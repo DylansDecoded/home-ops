@@ -1,0 +1,35 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./angelnu.yaml
+  - ./actions-runner-controller.yaml
+  # - ./authentik.yaml
+  - ./backube.yaml
+  - ./bitnami.yaml
+  - ./bjw-s.yaml
+  - ./cilium.yaml
+  - ./cloudnative-pg.yaml
+  - ./coredns.yaml
+  - ./democratic-csi.yaml
+  - ./descheduler.yaml
+  - ./emqx.yaml
+  - ./external-secrets.yaml
+  - ./external-dns.yaml
+  - ./grafana.yaml
+  # - ./hajimari.yaml
+  - ./ingress-nginx.yaml
+  - ./intel.yaml
+  - ./jameswynn.yaml
+  - ./jetstack.yaml
+  - ./metrics-server.yaml
+  - ./node-feature-discovery.yaml
+  - ./openebs.yaml
+  - ./piraeus.yaml
+  - ./postfinance.yaml
+  - ./prometheus-community.yaml
+  - ./rook-ceph.yaml
+  - ./stakater.yaml
+  - ./stevenhipwell.yaml
+  - ./weaveworks.yaml
+  - ./xenitab.yaml
