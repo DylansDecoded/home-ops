@@ -40,7 +40,7 @@ tasks:
     vars:
       node: kube-02
 
-  wipe-node-felix:
+  wipe-node-kube-03:
     desc: Trigger a wipe of Rook-Ceph data on node "kube-03"
     cmds:
       - task: wipe-disk
