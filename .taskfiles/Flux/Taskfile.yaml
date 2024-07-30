@@ -22,7 +22,6 @@ tasks:
     preconditions:
       - sh: kubectl config get-contexts {{.cluster}}
         msg: "Kubectl context {{.cluster}} not found"
-      - test -f $HOME/.config/age/keys.txt
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.sops.yaml
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.sops.yaml
