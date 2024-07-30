@@ -80,7 +80,7 @@ tasks:
       node: kube-05
 
   wipe-disk:
-    desc: Wipe all remnants of rook-ceph from a given disk (ex. task rook:wipe-disk node=delta ceph_disk="/dev/sda")
+    desc: Wipe all remnants of rook-ceph from a given disk (ex. task rook:wipe-disk node=kube-01 ceph_disk="/dev/sda")
     silent: true
     internal: true
     cmds:
