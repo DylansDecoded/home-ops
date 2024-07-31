@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app ring-mqtt
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: emqx
+      namespace: database
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync-system
+  values:
+    controllers:
+      ring-mqtt:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+
+        containers:
+          app:
+            image:
+              repository: docker.io/tsightler/ring-mqtt
+              tag: 5.6.7
+            env:
+              MQTTHOST: "emqx-listeners.database.svc.cluster.local"
+              ENABLECAMERAS: "true"
+              SNAPSHOTMODE: "true"
+              ENABLEPANIC: "true"
+              MQTTHASSTOPIC: hass/status
+              MQTTPORT: 1883
+            envFrom:
+              - secretRef:
+                  name: ring-mqtt-secret
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext:
+              privileged: true
+
+    service:
+      app:
+        controller: ring-mqtt
+        ports:
+          http:
+            port: 8554
+          web-ui:
+            port: 55123
+
+    ingress:
+
+    persistence:
+      config:
+        existingClaim: ring-mqtt
+        advancedMounts:
+          ring-mqtt:
+            app:
+              - path: /data
+
+      config-file:
+        type: secret
+        name: ring-mqtt-config-secret
+        advancedMounts:
+          ring-mqtt:
+            app:
+              - path: /data/config.json
+                subPath: config.json
+                readOnly: true
