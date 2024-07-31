@@ -6,7 +6,8 @@ metadata:
   name: l2-policy
 spec:
   loadBalancerIPs: true
-  # interfaces: ["^eno.*"]
+  interfaces:
+    - eno1
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
@@ -19,6 +20,5 @@ metadata:
 spec:
   allowFirstLastIPs: "Yes"
   blocks:
-    - # Controller VIP: 10.1.33.254 & VLAN DHCP Range 10.1.33.180-10.1.33.199
-      start: 10.1.33.20
+    - start: 10.1.33.20
       stop: 10.1.33.139
