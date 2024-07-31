@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ingress-nginx-internal
+  name: nginx-external
 spec:
   interval: 30m
   chart:
@@ -22,24 +22,29 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  valuesFrom:
+    - targetPath: controller.maxmindLicenseKey
+      kind: Secret
+      name: nginx-external-maxmind-secret
+      valuesKey: MAXMIND_LICENSE_KEY
   values:
-    fullnameOverride: ingress-nginx-internal
+    fullnameOverride: nginx-external
     controller:
       replicaCount: 2
       service:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: internal.robsonhome.cloud
-          io.cilium/lb-ipam-ips: 10.1.33.130
+          external-dns.alpha.kubernetes.io/hostname: external.robsonhome.cloud
+          io.cilium/lb-ipam-ips: 10.1.33.131
       ingressClassResource:
-        name: internal
-        default: true
-        controllerValue: k8s.io/internal
+        name: external
+        default: false
+        controllerValue: k8s.io/external
       admissionWebhooks:
         objectSelector:
           matchExpressions:
             - key: ingress-class
               operator: In
-              values: ["internal"]
+              values: ["external"]
       allowSnippetAnnotations: true
       config:
         block-user-agents: "GPTBot,~*GPTBot*,ChatGPT-User,~*ChatGPT-User*,Google-Extended,~*Google-Extended*,CCBot,~*CCBot*,Omgilibot,~*Omgilibot*,FacebookBot,~*FacebookBot*" # taken from https://github.com/superseriousbusiness/gotosocial/blob/main/internal/web/robots.go
@@ -60,10 +65,11 @@ spec:
           "request_id": "$req_id", "remote_user": "$remote_user", "bytes_sent": $bytes_sent, "request_time": $request_time,
           "status": $status, "vhost": "$host", "request_proto": "$server_protocol", "path": "$uri", "request_query": "$args",
           "request_length": $request_length, "duration": $request_time, "method": "$request_method", "http_referrer": "$http_referer",
-          "http_user_agent": "$http_user_agent"}
+          "http_user_agent": "$http_user_agent", "country_code": "$geoip2_city_country_code", "country_name": "$geoip2_city_country_name"}
         proxy-body-size: 0
         proxy-buffer-size: 16k
         ssl-protocols: TLSv1.3 TLSv1.2
+        use-geoip2: true
         use-forwarded-headers: "true"
       metrics:
         enabled: true
@@ -81,7 +87,7 @@ spec:
           labelSelector:
             matchLabels:
               app.kubernetes.io/name: ingress-nginx
-              app.kubernetes.io/instance: ingress-nginx-internal
+              app.kubernetes.io/instance: nginx-external
               app.kubernetes.io/component: controller
       resources:
         requests:
