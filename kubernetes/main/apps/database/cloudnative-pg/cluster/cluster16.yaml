@@ -40,7 +40,7 @@ spec:
       endpointURL: http://minio.default.svc.cluster.local:9000
       # Note: serverName version needs to be inclemented
       # when recovering from an existing cnpg cluster
-      serverName: &currentCluster postgres16-v2
+      serverName: &currentCluster postgres16-v1
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg-secret
@@ -48,14 +48,22 @@ spec:
         secretAccessKey:
           name: cloudnative-pg-secret
           key: aws-secret-access-key
+          
+  # Note: For initial cluster creation, comment out the recovery section
+  # and uncomment the bootstrap initdb section
+  bootstrap:
+    initdb:
+      database: postgres
+      owner: postgres
+      secret: cloudnative-pg-secret
+  
   # Note: previousCluster needs to be set to the name of the previous
   # cluster when recovering from an existing cnpg cluster
-  bootstrap:
-    recovery:
-      source: &previousCluster postgres16-v1
-  # Note: externalClusters is needed when recovering from an existing cnpg cluster
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
+  # bootstrap:
+  #   recovery:
+  #     source: &previousCluster postgres16-v1
+  # externalClusters:
+  #   - name: *previousCluster
+  #     barmanObjectStore:
+  #       <<: *barmanObjectStore
+  #       serverName: *previousCluster

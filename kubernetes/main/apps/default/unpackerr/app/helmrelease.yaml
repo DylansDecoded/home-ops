@@ -85,7 +85,7 @@ spec:
         type: emptyDir
       media:
         type: nfs
-        server: 10.1.10.210
+        server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
           - path: /media/downloads/qbittorrent
