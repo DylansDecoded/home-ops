@@ -55,7 +55,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ingress-nginx-certificates
-  path: ./kubernetes/apps/network/ingress-nginx/external
+  path: ./kubernetes/main/apps/network/ingress-nginx/external
   prune: true
   sourceRef:
     kind: GitRepository
