@@ -18,12 +18,8 @@ tasks:
     desc: Bootstrap the Talos cluster
     dir: "{{.KUBERNETES_DIR}}/bootstrap/talos"
     cmds:
-      # - |
-      #   if [ ! -f "{{.TALHELPER_SECRET_FILE}}" ]; then
-      #       talhelper gensecret > {{.TALHELPER_SECRET_FILE}}
-      #       sops --encrypt --in-place {{.TALHELPER_SECRET_FILE}}
-      #   fi
-      # - talhelper genconfig --config-file {{.TALHELPER_CONFIG_FILE}} --secret-file {{.TALHELPER_SECRET_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}}
+      
+    
       - talhelper gencommand apply --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}} --extra-flags="--insecure" | bash
       - until talhelper gencommand bootstrap --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}} | bash; do sleep 10; done
       - task: fetch-kubeconfig
@@ -162,30 +158,7 @@ tasks:
 #       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 #       - talosctl --context {{.cluster}} --nodes {{.CONTROLLER}} get machineconfig >/dev/null 2>&1
 
-#   reset-node:
-#     desc: Reset a Talos node and shut it down
-#     prompt: Reset Talos '{{.hostname}}' node on the '{{.cluster}}' cluster ... continue?
-#     cmd: talosctl --context {{.cluster}} reset --nodes {{.hostname}} --graceful=false
-#     requires:
-#       vars: ["cluster", "hostname"]
-#     preconditions:
-#       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
-#       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
-#       - talosctl --context {{.cluster}} --nodes {{.hostname}} get machineconfig >/dev/null 2>&1
 
-#   reset-cluster:
-#     desc: Reset all the Talos nodes and shut 'em down
-#     prompt: Reset Talos on the '{{.cluster}}' cluster ... continue?
-#     cmd: talosctl --context {{.cluster}} reset --nodes {{.nodes}} --graceful=false
-#     vars:
-#       nodes:
-#         sh: talosctl --context {{.cluster}} config info --output json | jq --join-output '[.nodes[]] | join(",")'
-#     requires:
-#       vars: ["cluster"]
-#     preconditions:
-#       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
-#       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
-#       - talosctl --context {{.cluster}} --nodes {{.nodes}} get machineconfig >/dev/null 2>&1
 
 #   bootstrap-matchbox:
 #     desc: Bootstrap required Matchbox configuration to PXE Boot machine

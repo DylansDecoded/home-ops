@@ -9,6 +9,8 @@ talosconfig
 *.agekey
 *.pub
 *.key
+# Archive
+.archive
 # Private
 .private
 .bin
