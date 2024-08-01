@@ -80,21 +80,20 @@ nodes:
         dhcp: true
         mtu: 1500
 
-# Global patches
-patches:
-  - "@./patches/global/cluster-discovery.yaml"
-  - "@./patches/global/containerd.yaml"
-  - "@./patches/global/disable-search-domain.yaml"
-  - "@./patches/global/hostdns.yaml"
-  - "@./patches/global/kubelet.yaml"
-  - "@./patches/global/openebs-local.yaml"
-  - "@./patches/global/sysctl.yaml"
+# # Global patches
+# patches:
+#   - "@./patches/global/cluster-discovery.yaml"
+#   - "@./patches/global/containerd.yaml"
+#   - "@./patches/global/disable-search-domain.yaml"
+#   - "@./patches/global/hostdns.yaml"
+#   - "@./patches/global/kubelet.yaml"
+#   - "@./patches/global/openebs-local.yaml"
+#   - "@./patches/global/sysctl.yaml"
 
-# Controller patches
-controlPlane:
-  patches:
-    - "@./patches/controller/api-access.yaml"
-    - "@./patches/controller/cluster.yaml"
-    - "@./patches/controller/disable-admission-controller.yaml"
-    - "@./patches/controller/etcd.yaml"
+# # Controller patches
+# controlPlane:
+#   patches:
+#     - "@./patches/controller/cluster.yaml"
+#     - "@./patches/controller/disable-admission-controller.yaml"
+#     - "@./patches/controller/etcd.yaml"
 
