@@ -4,8 +4,8 @@ bandwidthManager:
   enabled: true
   bbr: true
 bpf:
-  masquerade: false # Required for route to host before lrp is setu
-  # tproxy: true
+  masquerade: true # Required for route to host before lrp is setu
+  tproxy: true
 cgroup:
   automount:
     enabled: false
