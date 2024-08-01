@@ -26,7 +26,7 @@ env:
 
 includes:
   rook: .taskfiles/Rook
-  # kubernetes: .taskfiles/Kubernetes
+  kubernetes: .taskfiles/Kubernetes
   flux: .taskfiles/Flux
   talos: .taskfiles/Talos
   

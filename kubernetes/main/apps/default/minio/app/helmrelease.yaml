@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -8,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.2.1
+      version: 3.3.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -37,13 +38,13 @@ spec:
               MINIO_PROMETHEUS_JOB_ID: minio
               MINIO_PROMETHEUS_URL: https://prometheus.robsonhome.cloud
               MINIO_PROMETHEUS_AUTH_TYPE: public
-              # MINIO_SERVER_URL: https://s3.robsonhome.cloud
+              MINIO_SERVER_URL: https://s3.robsonhome.cloud
               MINIO_STORAGE_CLASS_RRS: EC:0
               MINIO_STORAGE_CLASS_STANDARD: EC:0
               MINIO_UPDATE: "off"
             envFrom:
-            - secretRef:
-                name: minio-secret
+              - secretRef:
+                  name: minio-secret
             args: ["server", "/data", "--console-address", ":9001"]
             probes:
               liveness: &probes
@@ -61,7 +62,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
@@ -75,7 +76,7 @@ spec:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [10000]
-        seccompProfile: {type: RuntimeDefault}
+        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: minio
@@ -88,33 +89,33 @@ spec:
       app:
         serviceName: minio
         endpoints:
-        - port: s3
-          scheme: http
-          path: /minio/v2/metrics/cluster
-          interval: 1m
-          scrapeTimeout: 10s
+          - port: s3
+            scheme: http
+            path: /minio/v2/metrics/cluster
+            interval: 1m
+            scrapeTimeout: 10s
     ingress:
       app:
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         className: internal
         hosts:
-        - host: "{{ .Release.Name }}.robsonhome.cloud"
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
-        - host: s3.robsonhome.cloud
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: s3
+          - host: "{{ .Release.Name }}.robsonhome.cloud"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+          - host: s3.robsonhome.cloud
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: s3
     persistence:
       config:
         type: nfs
-        server: 10.1.30.210
-        path: /mnt/tank/apps/minio
+        server: 
+        path: /mnt/tank/data/apps/minio
         globalMounts:
-        - path: /data
+          - path: /data
