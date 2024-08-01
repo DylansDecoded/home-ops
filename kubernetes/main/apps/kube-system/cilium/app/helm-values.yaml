@@ -1,48 +1,27 @@
 ---
 autoDirectNodeRoutes: true
 bandwidthManager:
-  bbr: true
   enabled: true
+  bbr: true
 bpf:
-  masquerade: true
-  tproxy: true
+  masquerade: false # Required for route to host before lrp is setu
+  # tproxy: true
 cgroup:
-  autoMount:
+  automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
 cluster:
   id: 1
   name: main
-cni:
-  exclusive: false
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
 envoy:
   enabled: false
 hubble:
-  enabled: true
-  metrics:
-    enabled:
-      - dns:query;ignoreAAAA
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-  relay:
-    enabled: true
-    rollOutPods: true
-  serviceMonitor:
-    enabled: false
-  ui:
-    enabled: true
-    ingress:
-      enabled: false
-    rollOutPods: true
+  enabled: false
 ipam:
-  mode: "kubernetes"
+  mode: kubernetes
 ipv4NativeRoutingCIDR: 10.42.0.0/16
 k8sServiceHost: 127.0.0.1
 k8sServicePort: 7445
@@ -52,7 +31,7 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: dsr
+  mode: snat
 localRedirectPolicy: true
 operator:
   rollOutPods: true
