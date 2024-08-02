@@ -3,7 +3,9 @@
 version: "3"
 
 vars:
-  BOOTSTRAP_RESOURCES_DIR: "{{.ROOT_DIR}}/.taskfiles/Bootstrap/resources"
+  BOOTSTRAP_RESOURCES_DIR: "{{.ROOT_DIR}}/.taskfiles/bootstrap/resources"
+
+tasks:
 
   kubernetes:
     desc: Bootstrap a Talos Kubernetes cluster backed by flux, sops, and rook
@@ -73,28 +75,18 @@ vars:
       - sops filestatus {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml | jq --exit-status '.encrypted'
       - sops filestatus {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | jq --exit-status '.encrypted'
       - sops filestatus {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml | jq --exit-status '.encrypted'
-  
-  foo:
-
-    vars: 
-      nodes: ['node-011', 'node2', 'node3']
-    cmds:
-      - for:
-          var: nodes
-        cmd: echo {{.ITEM}}
 
   rook:
     internal: true
-    vars:
+    vars: &vars
       cluster: '{{.cluster}}'
-      node: ['kube-01', 'kube-02', 'kube-03', 'kube-04', 'kube-05', 'kube-06']
+      node: '{{.ITEM}}'
       disk: '{{.disk}}'
     cmds:
-      - for:
-          var: nodes
+      - for: { var: nodes }
         task: rook-data
         vars: *vars
-      - for:
+      - for: { var: nodes }
         task: rook-disk
         vars: *vars
 
@@ -113,7 +105,7 @@ vars:
     vars:
       job: wipe-disk-{{.node}}
     preconditions:
-      
+      # - test -f $GOPATH/bin/envsubst
       - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/wait-for-job.sh
       - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.tmpl.yaml
 
@@ -132,6 +124,5 @@ vars:
     vars:
       job: wipe-data-{{.node}}
     preconditions:
-      
       - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/wait-for-job.sh
       - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.tmpl.yaml
