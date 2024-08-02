@@ -10,7 +10,7 @@ rook-task-vars: &task-vars
   jobName: "{{.jobName}}"
 
 vars:
-  waitForJobScript: ".taskfiles/Rook/scripts/wait-for-k8s-job.sh"
+  waitForJobScript: ".taskfiles/Rook/resources/wait-for-job.sh"
   ts: '{{now | date "150405"}}'
 
 tasks:
@@ -107,7 +107,7 @@ tasks:
       node: '{{ or .node (fail "`node` is required") }}'
       ceph_disk: '{{ or .ceph_disk (fail "`ceph_disk` is required") }}'
       jobName: "wipe-disk-{{- .node -}}"
-      wipeRookDiskJobTemplate: ".taskfiles/Rook/WipeDiskJob.tmpl.yaml"
+      wipeRookDiskJobTemplate: ".taskfiles/Rook/resources/rook-disk-job.tmpl.yaml"
     env: *task-vars
     preconditions:
       - sh: test -f {{.waitForJobScript}}
@@ -127,7 +127,7 @@ tasks:
       cluster: '{{.cluster | default "main"}}'
       node: '{{ or .node (fail "`node` is required") }}'
       jobName: "wipe-rook-data-{{- .node -}}"
-      wipeRookDataJobTemplate: ".taskfiles/Rook/WipeRookDataJob.tmpl.yaml"
+      wipeRookDataJobTemplate: ".taskfiles/Rook/resources/rook-data-job.tmpl.yaml"
     env: *task-vars
     preconditions:
       - sh: test -f {{.waitForJobScript}}

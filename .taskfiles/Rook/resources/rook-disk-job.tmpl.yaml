@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: ${job}
+  name: ${jobName}
   namespace: default
 spec:
   ttlSecondsAfterFinished: 3600
@@ -17,10 +17,10 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - apk add --no-cache sgdisk util-linux util-linux-misc parted device-mapper;
-              sgdisk --zap-all ${disk};
-              dd if=/dev/zero of=${disk} bs=1M count=100 oflag=direct,dsync;
-              blkdiscard ${disk};
-              partprobe ${disk};
+              sgdisk --zap-all ${ceph_disk};
+              dd if=/dev/zero of=${ceph_disk} bs=1M count=100 oflag=direct;
+              blkdiscard ${ceph_disk};
+              partprobe ${ceph_disk};
           securityContext:
             privileged: true
           resources: {}
