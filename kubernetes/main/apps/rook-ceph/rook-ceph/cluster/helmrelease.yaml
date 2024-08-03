@@ -65,8 +65,8 @@ spec:
           requireMsgr2: true
       storage:
         useAllNodes: true
-        useAllDevices: false
-        deviceFilter: /dev/sda
+        useAllDevices: true
+        deviceFilter: sda
         config:
           osdsPerDevice: "1"
       # placement:
