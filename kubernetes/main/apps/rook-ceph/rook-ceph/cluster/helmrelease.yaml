@@ -41,7 +41,7 @@ spec:
         tls:
           - hosts: [*host]
     toolbox:
-      enabled: false
+      enabled: true
     configOverride: |
       [global]
       bdev_enable_discard = true
@@ -65,19 +65,19 @@ spec:
           requireMsgr2: true
       storage:
         useAllNodes: true
-        useAllDevices: true
-        deviceFilter: sda
+        useAllDevices: false
+        deviceFilter: /dev/sda
         config:
           osdsPerDevice: "1"
-      placement:
-        mgr: &placement
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exists
-        mon: *placement
+      # placement:
+      #   mgr: &placement
+      #     nodeAffinity:
+      #       requiredDuringSchedulingIgnoredDuringExecution:
+      #         nodeSelectorTerms:
+      #           - matchExpressions:
+      #               - key: node-role.kubernetes.io/control-plane
+      #                 operator: Exists
+      #   mon: *placement
       resources:
         mgr:
           requests:
