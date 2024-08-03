@@ -41,7 +41,7 @@ spec:
         tls:
           - hosts: [*host]
     toolbox:
-      enabled: true
+      enabled: false
     configOverride: |
       [global]
       bdev_enable_discard = true
@@ -63,21 +63,6 @@ spec:
         provider: host
         connections:
           requireMsgr2: true
-      storage:
-        useAllNodes: true
-        useAllDevices: true
-        deviceFilter: sda
-        config:
-          osdsPerDevice: "1"
-      # placement:
-      #   mgr: &placement
-      #     nodeAffinity:
-      #       requiredDuringSchedulingIgnoredDuringExecution:
-      #         nodeSelectorTerms:
-      #           - matchExpressions:
-      #               - key: node-role.kubernetes.io/control-plane
-      #                 operator: Exists
-      #   mon: *placement
       resources:
         mgr:
           requests:
@@ -93,8 +78,8 @@ spec:
             memory: 1Gi
         osd:
           requests:
-            cpu: 250m
-            memory: 1Gi
+            cpu: 500m
+            memory: 2Gi
           limits:
             memory: 6Gi
         mgr-sidecar:
@@ -103,6 +88,45 @@ spec:
             memory: 128Mi
           limits:
             memory: 256Mi
+      storage:
+        useAllNodes: false
+        useAllDevices: false
+        config:
+          osdsPerDevice: "1"
+        nodes:
+          - name: "kube-01"
+            devices:
+              - "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874"
+
+          - name: "kube-02"
+            devices:
+              - "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056"
+
+          - name: "kube-03"
+            devices:
+              - "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045"
+
+          - name: "kube-04"
+            devices:
+              - "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743"
+
+          - name: "kube-05"
+            devices:
+              - "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441"
+
+          - name: "kube-06"
+            devices:
+              - "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B"
+      placement:
+        mgr: &placement
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: Exists
+        mon: *placement
+      
     cephBlockPools:
       - name: ceph-blockpool
         spec:
