@@ -1,0 +1,66 @@
+{
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "metadata": {
+        "annotations": {
+            "kustomize.toolkit.fluxcd.io/prune": "disabled",
+            "volsync.backube/privileged-movers": "true"
+        },
+        "creationTimestamp": "2024-08-03T01:08:57Z",
+        "deletionTimestamp": "2024-08-03T13:08:57Z",
+        "labels": {
+            "k8slens-edit-resource-version": "v1",
+            "kubernetes.io/metadata.name": "rook-ceph",
+            "kustomize.toolkit.fluxcd.io/name": "cluster-apps",
+            "kustomize.toolkit.fluxcd.io/namespace": "flux-system"
+        },
+        "name": "rook-ceph",
+        "resourceVersion": "1488374",
+        "uid": "85225665-2a84-43ff-972d-ebe34109a205"
+    },
+    "spec": {
+        "finalizers": [
+            
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastTransitionTime": "2024-08-03T13:09:05Z",
+                "message": "All resources successfully discovered",
+                "reason": "ResourcesDiscovered",
+                "status": "False",
+                "type": "NamespaceDeletionDiscoveryFailure"
+            },
+            {
+                "lastTransitionTime": "2024-08-03T13:09:05Z",
+                "message": "All legacy kube types successfully parsed",
+                "reason": "ParsedGroupVersions",
+                "status": "False",
+                "type": "NamespaceDeletionGroupVersionParsingFailure"
+            },
+            {
+                "lastTransitionTime": "2024-08-03T13:09:05Z",
+                "message": "All content successfully deleted, may be waiting on finalization",
+                "reason": "ContentDeleted",
+                "status": "False",
+                "type": "NamespaceDeletionContentFailure"
+            },
+            {
+                "lastTransitionTime": "2024-08-03T13:09:05Z",
+                "message": "Some resources are remaining: configmaps. has 1 resource instances, secrets. has 1 resource instances",
+                "reason": "SomeResourcesRemain",
+                "status": "True",
+                "type": "NamespaceContentRemaining"
+            },
+            {
+                "lastTransitionTime": "2024-08-03T13:09:05Z",
+                "message": "Some content in the namespace has finalizers remaining: ceph.rook.io/disaster-protection in 2 resource instances",
+                "reason": "SomeFinalizersRemain",
+                "status": "True",
+                "type": "NamespaceFinalizersRemaining"
+            }
+        ],
+        "phase": "Terminating"
+    }
+}
