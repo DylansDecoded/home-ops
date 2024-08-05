@@ -89,8 +89,7 @@ spec:
       config-file:
         type: configMap
         name: ring-mqtt-configmap
-        globalMounts:
-          ring-mqtt:
-            - path: /data/config.json
-              subPath: config.json
-              readOnly: true
+        globalMounts: 
+          - path: /data/config.json
+            subPath: config.json
+            readOnly: true
