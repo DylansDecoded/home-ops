@@ -11,12 +11,11 @@ resources:
 # - ./autobrr/ks.yaml
 # - ./filebrowser/ks.yaml
 # - ./flaresolverr/ks.yaml
-# - ./frigate/ks.yaml
+- ./frigate/ks.yaml
 # - ./glauth/ks.yaml
 # - ./home-assistant/ks.yaml
 # - ./miniflux/ks.yaml
 - ./minio/ks.yaml
-# - ./maintainerr/ks.yaml
 # - ./overseerr/ks.yaml
 # - ./plex/ks.yaml
 # - ./prowlarr/ks.yaml
@@ -24,7 +23,7 @@ resources:
 # - ./readarr/ks.yaml
 # - ./radarr/ks.yaml
 # - ./recyclarr/ks.yaml
-# - ./ring-mqtt/ks.yaml
+- ./ring-mqtt/ks.yaml
 # - ./sabnzbd/ks.yaml
 # - ./sonarr/ks.yaml
 # - ./tautulli/ks.yaml

@@ -1,15 +1,16 @@
+
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app zwave
+  name: zwave
 spec:
   interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 3.2.1
+      version: 3.3.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -36,7 +37,7 @@ spec:
           app:
             image:
               repository: ghcr.io/zwave-js/zwave-js-ui
-              tag: 9.15.0@sha256:97b0efa02fcb226ba7693e87fa6bc900a38e675d43a0a6c56ac40acec4cdac3d
+              tag: 9.16.4@sha256:6f06b9cb39e87a9f7bb0c78ff075970b97f7de647d8a258bbb0f1cc39cf3a2c4
             env:
               TZ: America/New_York
               PORT: &port 80
@@ -55,16 +56,13 @@ spec:
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
-              # privileged: true
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
-              limits: &resources
-                memory: 256Mi
               requests:
-                <<: *resources
                 cpu: 10m
-
+              limits:
+                memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -72,10 +70,10 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-
+        seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: *app
+        controller: zwave
         ports:
           http:
             port: *port
@@ -83,22 +81,20 @@ spec:
             port: 3000
     ingress:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.robsonhome.cloud"
+          - host: "{{ .Release.Name }}.robsonhome.cloud"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-        tls:
-          - hosts: [*host]
-
     persistence:
       config:
         existingClaim: zwave
         globalMounts:
           - path: /usr/src/app/store
-
       tmp:
         type: emptyDir
