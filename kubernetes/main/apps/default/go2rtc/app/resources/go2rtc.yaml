@@ -13,6 +13,6 @@ webrtc:
        - stun:stun.cloudflare.com:3478
 streams:
   backporch:
-    - rtsp://admin:{REOLINK_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
+    - rtsp://admin:${REOLINK_PASSWORD}@10.1.90.3:554/h264Preview_01_main
   driveway:
-    - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
+    - rtsp://admin:${REOLINK_PASSWORD}@10.1.90.4:554/h264Preview_01_main
