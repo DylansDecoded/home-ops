@@ -5,8 +5,6 @@ kind: ScrapeConfig
 metadata:
   name: &name pikvm
 spec:
-  basicAuth:
-    
   staticConfigs:
     - targets:
         - pikvm.robsonhome.cloud
