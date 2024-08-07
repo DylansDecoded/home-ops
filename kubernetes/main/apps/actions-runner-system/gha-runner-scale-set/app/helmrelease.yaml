@@ -40,7 +40,7 @@ spec:
   values:
     nameOverride: gha-runner-scale-set
     runnerScaleSetName: gha-runner-scale-set
-    githubConfigUrl: https://github.com/DylansDecoded/homelab
+    githubConfigUrl: https://github.com/DylansDecoded/home-ops
     minRunners: 1
     maxRunners: 4
     containerMode:
