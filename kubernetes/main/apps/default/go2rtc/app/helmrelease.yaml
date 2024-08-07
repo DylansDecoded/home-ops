@@ -92,8 +92,8 @@ spec:
                   port: http
     persistence:
       config:
-        type: configMap
-        name: go2rtc-configmap
+        type: secret
+        name: go2rtc-secret
         globalMounts:
           - path: /config/go2rtc.yaml
             subPath: go2rtc.yaml

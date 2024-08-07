@@ -6,9 +6,9 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ../../../../templates/gatus/guarded
-configMapGenerator:
-  - name: go2rtc-configmap
-    files:
-      - go2rtc.yaml=./resources/go2rtc.yaml
-generatorOptions:
-  disableNameSuffixHash: true
+# configMapGenerator:
+#   - name: go2rtc-configmap
+#     files:
+#       - go2rtc.yaml=./resources/go2rtc.yaml
+# generatorOptions:
+#   disableNameSuffixHash: true
