@@ -30,6 +30,7 @@ spec:
       radarr:
         annotations:
           reloader.stakater.com/auto: "true"
+
         initContainers:
           init-db:
             image:
@@ -38,11 +39,12 @@ spec:
             envFrom: &envFrom
               - secretRef:
                   name: radarr-secret
+
         containers:
           app:
             image:
               repository: ghcr.io/onedr0p/radarr-develop
-              tag: 5.8.1
+              tag: 5.8.3
             env:
               COMPlus_EnableDiagnostics: "0"
               PUSHOVER_DEBUG: "false"
@@ -53,6 +55,8 @@ spec:
               RADARR__LOG_LEVEL: info
               RADARR__THEME: dark
               TZ: America/New_York
+              XSEED_HOST: cross-seed.default.svc.cluster.local
+              XSEED_PORT: 2468
             envFrom: *envFrom
             probes:
               liveness: &probes
@@ -86,6 +90,26 @@ spec:
             fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
             supplementalGroups: [10000]
+      starr-scripts:
+        image:
+          repository: registry.k8s.io/git-sync/git-sync
+          tag: v4.2.4
+        env:
+          GITSYNC_REPO: https://github.com/bakerboy448/StarrScripts
+          GITSYNC_REF: main
+          GITSYNC_PERIOD: 24h
+          GITSYNC_ROOT: /add-ons
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
     service:
       app:
         controller: radarr
@@ -96,6 +120,8 @@ spec:
       app:
         enabled: true
         className: internal
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         hosts:
           - host: &host "{{ .Release.Name }}.robsonhome.cloud"
             paths:
@@ -103,12 +129,15 @@ spec:
                 service:
                   identifier: app
                   port: http
-        tls:
-          - hosts:
-              - *host
     persistence:
       config:
         existingClaim: radarr
+      
+      add-ons:
+        type: emptyDir
+
+      tmp:
+        type: emptyDir
 
       pushover-notify:
         type: configMap
@@ -118,9 +147,7 @@ spec:
           - path: /scripts/pushover-notify.sh
             subPath: pushover-notify.sh
             readOnly: true
-      tmp:
-        type: emptyDir
-
+            
       media:
         type: nfs
         server: 10.1.10.210

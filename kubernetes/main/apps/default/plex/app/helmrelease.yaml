@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -10,7 +10,6 @@ spec:
     spec:
       chart: app-template
       version: 3.3.2
-      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -35,16 +34,15 @@ spec:
       plex:
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
           app:
             image:
-              repository: ghcr.io/joryirving/plex
-              tag: 1.40.4.8679-424562606@sha256:e67df6ddfffec34d61caec026a7c8b0dc5662ecdef096588658fcec9f29b317e
+              repository: ghcr.io/onedr0p/plex
+              tag: 1.40.4.8679-424562606@sha256:6caeca24f3b08206a94a6a9c102e2c0c14d46d5a9163241716559e8c83f53ff8
             env:
               TZ: America/New_York
-              PLEX_ADVERTISE_URL: https://plex.robsonhome.cloud:443,http://10.45.0.55:32400
-              PLEX_NO_AUTH_NETWORKS: 10.42.0.0/16
+              PLEX_ADVERTISE_URL: https://plex.robsonhome.cloud:443,http://10.1.33.128:32400
+              PLEX_NO_AUTH_NETWORKS: 10.1.10.0/24,10.1.40.0/24,10.1.1.0/24
             probes:
               liveness: &probes
                 enabled: true
@@ -52,17 +50,17 @@ spec:
                 spec:
                   httpGet:
                     path: /identity
-                    port: &port 32400
+                    port: 32400
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
               startup:
-                enabled: false
+                enabled: true
                 spec:
                   failureThreshold: 30
-                  periodSeconds: 5
+                  periodSeconds: 10
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -72,60 +70,49 @@ spec:
                 cpu: 100m
               limits:
                 gpu.intel.com/i915: 1
-                memory: 4Gi
-        pod:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchExpressions:
-                      - key: app.kubernetes.io/name
-                        operator: In
-                        values: ["frigate"]
-                  topologyKey: "kubernetes.io/hostname"
-          nodeSelector:
-            intel.feature.node.kubernetes.io/gpu: "true"
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [44, 10000, 109, 65537]
-
+                memory: 16Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [44, 10000]
+        seccompProfile: { type: RuntimeDefault }
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: "true"
     service:
       app:
         controller: plex
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: 10.45.0.55
+          io.cilium/lb-ipam-ips: 10.1.33.128
         ports:
           http:
             port: 32400
     ingress:
       app:
-        className: external
         annotations:
-          external-dns.alpha.kubernetes.io/target: "external.robsonhome.cloud"
+          external-dns.alpha.kubernetes.io/target: external.robsonhome.cloud
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        className: external
         hosts:
-          - host: &host plex.robsonhome.cloud
+          - host: "{{ .Release.Name }}.robsonhome.cloud"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-        tls:
-          - hosts: [*host]
-
-
     persistence:
       config:
         existingClaim: plex
+        # TODO: If setting up Plex for the first time, you'll want to add the globalMounts section
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server
 
-      plex-cache:
+      # Separate PVC for cache to avoid backing up cache files
+      cache:
         existingClaim: plex-cache
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Cache
@@ -134,16 +121,14 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Logs
-
       tmp:
         type: emptyDir
-
       transcode:
         type: emptyDir
-
       media:
         type: nfs
-        server: 10.1.10.210
+        server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
           - path: /media
+            readOnly: true

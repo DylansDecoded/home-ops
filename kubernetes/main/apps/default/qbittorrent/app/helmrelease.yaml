@@ -140,17 +140,16 @@ spec:
 
     ingress:
       app:
-        enabled: true
         className: internal
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         hosts:
-          - host: &host qb.robsonhome.cloud
+          - host: qbittorrent.robsonhome.cloud
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-        tls:
-          - hosts: [*host]
 
     persistence:
       config:
@@ -170,10 +169,9 @@ spec:
 
       media:
         type: nfs
-        server: 10.1.10.210
+        server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         advancedMounts:
           qbittorrent:
             app:
-              - path: /media/downloads/qbittorrent
-                subPath: downloads/qbittorrent
+              - path: /data/media

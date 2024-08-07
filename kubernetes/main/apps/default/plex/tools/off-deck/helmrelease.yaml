@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -20,9 +20,8 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   dependsOn:
     - name: plex
       namespace: default
@@ -33,6 +32,8 @@ spec:
         cronjob:
           schedule: "@hourly"
           timeZone: &timeZone America/New_York
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
         containers:
           app:
             image:
@@ -41,14 +42,11 @@ spec:
             env:
               TZ: *timeZone
               JBOPS__SCRIPT_PATH: utility/off_deck.py
-            args:
-              [
-                "/entrypoint.sh",
-                "--markWatched",
-                "--playlists",
-                "Toons",
-                "SleepMix",
-              ]
+            args: [
+              "/entrypoint.sh",
+              "--markWatched",
+              "--playlists", "Toons", "SleepMix"
+            ]
     persistence:
       secret-file:
         type: secret
