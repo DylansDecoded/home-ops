@@ -144,7 +144,7 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         hosts:
-          - host: qbittorrent.robsonhome.cloud
+          - host: qb.robsonhome.cloud
             paths:
               - path: /
                 service:
@@ -171,7 +171,6 @@ spec:
         type: nfs
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /data/media
+        globalMounts:
+          - path: /media/Downloads/qbittorrent
+            subPath: Downloads/qbittorrent
