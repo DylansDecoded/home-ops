@@ -30,4 +30,5 @@ includes:
   kubernetes: .taskfiles/Kubernetes
   flux: .taskfiles/Flux
   talos: .taskfiles/Talos
+  volsync: .taskfiles/Volsync
   
