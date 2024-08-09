@@ -58,7 +58,7 @@ tasks:
       ns: '{{.ns | default "default"}}'
       job: volsync-list-{{.app}}
     preconditions:
-      - test -f envsubst
+      
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/wait-for-job.sh
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/list.tmpl.yaml
     silent: true
@@ -83,7 +83,6 @@ tasks:
       ns: '{{.ns | default "default"}}'
       job: volsync-unlock-{{.app}}
     preconditions:
-      - test -f envsubst
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/wait-for-job.sh
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/unlock.tmpl.yaml
     silent: true
@@ -196,7 +195,7 @@ tasks:
     vars:
       job: volsync-wipe-{{.app}}
     preconditions:
-      - test -f envsubst
+      
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/wipe.tmpl.yaml
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/wait-for-job.sh
 
@@ -212,7 +211,7 @@ tasks:
     vars:
       job: volsync-dst-{{.app}}
     preconditions:
-      - test -f envsubst
+      
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/replicationdestination.tmpl.yaml
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/wait-for-job.sh
 

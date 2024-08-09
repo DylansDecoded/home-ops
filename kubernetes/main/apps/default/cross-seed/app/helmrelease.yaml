@@ -17,7 +17,7 @@ spec:
         namespace: flux-system
   dependsOn:
     - name: qbittorrent
-      namespace: downloads
+      namespace: default
   values:
     controllers:
       cross-seed:
@@ -83,14 +83,14 @@ spec:
             subPath: config.js
             readOnly: true
       qbittorrent:
-        existingClaim: qbittorrent-config
+        existingClaim: qbittorrent
         globalMounts:
           - path: /qbittorrent
       media:
         type: nfs
         server: truenas.robsonhome.cloud
-        path: /tank/mnt/media
+        path: /mnt/tank/media
         advancedMounts:
           cross-seed:
             app:
-              - path: /data/media
+              - path: /media

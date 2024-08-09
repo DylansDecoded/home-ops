@@ -5,5 +5,14 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/volsync
   - ../../../../templates/gatus/guarded
+  - ../../../../templates/volsync
+configMapGenerator:
+  - name: qbittorrent-loki-rules
+    files:
+      - qbittorrent.yaml=./resources/lokirule.yaml
+    options:
+      labels:
+        loki_rule: "true"
+generatorOptions:
+  disableNameSuffixHash: true
