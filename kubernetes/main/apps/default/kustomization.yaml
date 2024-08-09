@@ -28,4 +28,4 @@ resources:
 - ./tautulli/ks.yaml
 - ./unpackerr/ks.yaml
 - ./zigbee2mqtt/ks.yaml
-- ./zwave/ks.yaml
+# - ./zwave/ks.yaml
