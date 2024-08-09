@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -31,111 +31,75 @@ spec:
     controllers:
       qbittorrent:
         annotations:
-          configmap.reloader.stakater.com/reload: qbittorrent-scripts,qbittorrent-dnsdist
-          secret.reloader.stakater.com/reload: qbittorrent-secret
-        pod:
-          securityContext:
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 65542
-              - 10000
+          reloader.stakater.com/auto: "true"
         containers:
           app:
-            nameOverride: qbittorrent
             image:
               repository: ghcr.io/onedr0p/qbittorrent-beta
               tag: 4.6.5@sha256:251916c90b09018e747b775f4924da711d8b4545b5b959030eb428571b38be2f
             env:
               TZ: America/New_York
-              UMASK: "022"
-              QBITTORRENT__PORT: &port 8080
+              QBITTORRENT__PORT: &port 80
+              QBITTORRENT__BT_PORT: &bittorrentPort 50413
+              QBT_Preferences__WebUI__AlternativeUIEnabled: false
               QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
-              QBT_Preferences__WebUI__LocalHostAuth: false
               QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
                 10.42.0.0/16, 10.1.1.0/24, 10.1.10.0/24, 10.1.40.0/24
+              QBT_Preferences__WebUI__LocalHostAuth: false
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v2/app/version
+                    port: *port
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 6
+              readiness: *probes
               startup:
                 enabled: true
                 spec:
                   failureThreshold: 30
-                  periodSeconds: 5
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 49m
-                memory: 1024Mi
+                cpu: 100m
               limits:
-                memory: 8192Mi
-            securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-
-          gluetun:
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.38.0
-            env:
-              VPN_SERVICE_PROVIDER: custom
-              VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
-              VPN_ENDPOINT_PORT: 51820
-              VPN_PORT_FORWARDING: on
-              VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: 8080
-              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/16,10.43.0.0/16
-            envFrom:
-              - secretRef:
-                  name: qbittorrent-secret
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
-              allowPrivilegeEscalation: true
-
-          port-forward:
-            image:
-              repository: ghcr.io/bjw-s/gluetun-qb-port-sync
-              tag: v0.0.2
-            env:
-              GLUETUN_CONTROL_SERVER_HOST: localhost
-              GLUETUN_CONTROL_SERVER_PORT: 8000
-              QBITTORRENT_HOST: localhost
-              QBITTORRENT_WEBUI_PORT: *port
-              CRON_ENABLED: true
-              CRON_SCHEDULE: "*/5 * * * *"
-              LOG_TIMESTAMP: false
-            securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-
+                memory: 10Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [10000]
+        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: qbittorrent
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: 10.1.33.55
         ports:
           http:
             port: *port
-
+          bittorrent:
+            enabled: true
+            port: *bittorrentPort
+            protocol: TCP
     ingress:
       app:
-        className: internal
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
+        className: internal
         hosts:
           - host: qb.robsonhome.cloud
             paths:
@@ -143,23 +107,9 @@ spec:
                 service:
                   identifier: app
                   port: http
-
     persistence:
       config:
         existingClaim: qbittorrent
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config
-
-
-      empty-config:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            port-forward:
-              - path: /config
-
       media:
         type: nfs
         server: truenas.robsonhome.cloud
