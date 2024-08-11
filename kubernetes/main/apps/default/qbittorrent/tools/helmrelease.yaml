@@ -140,12 +140,10 @@ spec:
             readOnly: true
       media:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: truenas,robsonhome.cloud
         path: /mnt/tank/media
-        advancedMounts:
-          orphaned:
-            app:
-              - path: /media/Downloads/qbittorrent
-                subPath: Downloads/qbittorrent
+        globalMounts:
+          - path: /media/downloads/torrents
+            subPath: downloads/torrents
 
 
