@@ -81,8 +81,8 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [10000]
         seccompProfile: { type: RuntimeDefault }
-      # nodeSelector:
-      #   topology.kubernetes.io/zone: w
+      nodeSelector:
+        topology.kubernetes.io/zone: w
     service:
       app:
         controller: sabnzbd
@@ -115,5 +115,5 @@ spec:
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
-          - path: /media/Downloads/sabnzbd
-            subPath: Downloads/sabnzbd
+          - path: /media/downloads/usenet
+            subPath: downloads/usenet
