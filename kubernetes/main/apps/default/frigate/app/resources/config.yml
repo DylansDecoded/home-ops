@@ -30,17 +30,10 @@ objects:
       threshold: 0.7
 
 ffmpeg:
-  global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
+  global_args: ["-hide_banner", "-loglevel", "warning"]
   hwaccel_args: preset-vaapi
   output_args: 
     record: preset-record-generic-audio-copy
-
-detect:
-  width: 1280
-  height: 720
-  fps: 5
-  enabled: True
-  
 
 snapshots:
   enabled: true
