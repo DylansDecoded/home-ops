@@ -3,14 +3,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app go2rtc
+  name: &app frigate
   namespace: flux-system
 spec:
   targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/default/go2rtc/app
+  dependsOn:
+    - name: emqx-cluster
+    - name: external-secrets-stores
+    - name: node-feature-discovery-rules
+  path: ./kubernetes/main/apps/default/frigate/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -22,3 +26,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 5Gi
