@@ -12,6 +12,9 @@ database:
 
 model:
   path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
+  width: 320
+  height: 320
+  input_pixel_format: rgb
 
 detectors:
   coral:
@@ -26,28 +29,18 @@ objects:
       max_area: 100000
       threshold: 0.7
 
-# birdseye:
-#   restream: true
-#   # Optional: Enable birdseye view (default: shown below)
-#   enabled: true
-#   # Optional: Width of the output resolution (default: shown below)
-#   width: 1280
-#   # Optional: Height of the output resolution (default: shown below)
-#   height: 720
-#   # Optional: Encoding quality of the mpeg1 feed (default: shown below)
-#   # 1 is the highest quality, and 31 is the lowest. Lower quality feeds utilize less CPU resources.
-#   quality: 8
-#   # Optional: Mode of the view. Available options are: objects, motion, and continuous
-#   #   objects - cameras are included if they have had a tracked object within the last 30 seconds
-#   #   motion - cameras are included if motion was detected in the last 30 seconds
-#   #   continuous - all cameras are included always
-#   mode: objects
-
 ffmpeg:
-  global_args: ["-hide_banner", "-loglevel", "warning"]
+  global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
   hwaccel_args: preset-vaapi
   output_args: 
     record: preset-record-generic-audio-copy
+
+detect:
+  width: 1280
+  height: 720
+  fps: 5
+  enabled: True
+  
 
 snapshots:
   enabled: true
@@ -68,14 +61,14 @@ record:
 
 go2rtc:
   streams:
-    reolink_backporch_turret_cam:
+    reolink_backporch_cam_main:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
       - ffmpeg:reolink_backporch_turret_cam#video=copy#audio=aac#audio=opus#hardware
 
-    reolink_backporch_turret_cam_sub:
+    reolink_backporch_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
 
-    reolink_floodlight_cam:
+    reolink_floodlight_cam_main:
       - ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
       - ffmpeg:reolink_floodlight_cam#video=copy#audio=aac#audio=opus#hardware
 
