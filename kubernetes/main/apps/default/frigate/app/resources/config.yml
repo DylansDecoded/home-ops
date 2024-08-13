@@ -46,7 +46,8 @@ objects:
 ffmpeg:
   global_args: ['-hide_banner', '-loglevel', 'fatal']
   hwaccel_args: preset-vaapi
-  output_args: preset-record-generic-audio-copy
+  output_args: 
+    record: preset-record-generic-audio-copy
 
 snapshots:
   enabled: true
