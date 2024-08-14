@@ -17,7 +17,7 @@ resources:
 # - ./kopia/ks.yaml
 - ./miniflux/ks.yaml
 - ./minio/ks.yaml
-# - ./omegabrr/ks.yaml
+- ./omegabrr/ks.yaml
 - ./overseerr/ks.yaml
 - ./plex/ks.yaml
 - ./prowlarr/ks.yaml
