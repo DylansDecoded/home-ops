@@ -30,6 +30,10 @@ spec:
     - name: volsync
       namespace: volsync-system
   values:
+    defaultPodOptions:
+      nodeSelector:
+          google.feature.node.kubernetes.io/coral: 'true'
+          intel.feature.node.kubernetes.io/gpu: 'true'
     controllers:
       frigate:
         annotations:
@@ -60,17 +64,16 @@ spec:
               readiness: *probes
               startup:
                 enabled: false
-            securityContext:
-              privileged: true
             resources:
               requests:
-                cpu: 100m
+                cpu: 10m
+                memory: 1000Mi
+                gpu.intel.com/i915: '1'
               limits:
                 gpu.intel.com/i915: '1'
                 memory: 4Gi
-          nodeSelector:
-            google.feature.node.kubernetes.io/coral: 'true'
-            intel.feature.node.kubernetes.io/gpu: 'true'
+            securityContext:
+              privileged: true
     service:
       app:
         controller: frigate
