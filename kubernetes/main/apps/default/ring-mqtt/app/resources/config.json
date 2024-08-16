@@ -1,9 +1,9 @@
 {
-    "mqtt_url": "mqtt://emqx-listeners.database.svc.cluster.local:1883",
+    "mqtt_url": "${X_EMQX_MQTT_USERNAME}:${X_EMQX_MQTT_PASSWORD}@emqx-listeners.database.svc.cluster.local:1883",
     "mqtt_options": "",
     "livestream_user": "",
     "livestream_pass": "",
-    "disarm_code": "",
+    "disarm_code": "${RING_DISARM_CODE}",
     "enable_cameras": true,
     "enable_modes": false,
     "enable_panic": false,

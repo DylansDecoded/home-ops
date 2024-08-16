@@ -50,7 +50,6 @@ spec:
               repository: docker.io/tsightler/ring-mqtt
               tag: 5.7.0
             env:
-              MQTTHOST: "mqtt://emqx-listeners.database.svc.cluster.local:1883"
               ENABLECAMERAS: "true"
               SNAPSHOTMODE: "true"
               ENABLEPANIC: "true"
