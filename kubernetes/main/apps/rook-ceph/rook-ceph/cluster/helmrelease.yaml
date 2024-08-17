@@ -32,19 +32,16 @@ spec:
     monitoring:
       enabled: true
       createPrometheusRules: true
-
     ingress:
       dashboard:
-        ingressClassName: internal
         annotations:
-        external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
+          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
+        ingressClassName: internal
         host:
-          name: &host rook.robsonhome.cloud
+          name: rook.robsonhome.cloud
           path: /
-
     toolbox:
-      enabled: false
-
+      enabled: true
     configOverride: |
       [global]
       bdev_enable_discard = true
@@ -66,32 +63,6 @@ spec:
         provider: host
         connections:
           requireMsgr2: true
-      resources:
-        mgr:
-          requests:
-            cpu: 100m
-            memory: 512Mi
-          limits:
-            memory: 2Gi
-        mon:
-          requests:
-            cpu: 50m
-            memory: 512Mi
-          limits:
-            memory: 1Gi
-        osd:
-          requests:
-            cpu: 500m
-            memory: 2Gi
-          limits:
-            memory: 6Gi
-        mgr-sidecar:
-          requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            memory: 256Mi
-
       storage:
         useAllNodes: false
         useAllDevices: false
@@ -121,7 +92,40 @@ spec:
           - name: "kube-06"
             devices:
               - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B"
-      
+      placement:
+        mgr: &placement
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: Exists
+        mon: *placement
+      resources:
+        mgr:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 2Gi
+        mon:
+          requests:
+            cpu: 50m
+            memory: 512Mi
+          limits:
+            memory: 1Gi
+        osd:
+          requests:
+            cpu: 500m
+            memory: 2Gi
+          limits:
+            memory: 6Gi
+        mgr-sidecar:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            memory: 256Mi
     cephBlockPools:
       - name: ceph-blockpool
         spec:
@@ -181,7 +185,7 @@ spec:
                 cpu: 100m
                 memory: 1Gi
               limits:
-                memory: 3Gi
+                memory: 4Gi
         storageClass:
           enabled: true
           isDefault: false
@@ -217,6 +221,7 @@ spec:
               codingChunks: 1
           preservePoolsOnDelete: true
           gateway:
+            hostNetwork: false
             port: 80
             resources:
               requests:
@@ -238,10 +243,11 @@ spec:
             region: us-east-1
         ingress:
           enabled: true
+          annotations:
+            external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
           ingressClassName: internal
           host:
-            name: &host rgw.robsonhome.cloud
+            name: rgw.robsonhome.cloud
             path: /
-          tls:
-            - hosts:
-                - *host
