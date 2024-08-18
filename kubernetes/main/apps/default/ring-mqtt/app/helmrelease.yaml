@@ -84,11 +84,11 @@ spec:
           ring-mqtt:
             app:
               - path: /data
-
+              
       config-file:
-        type: configMap
-        name: ring-mqtt-configmap
-        globalMounts: 
-          - path: /data/config.json
-            subPath: config.json
+        type: secret
+        name: ring-mqtt-configmap-secret
+        globalMounts:
+          - path: /data/config.yaml
+            subPath: config.yaml
             readOnly: true

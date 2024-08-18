@@ -3,13 +3,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./ring-mqtt.secret.sops.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ../../../../templates/gatus/guarded
   - ../../../../templates/volsync
-configMapGenerator:
-  - name: ring-mqtt-configmap
-    files:
-      - config.json=./resources/config.json
-generatorOptions:
-  disableNameSuffixHash: true
+# configMapGenerator:
+#   - name: ring-mqtt-configmap
+#     files:
+#       - config.json=./resources/config.json
+# generatorOptions:
+#   disableNameSuffixHash: true
