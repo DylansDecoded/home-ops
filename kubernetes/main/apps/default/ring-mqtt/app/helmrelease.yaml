@@ -75,8 +75,6 @@ spec:
           web-ui:
             port: 55123
 
-    ingress:
-
     persistence:
       config:
         existingClaim: ring-mqtt
@@ -84,11 +82,11 @@ spec:
           ring-mqtt:
             app:
               - path: /data
-              
+
       config-file:
         type: secret
         name: ring-mqtt-configmap-secret
         globalMounts:
-          - path: /data/config.yaml
-            subPath: config.yaml
+          - path: /data/config.json
+            subPath: config.json
             readOnly: true
