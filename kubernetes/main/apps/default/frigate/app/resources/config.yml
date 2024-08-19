@@ -22,7 +22,7 @@ detectors:
     device: pci
 
 objects:
-  track: ['person', 'dog', 'face', 'amazon', 'ups', 'fedex']
+  track: ['person', 'dog', 'face', 'cat', 'amazon', 'ups', 'fedex']
   filters:
     person:
       min_area: 5000
