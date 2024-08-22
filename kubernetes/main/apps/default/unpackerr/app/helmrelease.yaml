@@ -38,9 +38,9 @@ spec:
               UN_WEBSERVER_LOG_FILE: /logs/webserver.log
               UN_ACTIVITY: true
               UN_SONARR_0_URL: http://sonarr.default.svc.cluster.local
-              UN_SONARR_0_PATHS_0: /media/Downloads/qbittorrent/complete/sonarr
+              UN_SONARR_0_PATHS_0: /media/downloads/torrents/complete/sonarr
               UN_RADARR_0_URL: http://radarr.default.svc.cluster.local
-              UN_RADARR_0_PATHS_0: /media/Downloads/qbittorrent/complete/radarr
+              UN_RADARR_0_PATHS_0: /media/Downloads/torrents/complete/radarr
             envFrom:
               - secretRef:
                   name: unpackerr-secret
@@ -90,5 +90,5 @@ spec:
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
-          - path: /media/Downloads/qbittorrent
-            subPath: Downloads/qbittorrent
+          - path: /media/downloads/torrents
+            subPath: downloads/torrents
