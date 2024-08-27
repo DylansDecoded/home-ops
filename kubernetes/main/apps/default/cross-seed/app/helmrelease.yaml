@@ -80,7 +80,7 @@ spec:
       qbittorrent:
         existingClaim: qbittorrent
         globalMounts:
-          - path: /config/qBittorrent/BT_backup
+          - path: /qbittorrent/qBittorrent/BT_backup
             subPath: qBittorrent/BT_backup
             readOnly: true
       media:
