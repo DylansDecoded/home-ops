@@ -33,8 +33,7 @@ spec:
               repository: ghcr.io/charlie-haley/omada_exporter
               tag: 0.13.1
             env:
-              OMADA_SITE: Homelab
-              OMADA_INSECURE: true
+              OMADA_SITE: 'Homelab'
               OMADA_REQUEST_TIMEOUT: 15
             envFrom:
               - secretRef:
