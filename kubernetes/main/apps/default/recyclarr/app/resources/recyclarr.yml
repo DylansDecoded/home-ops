@@ -45,7 +45,6 @@ sonarr:
         assign_scores_to:
           - name: WEB-1080p
           - name: ANY
-
 radarr:
   radarr:
     base_url: http://radarr.default.svc.cluster.local
