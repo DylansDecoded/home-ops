@@ -35,6 +35,7 @@ spec:
             env:
               OMADA_SITE: 'Homelab'
               OMADA_REQUEST_TIMEOUT: 15
+              OMADA_INSECURE: 'true'
             envFrom:
               - secretRef:
                   name: omada-exporter-secret
