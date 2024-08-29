@@ -77,11 +77,11 @@ cameras:
         - path: rtsp://127.0.0.1:8554/reolink_floodlight_cam_sub
           input_args: preset-rtsp-restream
           roles: ['detect']
-      detect:
-        enabled: True # <---- disable detection until you have a working camera feed
-        width: 1536 # <---- update for your camera's resolution
-        height: 576 # <---- update for your camera's resolution
-        fps: 7
+    detect:
+      enabled: True # <---- disable detection until you have a working camera feed
+      width: 1536 # <---- update for your camera's resolution
+      height: 576 # <---- update for your camera's resolution
+      fps: 7
 
         
     motion:
