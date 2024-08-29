@@ -8,7 +8,7 @@ resources:
 - ./actual/ks.yaml
 - ./atuin/ks.yaml
 - ./autobrr/ks.yaml
-- ./cross-seed/ks.yaml
+# - ./cross-seed/ks.yaml
 - ./echo-server/ks.yaml
 - ./filebrowser/ks.yaml
 - ./flaresolverr/ks.yaml
@@ -21,7 +21,7 @@ resources:
 - ./overseerr/ks.yaml
 - ./plex/ks.yaml
 - ./prowlarr/ks.yaml
-- ./qbittorrent/ks.yaml
+# - ./qbittorrent/ks.yaml
 - ./radarr/ks.yaml
 - ./recyclarr/ks.yaml
 - ./ring-mqtt/ks.yaml
