@@ -98,7 +98,7 @@ spec:
         hostPathType: Directory
       recs:
         type: nfs
-        server: gladius.bjw-s.internal
+        server: truenas.robsonhome.cloud
         path: /mnt/tank/apps/scrypted
         globalMounts:
           - path: /recordings
