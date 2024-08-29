@@ -189,9 +189,7 @@ spec:
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
         omada:
-          # renovate: depName="Omada Dashboard"
-          gnetId: 16343
-          revision: 2
+          url: https://raw.githubusercontent.com/charlie-haley/omada_exporter/main/dashboard.json
           datasource: Prometheus
         unpackerr:
           # renovate: depName="Unpackerr"
