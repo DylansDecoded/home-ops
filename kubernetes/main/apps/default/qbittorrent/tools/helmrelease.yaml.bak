@@ -60,7 +60,7 @@ spec:
               - --server
               - &qbittorrent_host qbittorrent.default.svc.cluster.local
               - --port
-              - &qbittorrent_port "80"
+              - &qbittorrent_port "8080"
               - --config
               - /config/config.yaml
             resources:
