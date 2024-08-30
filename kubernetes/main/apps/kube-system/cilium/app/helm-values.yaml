@@ -4,7 +4,8 @@ bandwidthManager:
   enabled: true
   bbr: true
 bpf:
-  masquerade: false
+  masquerade: true
+  tproxy: true
 cgroup:
   automount:
     enabled: false
@@ -12,6 +13,7 @@ cgroup:
 cluster:
   id: 1
   name: main
+devices: eno+
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
@@ -30,7 +32,7 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: snat
+  mode: dsr
 localRedirectPolicy: true
 operator:
   rollOutPods: true
