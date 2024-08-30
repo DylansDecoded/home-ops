@@ -34,7 +34,7 @@ spec:
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: external.robsonhome.cloud
-          io.cilium/lb-ipam-ips: 10.1.33.131
+          io.cilium/lb-ipam-ips: 10.1.33.126
       ingressClassResource:
         name: external
         default: false
@@ -78,7 +78,7 @@ spec:
           namespaceSelector:
             any: true
       extraArgs:
-        default-ssl-certificate: network/robsonhome-cloud-production-tls
+        default-ssl-certificate: network/robsonhome-cloud-tls
       terminationGracePeriodSeconds: 120
       topologySpreadConstraints:
         - maxSkew: 1

@@ -3,20 +3,20 @@
 area/docs:
   - changed-files:
       - any-glob-to-any-file:
-          - 'docs/**/*'
-          - 'README.md'
+          - "docs/**/*"
+          - "README.md"
 area/github:
   - changed-files:
-      - any-glob-to-any-file: '.github/**/*'
+      - any-glob-to-any-file: ".github/**/*"
 area/kubernetes:
   - changed-files:
-      - any-glob-to-any-file: 'kubernetes/**/*'
+      - any-glob-to-any-file: "kubernetes/**/*"
 area/taskfile:
   - changed-files:
       - any-glob-to-any-file:
-          - '.taskfiles/**/*'
-          - 'Taskfile.yaml'
+          - ".taskfiles/**/*"
+          - "Taskfile.yaml"
 # Clusters
 cluster/main:
   - changed-files:
-      - any-glob-to-any-file: 'kubernetes/main/**/*'
+      - any-glob-to-any-file: "kubernetes/main/**/*"
