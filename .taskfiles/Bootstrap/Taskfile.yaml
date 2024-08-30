@@ -19,11 +19,11 @@ tasks:
       nodes: '{{.nodes}}'
       disk: '{{.disk}}'
     cmds:
-      # - { task: etcd, vars: *vars }
-      # - { task: kubeconfig, vars: *vars }
-      # - { task: apps, vars: *vars }
+      - { task: etcd, vars: *vars }
+      - { task: kubeconfig, vars: *vars }
+      - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
-      # - { task: flux, vars: *vars }
+      - { task: flux, vars: *vars }
     requires:
       vars: ["nodes", "disk"]
     preconditions:

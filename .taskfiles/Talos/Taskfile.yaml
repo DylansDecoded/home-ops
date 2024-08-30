@@ -11,12 +11,12 @@ tasks:
         controller: Controller node to run command against (required)
     prompt: Bootstrap Talos on the '{{.cluster}}' cluster... continue?
     cmds:
-      # - task: bootstrap-etcd
-      #   vars: &vars
-      #     cluster: '{{.cluster | default "main"}}'
-      #     controller: "{{.controller}}"
-      # - task: fetch-kubeconfig
-      #   vars: *vars
+      - task: bootstrap-etcd
+        vars: &vars
+          cluster: '{{.cluster | default "main"}}'
+          controller: "{{.controller}}"
+      - task: fetch-kubeconfig
+        vars: *vars
       - task: bootstrap-integrations
         vars:
           cluster: '{{.cluster | default "main"}}'
