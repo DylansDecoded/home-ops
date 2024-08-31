@@ -13,7 +13,7 @@ spec:
     solvers:
       - dns01:
           cloudflare:
-            email: admin@robsonhome.cloud
+            email: dylan@robsonhome.cloud
             apiKeySecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_API_KEY
@@ -34,7 +34,7 @@ spec:
     solvers:
       - dns01:
           cloudflare:
-            email: admin@robsonhome.cloud
+            email: dylan@robsonhome.cloud
             apiKeySecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_API_KEY
