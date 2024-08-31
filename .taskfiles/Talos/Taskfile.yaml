@@ -2,78 +2,73 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
-vars: &vars
-  TALOS_VERSION: 1.7.6
-    # sh: yq 'select(document_index == 1).spec.postBuild.substitute.TALOS_VERSION' {{.KUBERNETES_DIR}}/main/apps/system-upgrade/system-upgrade-controller/ks.yaml
-  TALOS_SCHEMATIC_ID: "f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df"
-    # sh: yq 'select(document_index == 1).spec.postBuild.substitute.TALOS_SCHEMATIC_ID' {{.KUBERNETES_DIR}}/main/apps/system-upgrade/system-upgrade-controller/ks.yaml
-  # KUBERNETES_VERSION:
-  #   sh: yq 'select(document_index == 1).spec.postBuild.substitute.KUBERNETES_VERSION' {{.KUBERNETES_DIR}}/main/apps/system-upgrade/system-upgrade-controller/ks.yaml
-  # CONTROLLER:
-  #   sh: talosctl --context main config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
-
-# vars:
-#   # Ref: https://github.com/onedr0p/home-service
-#   HOME_SERVICE_ADDR: voyager.internal
-#   HOME_SERVICE_USER: devin
-#   HOME_SERVICE_MATCHBOX_DIR: /var/opt/home-service/apps/matchbox/data/config
+# vars: &vars
+#   TALOS_VERSION: 1.7.6
+#     # sh: yq 'select(document_index == 1).spec.postBuild.substitute.TALOS_VERSION' {{.KUBERNETES_DIR}}/main/apps/system-upgrade/system-upgrade-controller/ks.yaml
+#   TALOS_SCHEMATIC_ID: "f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df"
+#     # sh: yq 'select(document_index == 1).spec.postBuild.substitute.TALOS_SCHEMATIC_ID' {{.KUBERNETES_DIR}}/main/apps/system-upgrade/system-upgrade-controller/ks.yaml
+#   # KUBERNETES_VERSION:
+#   #   sh: yq 'select(document_index == 1).spec.postBuild.substitute.KUBERNETES_VERSION' {{.KUBERNETES_DIR}}/main/apps/system-upgrade/system-upgrade-controller/ks.yaml
+#   # CONTROLLER:
+#   #   sh: talosctl --context main config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
 
 tasks:
-  # bootstrap:
-  #   desc: Bootstrap Talos
-  #   summary: |
-  #     Args:
-  #       cluster: Cluster to run command against (default: main)
-  #       controller: Controller node to run command against (required)
-  #   prompt: Bootstrap Talos on the 'main' cluster... continue?
-  #   cmds:
-  #     - task: bootstrap-etcd
-  #       vars: &vars
-  #         cluster: '{{.cluster | default "main"}}'
-  #         controller: "{{.controller}}"
-  #     - task: fetch-kubeconfig
-  #       vars: *vars
-  #     - task: bootstrap-integrations
-  #       vars:
-  #         cluster: '{{.cluster | default "main"}}'
-  #         controller: "{{.controller}}"
-  #   requires:
-  #     vars:
-  #       - controller
+  bootstrap:
+    desc: Bootstrap Talos
+    summary: |
+      Args:
+        cluster: Cluster to run command against (default: main)
+        controller: Controller node to run command against (required)
+    prompt: Bootstrap Talos on the 'main' cluster... continue?
+    cmds:
+      - task: bootstrap-etcd
+        vars: &vars
+          cluster: '{{.cluster | default "main"}}'
+          controller: "{{.controller}}"
+      - task: fetch-kubeconfig
+        vars: *vars
+      - task: bootstrap-integrations
+        vars:
+          cluster: '{{.cluster | default "main"}}'
+          controller: "{{.controller}}"
+    requires:
+      vars:
+        - controller
 
-  # bootstrap-etcd:
-  #   desc: Bootstrap Etcd
-  #   cmd: until talosctl --context main --nodes {{.controller}} bootstrap; do sleep 10; done
-  #   requires:
-  #     vars:
-  #       - cluster
-  #       - controller
+  bootstrap-etcd:
+    desc: Bootstrap Etcd
+    cmd: until talosctl --context main --nodes {{.controller}} bootstrap; do sleep 10; done
+    requires:
+      vars:
+        - cluster
+        - controller
 
-  # bootstrap-integrations:
-  #   desc: Bootstrap core integrations needed for Talos
-  #   cmds:
-  #     - until kubectl --context main wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
-  #     - helmfile --kube-context main --file {{.KUBERNETES_DIR}}/main/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
-  #     - until kubectl --context main wait --for=condition=Ready nodes --all --timeout=600s; do sleep 10; done
-  #   requires:
-  #     vars:
-  #       - cluster
-  #   preconditions:
-  #     - which helmfile
-  #     - sh: kubectl config get-contexts main
-  #       msg: "Kubectl context main not found"
-  #     - test -f {{.KUBERNETES_DIR}}/main/bootstrap/helmfile.yaml
+  bootstrap-integrations:
+    desc: Bootstrap core integrations needed for Talos
+    cmds:
+      - until kubectl --context main wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
+      - helmfile --kube-context main --file {{.KUBERNETES_DIR}}/main/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+      - until kubectl --context main wait --for=condition=Ready nodes --all --timeout=600s; do sleep 10; done
+    requires:
+      vars:
+        - cluster
+    preconditions:
+      - which helmfile
+      - sh: kubectl config get-contexts main
+        msg: "Kubectl context main not found"
+      - test -f {{.KUBERNETES_DIR}}/main/bootstrap/helmfile.yaml
 
-  # fetch-kubeconfig:
-  #   desc: Fetch kubeconfig from Talos controllers
-  #   cmd: |
-  #     talosctl --context main kubeconfig --nodes {{.controller}} \
-  #         --force --force-context-name main {{.KUBERNETES_DIR}}/main
-  #   requires:
-  #     vars:
-  #       - cluster
-  #   preconditions:
-  #     - talosctl config get-contexts | grep main
+  fetch-kubeconfig:
+    desc: Fetch kubeconfig from Talos controllers
+    cmd: |
+      talosctl --context main kubeconfig --nodes {{.controller}} \
+          --force --force-context-name main {{.KUBERNETES_DIR}}/main
+      kubectl context rename admin@main main
+    requires:
+      vars:
+        - cluster
+    preconditions:
+      - talosctl config get-contexts | grep main
 
   # generate-clusterconfig:
   #   desc: Generate clusterconfig for Talos
