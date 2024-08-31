@@ -23,19 +23,19 @@ tasks:
       # - { task: kubeconfig, vars: *vars }
       - { task: apps, vars: *vars }
       # - { task: rook, vars: *vars }
-      # - { task: flux, vars: *vars }
+      - { task: flux, vars: *vars }
     requires:
       vars: ["nodes", "disk"]
     preconditions:
       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
 
-  # etcd:
-  #   internal: true
-  #   cmd: until talosctl --context {{.cluster}} --nodes kube-01 bootstrap; do sleep 10; done
-  #   preconditions:
-  #     - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
-  #     - talosctl --context {{.cluster}} config info >/dev/null 2>&1
+  etcd:
+    internal: true
+    cmd: until talosctl --context {{.cluster}} --nodes kube-01 bootstrap; do sleep 10; done
+    preconditions:
+      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
+      - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 
   apps:
     internal: true
@@ -52,7 +52,7 @@ tasks:
   kubeconfig:
     internal: true
     cmd: |
-      talosctl --context {{.cluster}} kubeconfig --nodes kube-01 \
+      talosctl --context {{.cluster}} kubeconfig --nodes 10.1.33.11 \
           --force --force-context-name {{.cluster}} {{.KUBERNETES_DIR}}/{{.cluster}}
     preconditions:
       - talosctl config get-contexts | grep {{.cluster}}

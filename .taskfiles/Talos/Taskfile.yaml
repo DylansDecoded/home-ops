@@ -63,7 +63,6 @@ tasks:
     cmd: |
       talosctl --context main kubeconfig --nodes {{.controller}} \
           --force --force-context-name main {{.KUBERNETES_DIR}}/main
-      kubectl context rename admin@main main
     requires:
       vars:
         - cluster
