@@ -9,10 +9,10 @@ resources:
   # - ./blackbox-exporter/ks.yaml
   - ./gatus/ks.yaml
   - ./grafana/ks.yaml
-  - ./kromgo/ks.yaml
+  # - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
-  - ./omada-exporter/ks.yaml
+  # - ./omada-exporter/ks.yaml
   - ./prometheus-operator-crds/ks.yaml
   - ./promtail/ks.yaml
   - ./smartctl-exporter/ks.yaml
