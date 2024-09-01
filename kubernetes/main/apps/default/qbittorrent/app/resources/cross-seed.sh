@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-export CROSS_SEED_HOST=${CROSS_SEED_HOST:-cross-seed.default.svc.cluster.local}
-export CROSS_SEED_PORT=${CROSS_SEED_PORT:-80}
-export CROSS_SEED_API_KEY=${CROSS_SEED_API_KEY:-unset}
-export CROSS_SEED_SLEEP_INTERVAL=${CROSS_SEED_SLEEP_INTERVAL:-30}
+export XSEED_HOST=${XSEED_HOST:-cross-seed.default.svc.cluster.local}
+export XSEED_PORT=${XSEED_PORT:-80}
+export XSEED_API_KEY=${XSEED_API_KEY:-unset}
+export XSEED_SEED_SLEEP_INTERVAL=${XSEED_SEED_SLEEP_INTERVAL:-30}
 
 SEARCH_PATH=$1
 
@@ -17,8 +17,8 @@ response=$(curl \
     --write-out "%{http_code}" \
     --request POST \
     --data-urlencode "path=${SEARCH_PATH}" \
-    --header "X-Api-Key: ${CROSS_SEED_API_KEY}" \
-    "http://${CROSS_SEED_HOST}:${CROSS_SEED_PORT}/api/webhook"
+    --header "X-Api-Key: ${XSEED_API_KEY}" \
+    "http://${XSEED_HOST}:${XSEED_PORT}/api/webhook"
 )
 
 if [[ "${response}" != "204" ]]; then
