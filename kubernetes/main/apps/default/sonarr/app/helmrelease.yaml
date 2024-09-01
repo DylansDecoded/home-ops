@@ -106,6 +106,7 @@ spec:
     persistence:
       config:
         existingClaim: sonarr
+
       pushover-notify:
         type: configMap
         name: sonarr-configmap
@@ -116,6 +117,7 @@ spec:
             readOnly: true
       tmp:
         type: emptyDir
+        
       media:
         type: nfs
         server: truenas.robsonhome.cloud
