@@ -28,4 +28,4 @@ fi
 
 printf "Successfully searched cross-seed for '%s'\n" "${SEARCH_PATH}"
 
-sleep "${CROSS_SEED_SLEEP_INTERVAL}"
+sleep "${XSEED_SEED_SLEEP_INTERVAL}"
