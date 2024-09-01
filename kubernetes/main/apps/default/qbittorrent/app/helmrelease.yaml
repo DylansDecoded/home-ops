@@ -61,7 +61,7 @@ spec:
                valueFrom:
                 secretKeyRef:
                  name: qbittorrent-secret
-                 key: CROSS_SEED_API_KEY
+                 key: XSEED_API_KEY
             probes:
               liveness:
                 enabled: true

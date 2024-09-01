@@ -5,10 +5,9 @@ resources:
 # Pre Flux-Kustomizations
 - ./namespace.yaml
 # Flux-Kustomizations
-- ./actual/ks.yaml
 - ./atuin/ks.yaml
 - ./autobrr/ks.yaml
-# - ./cross-seed/ks.yaml
+- ./cross-seed/ks.yaml
 - ./echo-server/ks.yaml
 - ./filebrowser/ks.yaml
 - ./flaresolverr/ks.yaml
