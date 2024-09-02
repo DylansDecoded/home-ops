@@ -5,5 +5,13 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/volsync
   - ../../../../templates/gatus/guarded
+  - ../../../../templates/volsync
+configMapGenerator:
+  - name: sabnzbd-scripts
+    files:
+      - post-process.sh=./resources/post-process.sh
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled

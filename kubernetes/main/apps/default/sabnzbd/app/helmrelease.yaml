@@ -110,6 +110,12 @@ spec:
           - path: /config/logs
       tmp:
         type: emptyDir
+      scripts:
+        type: configMap
+        name: sabnzbd-scripts
+        defaultMode: 0775
+        globalMounts:
+          - readOnly: true
       media:
         type: nfs
         server: truenas.robsonhome.cloud
