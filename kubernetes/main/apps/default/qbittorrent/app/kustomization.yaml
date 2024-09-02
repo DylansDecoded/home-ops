@@ -16,7 +16,7 @@ configMapGenerator:
         loki_rule: "true"
   - name: qbittorrent-scripts
     files:
-      - cross-seed.sh=./resources/post-process.sh
+      - post-process.sh=./resources/post-process.sh
   - name: qbittorrent-dnsdist
     files:
      - dnsdist.conf=./resources/dnsdist.conf
