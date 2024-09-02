@@ -31,8 +31,9 @@ objects:
 
 ffmpeg:
   global_args: ["-hide_banner", "-loglevel", "warning"]
-  hwaccel_args: preset-vaapi
-  output_args: 
+  hwaccel_args: preset-intel-qsv-h264
+  input_args: preset-rtsp-restream 
+  output_args:
     record: preset-record-generic-audio-copy
 
 snapshots:
@@ -55,13 +56,12 @@ record:
 go2rtc:
   streams:
     reolink_backporch_turret_cam_main:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main#video=copy#audio=copy#audio=opus#hardware"
-      # - ffmpeg:reolink_backporch_turret_cam#video=copy#audio=aac#audio=opus#hardware
+      - rtmp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
     reolink_backporch_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
 
     reolink_floodlight_cam_main:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main#video=copy#audio=copy#audio=opus#hardware"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
     reolink_floodlight_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub
     
@@ -71,19 +71,21 @@ cameras:
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/reolink_floodlight_cam_main
-          input_args: preset-rtsp-restream
+          hwaccel_args: preset-intel-qsv-h265
           roles: ['record']
           
         - path: rtsp://127.0.0.1:8554/reolink_floodlight_cam_sub
-          input_args: preset-rtsp-restream
           roles: ['detect']
+    record:
+     enabled: True
+     width: 1536
+     height: 4096
+     fps: 20
     detect:
-      enabled: True # <---- disable detection until you have a working camera feed
-      width: 1536 # <---- update for your camera's resolution
-      height: 576 # <---- update for your camera's resolution
+      enabled: True
+      width: 1536
+      height: 576
       fps: 7
-
-        
     motion:
       mask: 1133,204,1349,266,1451,311,1536,576,1094,576,931,163
     zones:
@@ -101,14 +103,21 @@ cameras:
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/reolink_backporch_cam_sub
-          input_args: preset-rtsp-restream
+          hwaccel_args: preset-intel-qsv-h264
           roles: ['detect']
 
-
         - path: rtsp://127.0.0.1:8554/reolink_backporch_cam_main
-          input_args: preset-rtsp-restream
           roles: ['record']
-
+    record:
+     enabled: True
+     width: 2560
+     height: 1440
+     fps: 30
+    detect:
+      enabled: True
+      width: 640
+      height: 480
+      fps: 10
     motion:
       mask: 418,176,141,181,106,89,71,0,169,0,332,0,640,0,640,248
     zones:
