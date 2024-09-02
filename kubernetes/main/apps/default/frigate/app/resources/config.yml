@@ -56,7 +56,7 @@ record:
 go2rtc:
   streams:
     reolink_backporch_turret_cam_main:
-      - rtmp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
     reolink_backporch_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
 
