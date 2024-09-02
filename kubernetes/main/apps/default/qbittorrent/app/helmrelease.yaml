@@ -196,6 +196,7 @@ spec:
           qbittorrent:
             app:
               - path: /media/downloads/torrents
+                subPath: downloads/torrents
       
       dnsdist:
         type: configMap
@@ -211,10 +212,8 @@ spec:
         type: configMap
         name: qbittorrent-scripts
         defaultMode: 0775
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config/scripts
+        globalMounts:
+          - readOnly: true
 
       
 
