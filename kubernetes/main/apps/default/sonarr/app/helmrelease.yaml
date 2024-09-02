@@ -107,13 +107,16 @@ spec:
       config:
         existingClaim: sonarr
 
-      pushover-notify:
+      scripts:
         type: configMap
         name: sonarr-configmap
         defaultMode: 0775
         globalMounts:
           - path: /scripts/pushover-notify.sh
             subPath: pushover-notify.sh
+            readOnly: true
+          - path: /scripts/refresh-series.sh
+            subPath: refresh-series.sh
             readOnly: true
       tmp:
         type: emptyDir
