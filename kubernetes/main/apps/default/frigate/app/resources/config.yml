@@ -77,10 +77,7 @@ cameras:
         - path: rtsp://127.0.0.1:8554/reolink_floodlight_cam_sub
           roles: ['detect']
     record:
-     enabled: True
-     width: 1536
-     height: 4096
-     fps: 20
+      enabled: True
     detect:
       enabled: True
       width: 1536
@@ -109,10 +106,7 @@ cameras:
         - path: rtsp://127.0.0.1:8554/reolink_backporch_cam_main
           roles: ['record']
     record:
-     enabled: True
-     width: 2560
-     height: 1440
-     fps: 30
+      enabled: True
     detect:
       enabled: True
       width: 640
