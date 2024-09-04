@@ -3,15 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname multus
+  name: &app multus
   namespace: flux-system
 spec:
   targetNamespace: network
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *appname
+      app.kubernetes.io/name: *app
   interval: 10m
-  path: "./kubernetes/main/apps/network/multus/app"
+  path: ./kubernetes/main/apps/network/multus/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -22,15 +22,15 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname multus-config
+  name: &app multus-config
   namespace: flux-system
 spec:
   targetNamespace: network
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *appname
+      app.kubernetes.io/name: *app
   interval: 10m
-  path: "./kubernetes/main/apps/network/multus/config"
+  path: ./kubernetes/main/apps/network/multus/config
   prune: true
   sourceRef:
     kind: GitRepository
