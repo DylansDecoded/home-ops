@@ -32,6 +32,16 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name":"multus-clearnet",
+                "namespace": "network",
+                "ips": ["10.1.40.80/24"],
+                "mac": "3e:59:e4:f7:43:08"
+              }]
+
         containers:
           app:
             image:
