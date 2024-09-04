@@ -4,6 +4,8 @@
 set -euo pipefail
 
 # User defined variables for pushover
+PUSHOVER_URL="${sonarr_applicationurl:-localhost}"
+PUSHOVER_URL_TITLE="View in ${sonarr_instancename:-Sonarr}"
 PUSHOVER_USER_KEY="${PUSHOVER_USER_KEY:-required}"
 PUSHOVER_TOKEN="${PUSHOVER_TOKEN:-required}"
 PUSHOVER_PRIORITY="${PUSHOVER_PRIORITY:-"-2"}"
