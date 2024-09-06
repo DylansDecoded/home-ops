@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bernd-schorgers/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -10,91 +10,57 @@ spec:
     spec:
       chart: app-template
       version: 3.4.0
+      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-    - name: volsync
-      namespace: volsync-system
+
   values:
     controllers:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
+
         pod:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
                 "name":"multus-clearnet",
                 "namespace": "network",
-                "ips": ["10.1.40.80/24"],
+                "ips": ["10.1.40.140/24"],
                 "mac": "3e:59:e4:f7:43:08"
               }]
 
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/home-assistant
-              tag: 2024.8.3@sha256:4c66f07029ce461e2e57991968977eea759bf231caa4ced7116d478a6e5bcb37
-            env:
-              TZ: America/New_York
-              HASS_HTTP_TRUSTED_PROXY_1: 10.1.33.0/24
-              HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
+              repository: ghcr.io/home-assistant/home-assistant
+              tag: 2024.9.0
             envFrom:
               - secretRef:
                   name: home-assistant-secret
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
             resources:
               requests:
-                cpu: 10m
+                cpu: 47m
+                memory: 2Gi
               limits:
                 memory: 2Gi
-          code-server:
-            image:
-              repository: ghcr.io/coder/code-server
-              tag: 4.92.2@sha256:f32cfa5e7cc768f60969f1d2183fc4c7aa093b80b93c365535e83f79ccf004f2
-            args: [
-              "--auth", "none",
-              "--user-data-dir", "/config/.vscode",
-              "--extensions-dir", "/config/.vscode",
-              "--port", "12321",
-              "/config"
-            ]
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 512Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+
     service:
       app:
         controller: home-assistant
         ports:
           http:
             port: 8123
-          code-server:
-            port: 12321
+
     ingress:
       app:
         annotations:
@@ -107,31 +73,18 @@ spec:
                 service:
                   identifier: app
                   port: http
-      code-server:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
-        className: internal
-        hosts:
-          - host: hass-code.robsonhome.cloud
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: code-server
+                  
     persistence:
       config:
         existingClaim: home-assistant
+        advancedMounts:
+          home-assistant:
+            app:
+              - path: /config
+      deploy-key:
+        type: secret
+        name: home-assistant-secret
+        defaultMode: 256
         globalMounts:
-          - path: /config
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/logs
-      tts:
-        type: emptyDir
-        globalMounts:
-          - path: /config/tts
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+          - path: /root/.ssh/id_rsa
+            subPath: GH_DEPLOY_KEY
