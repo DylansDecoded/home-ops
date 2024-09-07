@@ -39,7 +39,7 @@ spec:
                 "name":"multus-clearnet",
                 "namespace": "network",
                 "ips": ["10.1.40.140/24"],
-                "mac": "3e:59:e4:f7:43:08"
+                "mac": "3d:59:e4:f7:43:08"
               }]
 
         containers:
