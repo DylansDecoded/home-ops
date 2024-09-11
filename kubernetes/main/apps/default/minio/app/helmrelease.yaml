@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: quay.io/minio/minio
-              tag: RELEASE.2024-08-17T01-24-54Z@sha256:6f23072e3e222e64fe6f86b31a7f7aca971e5129e55cbccef649b109b8e651a1
+              tag: RELEASE.2024-09-09T16-59-28Z@sha256:1ca1b68b0d8bff8eda22e11eafb9243d65b143e4c3e3f63bcf412c5df8464125
             env:
               MINIO_API_CORS_ALLOW_ORIGIN: https://minio.robsonhome.cloud,https://s3.robsonhome.cloud
               MINIO_BROWSER_REDIRECT_URL: https://minio.robsonhome.cloud
