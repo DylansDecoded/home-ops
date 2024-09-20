@@ -9,7 +9,7 @@ spec:
     {
       "cniVersion": "0.3.1",
       "name": "multus-clearnet",
-      "master": "eno1",
+      "master": "eno1.40",
       "type": "bridge",
       "ipam": {
               "type": "host-local",
