@@ -10,9 +10,9 @@ talosconfig
 *.pub
 *.key
 # Archive
-.archive
+.archive/
 # Private
-.private
+.private/
 .bin
 # Ansible
 .venv*
@@ -26,3 +26,4 @@ Brewfile.lock.json
 wiki
 # Bootstrap
 /config.yaml
+.task/

@@ -36,10 +36,11 @@ spec:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
-                "name": "multus-clearnet",
-                "namespace": "network"
+                "name":"multus-servernet",
+                "namespace": "network",
+                "ips": ["10.1.30.140/24"],
+                "mac": "3d:59:e4:f7:43:18"
               }]
-
         containers:
           app:
             image:

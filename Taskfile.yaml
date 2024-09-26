@@ -4,6 +4,7 @@ version: "3"
 
 vars:
   # Directories
+  CONTROLLER: "kube-01"
   BOOTSTRAP_DIR: "{{.ROOT_DIR}}/bootstrap"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
   PRIVATE_DIR: "{{.ROOT_DIR}}/.private"
@@ -23,6 +24,7 @@ env:
   PYTHONDONTWRITEBYTECODE: "1"
   SOPS_AGE_KEY_FILE: "{{.AGE_FILE}}"
   VIRTUAL_ENV: "{{.ROOT_DIR}}/.venv"
+
 
 includes:
   bootstrap: .taskfiles/Bootstrap

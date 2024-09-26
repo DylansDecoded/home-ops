@@ -1,20 +1,23 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 ---
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.7.6
+talosVersion: v1.8.0
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.31.0
+kubernetesVersion: v1.31.1
 
-clusterName: "main"
+clusterName: main
+
 endpoint: https://10.1.33.254:6443
+
 clusterPodNets:
-  - "10.42.0.0/16"
+  - 10.42.0.0/16
 clusterSvcNets:
-  - "10.43.0.0/16"
+  - 10.43.0.0/16
+
 additionalApiServerCertSans: &sans
   - 10.1.33.254
+  - k8s.robsonhome.cloud
   - 127.0.0.1 # KubePrism
-  - kubecluster.robsonhome.cloud
   
 additionalMachineCertSans: *sans
 
@@ -23,77 +26,300 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: "kube-01"
-    ipAddress: "10.1.33.11"
-    installDisk: "/dev/nvme0n1"
-    talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
+  - hostname: kube-01.robsonhome.cloud
+    ipAddress: 10.1.33.11
+    installDisk: &installDisk /dev/nvme0n1
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "10:62:e5:00:4c:12"
+      - interface: eno1
+      # - deviceSelector:
+      #     hardwareAddr: 10:62:e5:00:4c:12
         dhcp: true
         mtu: 1500
         vip:
-          ip: "10.1.33.254"
-  - hostname: "kube-02"
-    ipAddress: "10.1.33.12"
-    installDisk: "/dev/nvme0n1"
-    talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "18:60:24:27:27:a7"
-        dhcp: true
-        mtu: 1500
-        vip:
-          ip: "10.1.33.254"
-  - hostname: "kube-03"
-    ipAddress: "10.1.33.13"
-    installDisk: "/dev/nvme0n1"
-    talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "ac:e2:d3:0d:60:f0"
-        dhcp: true
-        mtu: 1500
-        vip:
-          ip: "10.1.33.254"
-  - hostname: "kube-04"
-    ipAddress: "10.1.33.14"
-    installDisk: "/dev/nvme0n1"
-    talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
-    controlPlane: false
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "ac:e2:d3:10:d8:25"
-        dhcp: true
-        mtu: 1500
-  - hostname: "kube-05"
-    ipAddress: "10.1.33.15"
-    installDisk: "/dev/nvme0n1"
-    talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
-    controlPlane: false
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "ac:e2:d3:15:fd:f9"
-        dhcp: true
-        mtu: 1500
+          ip: 10.1.33.254
+        vlans: 
+          - &vlan30
+            vlanId: 30
+            mtu: 1500
+            dhcp: false
 
-# # Global patches
-# patches:
-#   - "@./patches/global/cluster-discovery.yaml"
-#   - "@./patches/global/containerd.yaml"
-#   - "@./patches/global/disable-search-domain.yaml"
-#   - "@./patches/global/hostdns.yaml"
-#   - "@./patches/global/kubelet.yaml"
-#   - "@./patches/global/openebs-local.yaml"
-#   - "@./patches/global/sysctl.yaml"
+  - hostname: kube-02.robsonhome.cloud
+    ipAddress: 10.1.33.12
+    installDisk: *installDisk
+    controlPlane: true
+    networkInterfaces:
+      - interface: eno1
+        dhcp: true
+        mtu: 1500
+        vip:
+          ip: 10.1.33.254
+        vlans:
+          - *vlan30
+
+  - hostname: kube-03.robsonhome.cloud
+    ipAddress: 10.1.33.13
+    installDisk: *installDisk
+    controlPlane: true
+    networkInterfaces:
+      - interface: eno1
+        dhcp: true
+        mtu: 1500
+        vip:
+          ip: 10.1.33.254
+        vlans:
+          - *vlan30
+
+  - hostname: kube-04.robsonhome.cloud
+    ipAddress: 10.1.33.14
+    installDisk: *installDisk
+    controlPlane: false
+    networkInterfaces:
+      - interface: eno1
+        dhcp: true
+        mtu: 1500
+        vlans:
+          - *vlan30
+
+  - hostname: kube-05.robsonhome.cloud
+    ipAddress: 10.1.33.15
+    installDisk: *installDisk
+    
+    # talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
+    controlPlane: false
+    networkInterfaces:
+      - interface: eno1
+        dhcp: true
+        mtu: 1500
+        vlans:
+         - *vlan30
+
+  - hostname: kube-06.robsonhome.cloud
+    ipAddress: 10.1.33.16
+    installDisk: *installDisk
+    schematic:
+      customization:
+        extraKernelArgs:
+        - net.ifnames=0
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/intel-ucode
+            - siderolabs/i915-ucode
+            - siderolabs/gasket-driver
+    # talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
+    controlPlane: false
+    networkInterfaces:
+      - interface: eno1
+        dhcp: true
+        mtu: 1500
+        vlans:
+         - *vlan30
+  
 
 # # Controller patches
-# controlPlane:
-#   patches:
-#     - "@./patches/controller/cluster.yaml"
-#     - "@./patches/controller/disable-admission-controller.yaml"
-#     - "@./patches/controller/etcd.yaml"
+controlPlane:
+  schematic:
+      customization:
+        extraKernelArgs:
+        - net.ifnames=0
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/intel-ucode
+            - siderolabs/i915-ucode
+            - siderolabs/gasket-driver
+  nodeLabels:
+      topology.kubernetes.io/region: main
+      topology.kubernetes.io/zone: w
+  patches:
+    - &containerdPatch |-
+      machine:
+        files:
+          - op: create
+            path: /etc/cri/conf.d/20-customization.part
+            content: |-
+              [plugins."io.containerd.grpc.v1.cri"]
+                enable_unprivileged_ports = true
+                enable_unprivileged_icmp = true
+              [plugins."io.containerd.grpc.v1.cri".containerd]
+                discard_unpacked_layers = false
+              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+                discard_unpacked_layers = false
 
+  # Disable search domain everywhere
+    - &disableSearchDomainPatch |-
+      machine:
+        network:
+          disableSearchDomain: true
+
+    # Enable cluster discovery
+    - &discoveryPatch |-
+      cluster:
+        discovery:
+          registries:
+            kubernetes:
+              disabled: false
+            service:
+              disabled: true
+
+    # Enable host dns
+    - &hostDnsPatch |-
+      machine:
+        features:
+          hostDNS:
+            enabled: true
+            resolveMemberNames: true
+            forwardKubeDNSToHost: false
+
+    # Configure kubelet
+    - &kubeletPatch |-
+      machine:
+        kubelet:
+          extraArgs:
+            rotate-server-certificates: true
+          extraMounts:
+            - destination: /var/openebs/local
+              type: bind
+              source: /var/openebs/local
+              options:
+                - bind
+                - rshared
+                - rw
+          nodeIP:
+            validSubnets:
+              - 10.1.33.0/24
+
+    # Enable KubePrism
+    - &kubePrismPatch |-
+      machine:
+        features:
+          kubePrism:
+            enabled: true
+            port: 7445
+
+  # Force nameserver
+    - &nameserverPatch |-
+      machine:
+        network:
+          nameservers:
+            - 10.1.30.43
+
+    # Configure NFS mount options
+    - &nfsPatch |
+      machine:
+        files:
+          - op: overwrite
+            path: /etc/nfsmount.conf
+            permissions: 0o644
+            content: |
+              [ NFSMount_Global_Options ]
+              nfsvers=4.1
+              hard=True
+              noatime=True
+              nodiratime=True
+              rsize=131072
+              wsize=131072
+              nconnect=8
+    # Static host entries
+    - &staticHostEntriesPatch |-
+      machine:
+        network:
+          extraHostEntries:
+            - ip: 10.1.33.254
+              aliases:
+                - k8s.robsonhome.cloud
+
+    # Custom sysctl settings
+    - &sysctlPatch |-
+      machine:
+        sysctls:
+          fs.inotify.max_queued_events: "65536"
+          fs.inotify.max_user_watches: "524288"
+          fs.inotify.max_user_instances: "8192"
+          net.core.rmem_max: "2500000"
+          net.core.wmem_max: "2500000"
+
+    # Custom Talos installer patch
+    - &talosPatch |-
+      machine:
+        install:
+          extraKernelArgs:
+            - mitigations=off
+
+    # Various udev rules
+    - &udevPatch |-
+      machine:
+        udev:
+          rules:
+            # Thunderbolt
+            - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+            # Intel GPU
+            - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
+            # Google Coral USB Accelerator
+            - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a6e", ATTRS{idProduct}=="089a", GROUP="20", MODE="0660"
+            - SUBSYSTEMS=="usb", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="9302", GROUP="20", MODE="0660"
+
+    # Cluster configuration
+    - |-
+      cluster:
+        allowSchedulingOnMasters: true
+        controllerManager:
+          extraArgs:
+            bind-address: 0.0.0.0
+        coreDNS:
+          disabled: true
+        proxy:
+          disabled: true
+        scheduler:
+          extraArgs:
+            bind-address: 0.0.0.0
+
+    # ETCD configuration
+    - |-
+      cluster:
+        etcd:
+          extraArgs:
+            listen-metrics-urls: http://0.0.0.0:2381
+          advertisedSubnets:
+            - 10.1.33.0/24
+
+    # Disable default API server admission plugins.
+    - |-
+      - op: remove
+        path: /cluster/apiServer/admissionControl
+
+    # Enable K8s Talos API Access
+    - |-
+      machine:
+        features:
+          kubernetesTalosAPIAccess:
+            enabled: true
+            allowedRoles:
+              - os:admin
+            allowedKubernetesNamespaces:
+              - system-upgrade
+worker:
+  schematic:
+      customization:
+        extraKernelArgs:
+        - net.ifnames=0
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/intel-ucode
+            - siderolabs/i915-ucode
+            - siderolabs/gasket-driver
+  nodeLabels:
+    topology.kubernetes.io/region: main
+    topology.kubernetes.io/zone: w
+  patches:
+    - *containerdPatch
+    - *disableSearchDomainPatch
+    - *discoveryPatch
+    - *hostDnsPatch
+    - *kubeletPatch
+    - *kubePrismPatch
+    - *nameserverPatch
+    - *nfsPatch
+    - *staticHostEntriesPatch
+    - *sysctlPatch
+    - *talosPatch
+    - *udevPatch

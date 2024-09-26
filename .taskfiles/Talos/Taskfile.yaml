@@ -69,22 +69,22 @@ tasks:
     preconditions:
       - talosctl config get-contexts | grep main
 
-  # generate-clusterconfig:
-  #   desc: Generate clusterconfig for Talos
-  #   cmds:
-  #     - talhelper genconfig
-  #       --env-file {{.KUBERNETES_DIR}}/main/bootstrap/talos/talenv.sops.yaml
-  #       --secret-file {{.KUBERNETES_DIR}}/main/bootstrap/talos/talsecret.sops.yaml
-  #       --config-file {{.KUBERNETES_DIR}}/main/bootstrap/talos/talconfig.yaml
-  #       --out-dir {{.KUBERNETES_DIR}}/main/bootstrap/talos/clusterconfig
-  #   requires:
-  #     vars:
-  #       - cluster
-  #   preconditions:
-  #     - which talhelper
-  #     - test -f {{.KUBERNETES_DIR}}/main/bootstrap/talos/talenv.sops.yaml
-  #     - test -f {{.KUBERNETES_DIR}}/main/bootstrap/talos/talsecret.sops.yaml
-  #     - test -f {{.KUBERNETES_DIR}}/main/bootstrap/talos/talconfig.yaml
+  generate-clusterconfig:
+    desc: Generate clusterconfig for Talos
+    cmds:
+      - talhelper genconfig
+        --env-file {{.KUBERNETES_DIR}}/main/bootstrap/talos/talenv.sops.yaml
+        --secret-file {{.KUBERNETES_DIR}}/main/bootstrap/talos/talsecret.sops.yaml
+        --config-file {{.KUBERNETES_DIR}}/main/bootstrap/talos/talconfig.yaml
+        --out-dir {{.KUBERNETES_DIR}}/main/bootstrap/talos/clusterconfig
+    requires:
+      vars:
+        - cluster
+    preconditions:
+      - which talhelper
+      - test -f {{.KUBERNETES_DIR}}/main/bootstrap/talos/talenv.sops.yaml
+      - test -f {{.KUBERNETES_DIR}}/main/bootstrap/talos/talsecret.sops.yaml
+      - test -f {{.KUBERNETES_DIR}}/main/bootstrap/talos/talconfig.yaml
 
   upgrade:
     desc: Upgrade Talos on a node
