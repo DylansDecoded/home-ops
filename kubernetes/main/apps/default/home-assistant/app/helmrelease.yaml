@@ -38,7 +38,7 @@ spec:
               [{
                 "name":"multus-servernet",
                 "namespace": "network",
-                "ips": ["10.1.30.140/24"],
+                "ips": ["10.1.30.233/24"],
                 "mac": "3d:59:e4:f7:43:18"
               }]
         containers:
