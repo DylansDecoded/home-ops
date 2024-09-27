@@ -34,13 +34,13 @@ spec:
           reloader.stakater.com/auto: "true"
         pod:
           annotations:
-            k8s.v1.cni.cncf.io/networks: |
-              [{
-                "name": "macvlan-conf",   
-                "namespace": "network",
-                "mac": "c6:5e:a4:8e:7a:58",
-                "ips": ["10.1.33.221/24"]
-              }]
+            # k8s.v1.cni.cncf.io/networks: |
+            #   [{
+            #     "name": "macvlan-conf",   
+            #     "namespace": "network",
+            #     "mac": "c6:5e:a4:8e:7a:58",
+            #     "ips": ["10.1.33.221/24"]
+            #   }]
         containers:
           app:
             image:
