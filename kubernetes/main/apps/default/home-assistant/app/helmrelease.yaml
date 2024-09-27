@@ -36,9 +36,10 @@ spec:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
-                "name":"multus-clearnet",
+                "name": "macvlan-conf",   
                 "namespace": "network",
-                "ips": ["10.1.40.25/24"]
+                "mac": "c6:5e:a4:8e:7a:58",
+                "ips": ["10.1.33.221/24"]
               }]
         containers:
           app:
