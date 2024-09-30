@@ -3,10 +3,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: emqx-dashboard
+  annotations:
+    external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
 spec:
   ingressClassName: internal
   rules:
-    - host: &host emqx.robsonhome.cloud
+    - host: emqx.robsonhome.cloud
       http:
         paths:
           - path: /
@@ -16,5 +18,3 @@ spec:
                 name: emqx-dashboard
                 port:
                   number: 18083
-  tls:
-    - hosts: [*host]
