@@ -36,7 +36,7 @@ spec:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
-                "name":"macvlan-conf",
+                "name":"net-attach-trusted",
                 "namespace": "network",
                 "ips": ["10.1.40.220/24"],
                 "mac": "3d:59:e4:f7:43:08"
