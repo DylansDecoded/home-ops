@@ -32,15 +32,13 @@ nodes:
     controlPlane: true
     networkInterfaces:
       - interface: eno1
-      # - deviceSelector:
-      #     hardwareAddr: 10:62:e5:00:4c:12
         dhcp: true
         mtu: 1500
         vip:
           ip: 10.1.33.254
         vlans: 
-          - &vlan30
-            vlanId: 30
+          - &vlan40
+            vlanId: 40
             mtu: 1500
             dhcp: false
 
@@ -55,7 +53,7 @@ nodes:
         vip:
           ip: 10.1.33.254
         vlans:
-          - *vlan30
+          - *vlan40
 
   - hostname: kube-03.robsonhome.cloud
     ipAddress: 10.1.33.13
@@ -68,7 +66,7 @@ nodes:
         vip:
           ip: 10.1.33.254
         vlans:
-          - *vlan30
+          - *vlan40
 
   - hostname: kube-04.robsonhome.cloud
     ipAddress: 10.1.33.14
@@ -79,41 +77,29 @@ nodes:
         dhcp: true
         mtu: 1500
         vlans:
-          - *vlan30
+          - *vlan40
 
   - hostname: kube-05.robsonhome.cloud
     ipAddress: 10.1.33.15
     installDisk: *installDisk
-    
-    # talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
     controlPlane: false
     networkInterfaces:
       - interface: eno1
         dhcp: true
         mtu: 1500
         vlans:
-         - *vlan30
+         - *vlan40
 
   - hostname: kube-06.robsonhome.cloud
     ipAddress: 10.1.33.16
     installDisk: *installDisk
-    schematic:
-      customization:
-        extraKernelArgs:
-        - net.ifnames=0
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/intel-ucode
-            - siderolabs/i915-ucode
-            - siderolabs/gasket-driver
-    # talosImageURL: factory.talos.dev/installer/f0bab41395003b80e28f0d80c8fff4b264243942ad9b29ba2280d529eb2045df
     controlPlane: false
     networkInterfaces:
       - interface: eno1
         dhcp: true
         mtu: 1500
         vlans:
-         - *vlan30
+         - *vlan40
   
 
 # # Controller patches
@@ -244,6 +230,7 @@ controlPlane:
         install:
           extraKernelArgs:
             - mitigations=off
+            - net.ifnames=0
 
     # Various udev rules
     - &udevPatch |-

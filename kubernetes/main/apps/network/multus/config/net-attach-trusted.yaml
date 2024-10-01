@@ -2,7 +2,7 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
-  name: macvlan-conf
+  name: net-attach-trusted
 spec:
   config: |-
     {
@@ -10,9 +10,9 @@ spec:
       "plugins": [
         {
           "type": "macvlan",
-          "name": "macvlan-conf",
+          "name": "net-attach-trusted",
           "capabilities": { "ips": true },
-          "master": "eth0.40",
+          "master": "eth0",
           "mode": "bridge",
           "ipam": {
             "type": "static",
