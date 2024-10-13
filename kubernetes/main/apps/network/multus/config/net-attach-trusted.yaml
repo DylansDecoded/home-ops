@@ -12,7 +12,7 @@ spec:
           "type": "macvlan",
           "name": "net-attach-trusted",
           "capabilities": { "ips": true },
-          "master": "eth0",
+          "master": "eth0.40",
           "mode": "bridge",
           "ipam": {
             "type": "host-local",
