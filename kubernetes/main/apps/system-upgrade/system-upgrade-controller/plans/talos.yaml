@@ -1,3 +1,4 @@
+
 ---
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
@@ -44,5 +45,8 @@ spec:
     args:
       - --nodes=$(NODE_IP)
       - upgrade
-      - --image=factory.talos.dev/installer/${TALOS_SCHEMATIC_ID}:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
+      - --image=factory.talos.dev/installer/2a562b8a99951b896c4b03c1d41faf38bf783be5d18eecd02b4fb292e5de7c4b:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
+      - --preserve=true
       - --wait=false
+
+      
