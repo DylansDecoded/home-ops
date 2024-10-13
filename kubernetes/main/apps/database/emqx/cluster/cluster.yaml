@@ -12,7 +12,7 @@ spec:
         backend = "built_in_database"
         mechanism = "password_based"
         password_hash_algorithm {
-            name = "bcrypt",
+            name = "bcrypt"
         }
         user_id_type = "username"
         bootstrap_file = "/opt/init-user.json"
@@ -48,6 +48,6 @@ spec:
   listenersServiceTemplate:
     metadata:
       annotations:
-        io.cilium/lb-ipam-ips: 10.1.33.61
+        lbipam.cilium.io/ips: 10.1.33.61
     spec:
       type: LoadBalancer
