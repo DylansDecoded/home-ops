@@ -32,21 +32,22 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
+
         pod:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
-                "name":"net-attach-trusted",
+                "name":"multus-homenet",
                 "namespace": "network",
-                "ips": ["10.1.40.220/24"],
-                "mac": "3d:59:e4:f7:43:08"
+                "ips": ["10.1.40.233/24"],
+                "mac": "3e:59:e4:f7:43:08"
               }]
 
         containers:
           app:
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2024.9.3
+              tag: 2024.10.2
             envFrom:
               - secretRef:
                   name: home-assistant-secret
