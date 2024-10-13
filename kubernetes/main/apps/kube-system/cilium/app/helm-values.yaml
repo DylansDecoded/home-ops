@@ -1,13 +1,13 @@
 ---
 autoDirectNodeRoutes: true
 bandwidthManager:
-  bbr: true
   enabled: true
+  bbr: true
 bpf:
   masquerade: true
   tproxy: true
 cgroup:
-  autoMount:
+  automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
 cluster:
@@ -15,7 +15,7 @@ cluster:
   name: main
 cni:
   exclusive: false
-device: eth0+
+devices: eth+
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
