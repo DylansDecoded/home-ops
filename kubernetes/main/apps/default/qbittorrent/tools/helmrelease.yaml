@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -9,7 +8,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.4.0
+      version: 3.5.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -36,26 +35,26 @@ spec:
           successfulJobsHistory: 1
           failedJobsHistory: 1
         initContainers:
-          tagging: &container
+          tag: &container
             image:
               repository: ghcr.io/buroa/qbtools
-              tag: v0.17.0@sha256:2b3f49c9b8eea0561baa15ca950067d9560ed250f6f3111a3ca2eca26eeb4f2b
+              tag: v0.19.2@sha256:98b84b4b0e1e5f4fcff3cd2e6b5c5fe2168d415bccd38169dc80b161139c955f
             env:
+              QBITTORRENT_HOST: qbittorrent.default.svc.cluster.local
+              QBITTORRENT_PORT: 80
+              SABNZBD_HOST: sabnzbd.default.svc.cluster.local
+              SABNZBD_PORT: 80
               TZ: *timeZone
-              POD_NAMESPACE:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
+            envFrom:
+              - secretRef:
+                  name: qbtools-secret
             args: [
               "tagging",
               "--added-on",
               "--expired",
               "--last-activity",
               "--sites",
-              "--unregistered",
-              "--server", "qbittorrent.$(POD_NAMESPACE).svc.cluster.local",
-              "--port", "80",
-              "--config", "/config/config.yaml"
+              "--unregistered"
             ]
             securityContext:
               allowPrivilegeEscalation: false
@@ -73,11 +72,9 @@ spec:
               "prune",
               "--exclude-category", "manual",
               "--exclude-category", "music",
-              "--exclude-tag", "added:24h",
-              "--include-tag", "unregistered",
-              # "--dry-run",
-              "--server", "qbittorrent.$(POD_NAMESPACE).svc.cluster.local",
-              "--port", "80"
+              "--exclude-tag", "added:1d",
+              "--include-tag", "unregistered"
+              # "--dry-run"
             ]
           expired:
             <<: *container
@@ -85,11 +82,9 @@ spec:
               "prune",
               "--exclude-category", "manual",
               "--exclude-category", "music",
-              "--exclude-tag", "added:24h",
-              "--include-tag", "expired", # defined in config.yaml
-              # "--dry-run",
-              "--server", "qbittorrent.$(POD_NAMESPACE).svc.cluster.local",
-              "--port", "80"
+              "--exclude-tag", "added:1d",
+              "--include-tag", "expired"
+              # "--dry-run"
             ]
         pod:
           restartPolicy: OnFailure
@@ -97,17 +92,15 @@ spec:
         type: cronjob
         cronjob:
           <<: *cronJobSpec
-          schedule: "@daily"
+          schedule: "@weekly"
         containers:
           app:
             <<: *container
             args: [
               "orphaned",
               "--exclude-pattern", "*_unpackerred*",
-              "--exclude-pattern", "*/manual/*",
-              # "--dry-run",
-              "--server", "qbittorrent.$(POD_NAMESPACE).svc.cluster.local",
-              "--port", "80"
+              "--exclude-pattern", "*/manual/*"
+              # "--dry-run"
             ]
         pod:
           restartPolicy: OnFailure
@@ -117,9 +110,18 @@ spec:
             <<: *container
             args: [
               "reannounce",
-              "--process-seeding",
-              "--server", "qbittorrent.$(POD_NAMESPACE).svc.cluster.local",
-              "--port", "80"
+              "--process-seeding"
+            ]
+      limiter:
+        containers:
+          app:
+            <<: *container
+            args: [
+              "limiter",
+              "--max-line-speed-mbps", "100",
+              "--max-percent", "0.8",
+              "--limit-percent", "0.4",
+              "--interval", "5"
             ]
     defaultPodOptions:
       securityContext:
@@ -130,7 +132,7 @@ spec:
     persistence:
       secret-file:
         type: secret
-        name: qbtools-secret
+        name: qbtools-config-secret
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
