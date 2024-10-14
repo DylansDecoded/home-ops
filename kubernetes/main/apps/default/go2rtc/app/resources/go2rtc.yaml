@@ -2,6 +2,8 @@
 api:
   listen: :80
 rtsp:
+  username: ${REOLINK_USERNAME}
+  password: ${REOLINK_PASSWORD}
   listen: :554
 webrtc:
   listen: :8555
