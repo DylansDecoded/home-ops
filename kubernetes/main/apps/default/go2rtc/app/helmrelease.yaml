@@ -32,6 +32,9 @@ spec:
             image:
               repository: ghcr.io/alexxit/go2rtc
               tag: 1.9.4@sha256:61b8f04efe0f9025739ce0e5e5a5e0748b64c1e4bdb5ae707e9d0966150175e7
+            envFrom:
+              - secretRef:
+                  name: go2rtc-secret
             probes:
               liveness: &probes
                 enabled: true
