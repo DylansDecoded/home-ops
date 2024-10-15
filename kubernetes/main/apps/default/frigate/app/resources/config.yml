@@ -14,7 +14,8 @@ model:
   path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
   width: 320
   height: 320
-  input_pixel_format: rgb
+  input_tensor: "nhwc"
+  input_pixel_format: "bgr"
 
 detectors:
   coral:
