@@ -63,28 +63,35 @@ record:
 
 go2rtc:
   streams:
-    reolink_backporch_cam_main:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h265Preview_01_main
-      - "ffmpeg:reolink_backporch_cam_main#video=h264#audio=aac#hardware"
-    reolink_backporch_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
-
-    reolink_floodlight_cam_main:
+    driveway_floodlight_cam:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
-      - "ffmpeg:reolink_floodlight_cam_main#video=h264#audio=aac#hardware"
-    reolink_floodlight_cam_sub:
+      - "ffmpeg:driveway_floodlight_cam#video=copy#audio=copy#audio=opus"
+    
+    driveway_floodlight_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub
+
+    backporch_cam:
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
+      - "ffmpeg:backporch_cam#video=copy#audio=copy#audio=opus"
+    
+    backporch_cam_sub:
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
     
 
 cameras:
-  reolink_floodlight_cam:
+  driveway_floodlight_cam:
     ffmpeg:
+      output_args:
+        record: preset-record-generic-audio-copy
       inputs:
-        - path: rtsp://127.0.0.1:8554/reolink_floodlight_cam_main
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
+          input_args: preset-rtsp-restream
           roles: ['record']
           
-        - path: rtsp://127.0.0.1:8554/reolink_floodlight_cam_sub
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
+          input_args: preset-rtsp-restream
           roles: ['detect']
+
     record:
       enabled: True
     detect:
@@ -105,14 +112,15 @@ cameras:
         coordinates: 0.554,0.266,0.54,0.287,0.526,0.574,0.504,1,0.703,1,0.65,0.589,0.605,0.282
       
 
-  reolink_backporch_cam:
+  backporch_cam:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/reolink_backporch_cam_main
+        - path: rtsp://127.0.0.1:8554/backporch_cam
+          input_args: preset-rtsp-restream
           roles: ['record']
-        - path: rtsp://127.0.0.1:8554/reolink_backporch_cam_sub
+        - path: rtsp://127.0.0.1:8554/backporch_cam_sub
+          input_args: preset-rtsp-restream
           roles: ['detect']
-        
     record:
       enabled: True
     detect:
