@@ -44,9 +44,9 @@ spec:
               - --address
               - 0.0.0.0:80
               - --override-hostname
-              - truenas.robsonhome.cloud
+              - expanse.internal
               - --override-username
-              - kopia
+              - dylan
               - --without-password
               - --metrics-listen-addr
               - 0.0.0.0:8080
