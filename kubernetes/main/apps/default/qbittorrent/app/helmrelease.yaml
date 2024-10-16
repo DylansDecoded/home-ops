@@ -188,6 +188,11 @@ spec:
     persistence:
       config:
         existingClaim: qbittorrent
+        advancedMounts:
+          qbittorrent:
+            port-forward:
+              - path: /config
+
       scripts:
         type: configMap
         name: qbittorrent-scripts
