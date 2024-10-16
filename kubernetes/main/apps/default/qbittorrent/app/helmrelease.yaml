@@ -134,9 +134,6 @@ spec:
                   secretKeyRef:
                     name: qbittorrent-secret
                     key: WIREGUARD_PUBLIC_KEY
-            resources:
-              limits:
-                squat.ai/tun: "1"
             securityContext:
               capabilities:
                 add:
