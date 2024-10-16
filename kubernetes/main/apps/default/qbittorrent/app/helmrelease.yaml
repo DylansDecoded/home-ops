@@ -190,22 +190,16 @@ spec:
         existingClaim: qbittorrent
         advancedMounts:
           qbittorrent:
-            port-forward:
+            app:
               - path: /config
 
-      scripts:
-        type: configMap
-        name: qbittorrent-scripts
-        defaultMode: 0775
-        globalMounts:
-          - readOnly: true
-          
       empty-config:
         type: emptyDir
         advancedMounts:
           qbittorrent:
             port-forward:
               - path: /config
+
       media:
         type: nfs
         server: truenas.robsonhome.cloud
@@ -224,3 +218,11 @@ spec:
               - path: /etc/dnsdist/dnsdist.conf
                 subPath: dnsdist.conf
                 readOnly: true
+      scripts:
+        type: configMap
+        name: qbittorrent-scripts
+        defaultMode: 0775
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /config/scripts
