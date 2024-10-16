@@ -125,7 +125,6 @@ cameras:
           max_area: 105000
       track:
         - package
-        - 
         - person
         - cat
         - dog
@@ -172,7 +171,7 @@ cameras:
           roles: ['detect']
     
     objects:
-      track:
+      track: 
         - person
         - face
         - dog
