@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.4.0
+      version: 3.5.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -50,33 +50,23 @@ spec:
               - secretRef:
                   name: qbittorrent-secret
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v2/app/version
+                    port: *port
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 6
+              readiness: *probes
               startup:
                 enabled: true
                 spec:
                   failureThreshold: 30
-                  periodSeconds: 5
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /api/v2/app/version
-            #         port: *port
-            #       initialDelaySeconds: 30
-            #       periodSeconds: 30
-            #       timeoutSeconds: 10
-            #       failureThreshold: 6
-              # readiness: *probes
-              # startup:
-              #   enabled: true
-              #   spec:
-              #     failureThreshold: 30
-              #     periodSeconds: 10
+                  periodSeconds: 10
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -85,7 +75,7 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                memory: 8Gi
+                memory: 32Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -97,12 +87,13 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       nodeSelector:
         topology.kubernetes.io/zone: w
+      terminationGracePeriodSeconds: 300
     service:
       app:
         controller: qbittorrent
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.1.33.122
+          lbipam.cilium.io/ips: 10.1.33.139
         ports:
           http:
             port: *port
@@ -124,7 +115,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: qbittorrent
+        existingClaim: qbittorrent-config 
       scripts:
         type: configMap
         name: qbittorrent-scripts
