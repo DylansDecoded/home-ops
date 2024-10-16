@@ -21,7 +21,7 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      APP: qbittorrent-config
+      APP: *app
       VOLSYNC_CAPACITY: 2Gi
       VOLSYNC_ACCESSMODES: ReadWriteMany
       VOLSYNC_STORAGECLASS: ceph-filesystem
