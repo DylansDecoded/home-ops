@@ -119,11 +119,11 @@ spec:
                   secretKeyRef:
                     name: qbittorrent-secret
                     key: WIREGUARD_ENDPOINT_IP
-              WIREGUARD_ADDRESS:
+              WIREGUARD_ADDRESSES:
                 valueFrom:
                   secretKeyRef:
                     name: qbittorrent-secret
-                    key: WIREGUARD_ADDRESS
+                    key: WIREGUARD_ADDRESSES
               WIREGUARD_PRIVATE_KEY:
                   valueFrom:
                     secretKeyRef:
