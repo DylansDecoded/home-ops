@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.4.0
+      version: 3.5.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -32,9 +32,8 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
-
         pod:
-          annotations:
+         annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
                 "name":"multus-homenet",
@@ -43,42 +42,64 @@ spec:
                 "ips": ["10.1.40.209/24"],
                 "gateway": ["10.1.40.1"]
               }]
-
         containers:
           app:
             image:
-              repository: ghcr.io/home-assistant/home-assistant
-              tag: 2024.10.2
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2024.10.1@sha256:04614835418d2bdacd64685b516e58e7c5446f72485d446e7635282ba1a06c43
+            env:
+              TZ: America/New_York
+              HASS_HTTP_TRUSTED_PROXY_1: 10.1.0.0/16
+              HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
             envFrom:
               - secretRef:
                   name: home-assistant-secret
-            probes:
-              liveness:
-                enabled: false
-              readiness:
-                enabled: false
-              startup:
-                enabled: false
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 47m
-                memory: 2Gi
+                cpu: 10m
               limits:
                 memory: 2Gi
-
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.93.1@sha256:c69e398d1b64589b3b77a7becfd03f4ec524982def20e6bffbb51b1b839e72ba
+            args: [
+              "--auth", "none",
+              "--user-data-dir", "/config/.vscode",
+              "--extensions-dir", "/config/.vscode",
+              "--port", "12321",
+              "/config"
+            ]
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: home-assistant
         ports:
           http:
             port: 8123
-
+          code-server:
+            port: 12321
     ingress:
       app:
-        enabled: true
-        className: external
         annotations:
           external-dns.alpha.kubernetes.io/target: external.robsonhome.cloud
+        className: external
         hosts:
           - host: hass.robsonhome.cloud
             paths:
@@ -86,19 +107,31 @@ spec:
                 service:
                   identifier: app
                   port: http
-
+      code-server:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
+        className: internal
+        hosts:
+          - host: hass-code.robsonhome.cloud
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: code-server
     persistence:
       config:
         existingClaim: home-assistant
-        advancedMounts:
-          home-assistant:
-            app:
-              - path: /config
-
-      deploy-key:
-        type: secret
-        name: home-assistant-secret
-        defaultMode: 256
         globalMounts:
-          - path: /root/.ssh/id_ed25519
-            subPath: GH_DEPLOY_KEY
+          - path: /config
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tts:
+        type: emptyDir
+        globalMounts:
+          - path: /config/tts
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
