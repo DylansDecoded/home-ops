@@ -39,8 +39,9 @@ spec:
               [{
                 "name":"multus-homenet",
                 "namespace": "network",
-                "ips": ["10.1.40.233/24"],
-                "mac": "3e:59:e4:f7:43:08"
+                "mac": "3e:59:e4:f7:43:08",
+                "ips": ["10.1.40.209/24"],
+                "gateway": ["10.1.40.1"]
               }]
 
         containers:
@@ -75,9 +76,9 @@ spec:
     ingress:
       app:
         enabled: true
-        className: internal
+        className: external
         annotations:
-          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
+          external-dns.alpha.kubernetes.io/target: external.robsonhome.cloud
         hosts:
           - host: hass.robsonhome.cloud
             paths:
