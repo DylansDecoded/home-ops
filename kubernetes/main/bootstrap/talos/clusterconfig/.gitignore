@@ -1,7 +1,6 @@
-main-kube-01.yaml
-main-kube-02.yaml
-main-kube-03.yaml
-main-kube-04.yaml
-main-kube-05.yaml
-main-kube-06.yaml
-talosconfig
+main-m0.yaml
+main-m1.yaml
+main-m2.yaml
+main-w0.yaml
+main-w1.yaml
+main-w2.yaml

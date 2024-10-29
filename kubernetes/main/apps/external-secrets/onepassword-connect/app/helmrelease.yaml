@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.4.0
+      version: 3.5.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -37,7 +37,7 @@ spec:
               XDG_DATA_HOME: &configDir /config
               OP_HTTP_PORT: &apiPort 80
               OP_BUS_PORT: 11220
-              OP_BUS_PEERS: 127.0.0.1:11221
+              OP_BUS_PEERS: localhost:11221
               OP_SESSION:
                 valueFrom:
                   secretKeyRef:
@@ -79,7 +79,7 @@ spec:
               XDG_DATA_HOME: *configDir
               OP_HTTP_PORT: &syncPort 8081
               OP_BUS_PORT: 11221
-              OP_BUS_PEERS: 127.0.0.1:11220
+              OP_BUS_PEERS: localhost:11220
               OP_SESSION:
                 valueFrom:
                   secretKeyRef:
@@ -106,7 +106,6 @@ spec:
                   initialDelaySeconds: 15
             securityContext: *securityContext
             resources: *resources
-
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -114,27 +113,15 @@ spec:
         runAsGroup: 999
         fsGroup: 999
         fsGroupChangePolicy: OnRootMismatch
-
+        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: onepassword-connect
         ports:
           http:
             port: *apiPort
-
-    ingress:
-      app:
-        className: internal
-        hosts:
-          - host: "{{ .Release.Name }}.robsonhome.cloud"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-
     persistence:
       config:
         type: emptyDir
         globalMounts:
-          - path: /config
+          - path: *configDir

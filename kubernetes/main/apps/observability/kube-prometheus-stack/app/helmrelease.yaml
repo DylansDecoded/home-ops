@@ -59,9 +59,9 @@ spec:
     kubeControllerManager:
       enabled: true
       endpoints: &cp
-        - 10.1.33.11
-        - 10.1.33.12
-        - 10.1.33.13
+        - 10.1.20.10
+        - 10.1.20.11
+        - 10.1.20.12
     kubeEtcd:
       enabled: true
       endpoints: *cp

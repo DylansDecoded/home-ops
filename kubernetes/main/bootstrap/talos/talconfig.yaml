@@ -1,122 +1,185 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+
 ---
-# renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.8.0
-# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.31.1
+clusterName: &cluster main
 
-clusterName: main
-
-endpoint: https://10.1.33.254:6443
-
+# Kubernetes Pods Cluster/Service Network CIDR & Disable built-in Flannel to use Cilium
 clusterPodNets:
   - 10.42.0.0/16
 clusterSvcNets:
   - 10.43.0.0/16
 
+endpoint: https://k8s.robsonhome.cloud:6443
+
+# renovate: depName=ghcr.io/buroa/installer datasource=docker
+talosVersion: v1.8.1
+# renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+kubernetesVersion: v1.31.1
+
+
 additionalApiServerCertSans: &sans
-  - 10.1.33.254
+  - 10.1.20.254
   - k8s.robsonhome.cloud
-  - 127.0.0.1 # KubePrism
-  
+  - 127.0.0.1
+
 additionalMachineCertSans: *sans
 
-# Disable built-in Flannel to use Cilium
 cniConfig:
   name: none
-
-nodes:
-  - hostname: kube-01.robsonhome.cloud
-    ipAddress: 10.1.33.11
-    installDisk: &installDisk /dev/nvme0n1
-    controlPlane: true
-    networkInterfaces:
-      - interface: eno1
-        dhcp: true
-        mtu: 1500
-        vip:
-          ip: 10.1.33.254
-        vlans: 
-          - &vlan40
-            vlanId: 40
-            mtu: 1500
-            dhcp: false
-
-  - hostname: kube-02.robsonhome.cloud
-    ipAddress: 10.1.33.12
-    installDisk: *installDisk
-    controlPlane: true
-    networkInterfaces:
-      - interface: eno1
-        dhcp: true
-        mtu: 1500
-        vip:
-          ip: 10.1.33.254
-        vlans:
-          - *vlan40
-
-  - hostname: kube-03.robsonhome.cloud
-    ipAddress: 10.1.33.13
-    installDisk: *installDisk
-    controlPlane: true
-    networkInterfaces:
-      - interface: eno1
-        dhcp: true
-        mtu: 1500
-        vip:
-          ip: 10.1.33.254
-        vlans:
-          - *vlan40
-
-  - hostname: kube-04.robsonhome.cloud
-    ipAddress: 10.1.33.14
-    installDisk: *installDisk
-    controlPlane: false
-    networkInterfaces:
-      - interface: eno1
-        dhcp: true
-        mtu: 1500
-        vlans:
-          - *vlan40
-
-  - hostname: kube-05.robsonhome.cloud
-    ipAddress: 10.1.33.15
-    installDisk: *installDisk
-    controlPlane: false
-    networkInterfaces:
-      - interface: eno1
-        dhcp: true
-        mtu: 1500
-        vlans:
-         - *vlan40
-
-  - hostname: kube-06.robsonhome.cloud
-    ipAddress: 10.1.33.16
-    installDisk: *installDisk
-    controlPlane: false
-    networkInterfaces:
-      - interface: eno1
-        dhcp: true
-        mtu: 1500
-        vlans:
-         - *vlan40
   
+nodes:
+  - hostname: m0.robsonhome.cloud
+    ipAddress: 10.1.20.10
+    controlPlane: true
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 10:62:e5:00:4c:12
+        dhcp: false
+        mtu: 9000
+        addresses:
+          - 10.1.20.10/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        vip:
+          ip: 10.1.20.254
+        vlans:  
+          - vlanId: 30 # VPN/SERVICES
+            dhcp: false
+            mtu: 1500
+          - vlanId: 40 # HOMENET
+            dhcp: false
+            mtu: 1500
+        
 
-# # Controller patches
+  - hostname: m1.robsonhome.cloud
+    ipAddress: 10.1.20.11
+    installDisk: /dev/nvme0n1
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 18:60:24:27:27:a7
+        dhcp: false
+        addresses:
+          - 10.1.20.11/24
+        mtu: 9000
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        vip:
+          ip: 10.1.20.254
+        vlans:  
+          - vlanId: 30 # VPN/SERVICES
+            dhcp: false
+            mtu: 1500
+          - vlanId: 40 # HOMENET
+            dhcp: false
+            mtu: 1500
+
+  - hostname: m2.robsonhome.cloud
+    ipAddress: 10.1.20.12
+    installDisk: /dev/nvme0n1
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: ac:e2:d3:0d:60:f0
+        dhcp: false
+        addresses:
+          - 10.1.20.12/24
+        mtu: 9000
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        vip:
+          ip: 10.1.20.254
+        vlans:  
+          - vlanId: 30 # VPN/SERVICES
+            dhcp: false
+            mtu: 1500
+          - vlanId: 40 # HOMENET
+            dhcp: false
+            mtu: 1500
+
+  - hostname: w0.robsonhome.cloud
+    ipAddress: 10.1.20.13
+    installDisk: /dev/nvme0n1
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: ac:e2:d3:10:d8:25
+        dhcp: false
+        addresses:
+          - 10.1.20.13/24
+        mtu: 9000
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        vlans:  
+          - vlanId: 30 # VPN/SERVICES
+            dhcp: false
+            mtu: 1500
+          - vlanId: 40 # HOMENET
+            dhcp: false
+            mtu: 1500
+
+  - hostname: w1.robsonhome.cloud
+    ipAddress: 10.1.20.14
+    installDisk: /dev/nvme0n1
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: ac:e2:d3:15:fd:f9
+        dhcp: false
+        addresses:
+          - 10.1.20.14/24
+        mtu: 9000
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        vlans:  
+          - vlanId: 30 # VPN/SERVICES
+            dhcp: false
+            mtu: 1500
+          - vlanId: 40 # HOMENET
+            dhcp: false
+            mtu: 1500
+
+  - hostname: w2.robsonhome.cloud
+    ipAddress: 10.1.20.15
+    installDisk: /dev/nvme0n1
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 10:62:E5:1A:80:18
+        dhcp: false
+        addresses:
+          - 10.1.20.15/24
+        mtu: 9000
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        vlans:  
+          - vlanId: 30 # VPN/SERVICES
+            dhcp: false
+            mtu: 1500
+          - vlanId: 40 # HOMENET
+            dhcp: false
+            mtu: 1500
+
 controlPlane:
   schematic:
-      customization:
-        extraKernelArgs:
-        - net.ifnames=0
-        systemExtensions:
+    customization:
+      systemExtensions:
           officialExtensions:
-            - siderolabs/intel-ucode
-            - siderolabs/i915-ucode
-            - siderolabs/gasket-driver
+              - siderolabs/gasket-driver
+              - siderolabs/i915-ucode
+              - siderolabs/intel-ucode
+              - siderolabs/mei
   nodeLabels:
-      topology.kubernetes.io/region: main
-      topology.kubernetes.io/zone: w
+    topology.kubernetes.io/region: *cluster
+    topology.kubernetes.io/zone: m
   patches:
+    # Configure containerd
     - &containerdPatch |-
       machine:
         files:
@@ -131,7 +194,7 @@ controlPlane:
               [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
                 discard_unpacked_layers = false
 
-  # Disable search domain everywhere
+    # Disable search domain everywhere
     - &disableSearchDomainPatch |-
       machine:
         network:
@@ -162,17 +225,9 @@ controlPlane:
         kubelet:
           extraArgs:
             rotate-server-certificates: true
-          extraMounts:
-            - destination: /var/openebs/local
-              type: bind
-              source: /var/openebs/local
-              options:
-                - bind
-                - rshared
-                - rw
           nodeIP:
             validSubnets:
-              - 10.1.33.0/24
+              - 10.1.20.0/24
 
     # Enable KubePrism
     - &kubePrismPatch |-
@@ -182,12 +237,12 @@ controlPlane:
             enabled: true
             port: 7445
 
-  # Force nameserver
+    # Force nameserver
     - &nameserverPatch |-
       machine:
         network:
           nameservers:
-            - 10.1.30.43
+            - 10.1.20.43
 
     # Configure NFS mount options
     - &nfsPatch |
@@ -205,15 +260,24 @@ controlPlane:
               rsize=131072
               wsize=131072
               nconnect=8
+
+    # Configure NTP
+    - &ntpPatch |-
+      machine:
+        time:
+          disabled: false
+          servers:
+            - time.cloudflare.com
+
     # Static host entries
     - &staticHostEntriesPatch |-
       machine:
         network:
           extraHostEntries:
-            - ip: 10.1.33.254
+            - ip: 10.1.20.254
               aliases:
                 - k8s.robsonhome.cloud
-
+                
     # Custom sysctl settings
     - &sysctlPatch |-
       machine:
@@ -223,7 +287,6 @@ controlPlane:
           fs.inotify.max_user_instances: "8192"
           net.core.rmem_max: "2500000"
           net.core.wmem_max: "2500000"
-
     # Custom Talos installer patch
     - &talosPatch |-
       machine:
@@ -267,7 +330,7 @@ controlPlane:
           extraArgs:
             listen-metrics-urls: http://0.0.0.0:2381
           advertisedSubnets:
-            - 10.1.33.0/24
+            - 10.1.20.0/24
 
     # Disable default API server admission plugins.
     - |-
@@ -284,18 +347,18 @@ controlPlane:
               - os:admin
             allowedKubernetesNamespaces:
               - system-upgrade
+
 worker:
   schematic:
-      customization:
-        extraKernelArgs:
-        - net.ifnames=0
-        systemExtensions:
+    customization:
+      systemExtensions:
           officialExtensions:
-            - siderolabs/intel-ucode
-            - siderolabs/i915-ucode
-            - siderolabs/gasket-driver
+              - siderolabs/gasket-driver
+              - siderolabs/i915-ucode
+              - siderolabs/intel-ucode
+              - siderolabs/mei
   nodeLabels:
-    topology.kubernetes.io/region: main
+    topology.kubernetes.io/region: *cluster
     topology.kubernetes.io/zone: w
   patches:
     - *containerdPatch
@@ -306,7 +369,10 @@ worker:
     - *kubePrismPatch
     - *nameserverPatch
     - *nfsPatch
+    - *ntpPatch
     - *staticHostEntriesPatch
     - *sysctlPatch
     - *talosPatch
     - *udevPatch
+
+
