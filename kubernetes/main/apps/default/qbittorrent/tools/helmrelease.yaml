@@ -38,7 +38,7 @@ spec:
           tag: &container
             image:
               repository: ghcr.io/buroa/qbtools
-              tag: v0.19.2@sha256:98b84b4b0e1e5f4fcff3cd2e6b5c5fe2168d415bccd38169dc80b161139c955f
+              tag: v0.19.7@sha256:ceb38f6794b10a8f1147dbc8a4df24857e0dae72341eaf2d435796937d77ba3a
             env:
               QBITTORRENT_HOST: qbittorrent.default.svc.cluster.local
               QBITTORRENT_PORT: 80
