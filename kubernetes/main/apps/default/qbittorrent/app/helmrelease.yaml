@@ -1,9 +1,8 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: qbittorrent
+  name: &app qbittorrent
 spec:
   interval: 30m
   chart:
@@ -12,7 +11,7 @@ spec:
       version: 3.5.1
       sourceRef:
         kind: HelmRepository
-        name: bjw-s
+        name: bjw-s-charts
         namespace: flux-system
   install:
     remediation:
@@ -22,52 +21,20 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-    - name: volsync
-      namespace: volsync-system
   values:
     controllers:
       qbittorrent:
         annotations:
           reloader.stakater.com/auto: "true"
-          configmap.reloader.stakater.com/reload: qbittorrent-scripts,qbittorrent-dnsdist
-          secret.reloader.stakater.com/reload: qbittorrent-secret
-
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 568
-            runAsGroup: 568
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [10000]
-            seccompProfile: { type: RuntimeDefault }
-          nodeSelector:
-            topology.kubernetes.io/zone: w
-          terminationGracePeriodSeconds: 240
-
         containers:
           app:
-            nameOverride: qbittorrent
             image:
-              repository: ghcr.io/onedr0p/qbittorrent
-              tag: 5.0.1@sha256:7fc5af4f7f9c8e4998aaa18b5e2e634757c55f70c23b9bd46b40e09a4c7acda5
+              repository: ghcr.io/onedr0p/qbittorrent-beta
+              tag: 5.0.1@sha256:684422cab9fe3cba04812cf4207398bb72aa0f0283c92fddecd833648ac3f7bf
             env:
-              UMASK: "022"
-              QBT_WEBUI_PORT: &port 80
-              CROSS_SEED_ENABLED: false
-              CROSS_SEED_HOST: cross-seed.default.svc.cluster.local
-              CROSS_SEED_PORT: 80
-              CROSS_SEED_SLEEP_INTERVAL: 0
-              PUSHOVER_ENABLED: true
-              CROSS_SEED_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: CROSS_SEED_API_KEY
-
+              QBT_TORRENTING_PORT: &bittorrentPort 50413
+              QBT_WEBUI_PORT: &port 8080
+              TZ: America/New_York
             probes:
               liveness:
                 enabled: true
@@ -77,97 +44,47 @@ spec:
                 enabled: true
                 spec:
                   failureThreshold: 30
-                  periodSeconds: 5
+                  periodSeconds: 10
             resources:
               requests:
-                cpu: 49m
-                memory: 1024Mi
+                cpu: 100m
               limits:
-                memory: 8192Mi
+                memory: 8Gi
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-
-          dnsdist:
-            image:
-              repository: docker.io/powerdns/dnsdist-19
-              tag: 1.9.7
-
-          gluetun:
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.39.1
-            env:
-              DOT: "off"
-              DNS_ADDRESS: "127.0.0.2"
-              VPN_SERVICE_PROVIDER: custom
-              VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
-              VPN_PORT_FORWARDING: on
-              VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: 80
-              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/12,10.43.0.0/16 # Allow access to k8s subnets
-              WIREGUARD_ENDPOINT_IP:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_ENDPOINT_IP
-              WIREGUARD_ADDRESSES:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_ADDRESSES
-              WIREGUARD_PRIVATE_KEY:
-                  valueFrom:
-                    secretKeyRef:
-                      name: qbittorrent-secret
-                      key: WIREGUARD_PRIVATE_KEY
-              WIREGUARD_PUBLIC_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_PUBLIC_KEY
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
-              allowPrivilegeEscalation: false
-
-          port-forward:
-            image:
-              repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
-              tag: 0.0.2@sha256:3b97aaa6ff52037a4f9150ea3bb27ff949a1e1afd1044dcff0db3e9e56f807e4
-            env:
-              GLUETUN_CONTROL_SERVER_HOST: localhost
-              GLUETUN_CONTROL_SERVER_PORT: 8000
-              QBITTORRENT_HOST: localhost
-              QBITTORRENT_WEBUI_PORT: *port
-              CRON_ENABLED: true
-              CRON_SCHEDULE: "*/5 * * * *"
-              LOG_TIMESTAMP: false
-            securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 65536
 
     service:
       app:
-        controller: qbittorrent
+        controller: *app
+        nameOverride: *app
         ports:
           http:
             port: *port
+      bittorrent:
+        controller: *app
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.1.30.122
+        ports:
+          bittorrent-tcp:
+            port: *bittorrentPort
+            protocol: TCP
+          bittorrent-udp:
+            port: *bittorrentPort
+            protocol: UDP
 
     ingress:
       app:
@@ -175,51 +92,22 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         hosts:
-          - host: qb.robsonhome.cloud
+          - host: qb.robsonhome.cloud"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-      
+
     persistence:
       config:
-        existingClaim: qbittorrent
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config
-
-      empty-config:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            port-forward:
-              - path: /config
-
+        existingClaim: *app
       media:
         type: nfs
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /data/media
-
-      dnsdist:
-        type: configMap
-        name: qbittorrent-dnsdist
-        advancedMounts:
-          qbittorrent:
-            dnsdist:
-              - path: /etc/dnsdist/dnsdist.conf
-                subPath: dnsdist.conf
-                readOnly: true
-      scripts:
-        type: configMap
-        name: qbittorrent-scripts
-        defaultMode: 0775
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config/scripts
+        globalMounts:
+          - path: /media/downloads/torrents
+            subPath: downloads/torrents
+      tmp:
+        type: emptyDir
