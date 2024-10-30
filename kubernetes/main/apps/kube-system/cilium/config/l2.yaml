@@ -6,7 +6,8 @@ metadata:
   name: l2-policy
 spec:
   loadBalancerIPs: true
-  interfaces: ["^eth.*"]
+  interfaces:
+    - eth0.30
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
@@ -20,5 +21,5 @@ spec:
   allowFirstLastIPs: "Yes"
   blocks:
     - # Controller VIP: 10.1.33.254
-      start: 10.1.33.20
-      stop: 10.1.33.139
+      start: 10.1.30.3
+      stop: 10.1.30.149
