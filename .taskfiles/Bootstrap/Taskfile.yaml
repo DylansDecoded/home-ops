@@ -12,13 +12,13 @@ tasks:
     prompt: Bootstrap a Kubernetes cluster ... continue?
     vars: &vars
       CLUSTER: '{{.CLUSTER}}'
-      NODES: '{{.NODES | default "m0,m1,m2,w0,w1,w2"}}'
+      NODES: '{{ .NODES | default "m0,m1,m2,w0,w1,w2" }}'
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
       # - { task: etcd, vars: *vars }
       # - { task: conf, vars: *vars }
       # - { task: apps, vars: *vars }
-      - { task: rook, vars: *vars }
+      # - { task: rook, vars: *vars }
       - { task: flux, vars: *vars }
     requires:
       vars: [CLUSTER]
@@ -56,95 +56,142 @@ tasks:
       - test -f {{.CLUSTER_DIR}}/talosconfig
       - test -f {{.CLUSTER_DIR}}/bootstrap/apps/helmfile.yaml
       - talosctl config info &>/dev/null
-
   rook:
     internal: true
     vars: &vars
-      CLUSTER: '{{.CLUSTER}}'
-      NODE: '{{.ITEM}}'
-      ROOK_DISK: '{{.ROOK_DISK}}'
+      cluster: '{{.cluster}}'
+      nodes: m0 m1 m2 w0 w1 w2
+      disk: '/dev/sda'
     cmds:
-      - for: { var: NODES }
+      - for: { var: nodes }
         task: rook-data
-        vars: *vars
-      - for: { var: NODES }
+        vars:
+          node: '{{.ITEM}}'
+      - for: { var: nodes }
         task: rook-disk
-        vars: *vars
+        vars:
+          node: '{{.ITEM}}'
+          disk: '{{.disk}}'
 
-  rook-disk:
-    internal: true
-    cmds:
-      - minijinja-cli {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.yaml.j2 | kubectl apply --server-side --filename -
-      - until kubectl --namespace {{.NS}} get job/{{.JOB}} &>/dev/null; do sleep 5; done
-      - kubectl --namespace {{.NS}} wait job/{{.JOB}} --for=condition=complete --timeout=5m
-      - kubectl --namespace {{.NS}} logs job/{{.JOB}}
-      - kubectl --namespace {{.NS}} delete job {{.JOB}}
-    vars:
-      JOB: wipe-disk-{{.NODE}}
-      NS: '{{.NS | default "default"}}'
-    env:
-      ROOK_DISK: '{{.ROOK_DISK}}'
-      JOB: '{{.JOB}}'
-      NODE: '{{.NODE}}'
-      NS: '{{.NS}}'
-    preconditions:
-      - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.yaml.j2
 
   rook-data:
     internal: true
     cmds:
-      - minijinja-cli {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.yaml.j2 | kubectl apply --server-side --filename -
-      - until kubectl --namespace {{.NS}} get job/{{.JOB}} &>/dev/null; do sleep 5; done
-      - kubectl --namespace {{.NS}} wait job/{{.JOB}} --for=condition=complete --timeout=5m
-      - kubectl --namespace {{.NS}} logs job/{{.JOB}}
-      - kubectl --namespace {{.NS}} delete job {{.JOB}}
-    vars:
-      JOB: wipe-data-{{.NODE}}
-      NS: '{{.NS | default "default"}}'
+      - envsubst < <(cat {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.tmpl.yaml) | kubectl apply -f -
+      - bash {{.BOOTSTRAP_RESOURCES_DIR}}/wait-for-job.sh {{.job}} default
+      - kubectl --namespace default wait job/{{.job}} --for condition=complete --timeout=1m
+      - kubectl --namespace default logs job/{{.job}}
+      - kubectl --namespace default delete job {{.job}}
     env:
-      ROOK_DISK: '{{.ROOK_DISK}}'
-      JOB: '{{.JOB}}'
-      NODE: '{{.NODE}}'
-      NS: '{{.NS}}'
+      job: '{{.job}}'
+      node: '{{.node}}'
+    vars:
+      job: wipe-data-{{.node}}
     preconditions:
-      - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.yaml.j2
+      - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/wait-for-job.sh
+      - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.tmpl.yaml
+
+  rook-disk:
+    internal: true
+    cmds:
+      - envsubst < <(cat {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.tmpl.yaml) | kubectl apply -f -
+      - bash {{.BOOTSTRAP_RESOURCES_DIR}}/wait-for-job.sh {{.job}} default
+      - kubectl --namespace default wait job/{{.job}} --for condition=complete --timeout=1m
+      - kubectl --namespace default logs job/{{.job}}
+      - kubectl --namespace default delete job {{.job}}
+    env:
+      disk: '{{.disk}}'
+      job: '{{.job}}'
+      node: '{{.node}}'
+    vars:
+      job: wipe-disk-{{.node}}
+    preconditions:
+      - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/wait-for-job.sh
+      - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.tmpl.yaml
+  # rook:
+  #   internal: true
+  #   vars: &vars
+  #     CLUSTER: '{{.CLUSTER}}'
+  #     NODE: '{{.ITEM}}'
+  #     ROOK_DISK: '{{.ROOK_DISK}}'
+  #   cmds:
+  #     - for: { var: NODES }
+  #       task: rook-data
+  #       vars: *vars
+  #     - for: { var: NODES }
+  #       task: rook-disk
+  #       vars: *vars
+
+  # rook-disk:
+  #   internal: true
+  #   cmds:
+  #     - $GOPATH/bin/envsubst < <(cat {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.tmpl.yaml) | kubectl --context {{.cluster}} apply -f -
+  #     # - minijinja-cli {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.yaml.j2 | kubectl apply --server-side --filename -
+  #     - until kubectl --namespace {{.NS}} get job/{{.JOB}} &>/dev/null; do sleep 5; done
+  #     - kubectl --namespace {{.NS}} wait job/{{.JOB}} --for=condition=complete --timeout=5m
+  #     - kubectl --namespace {{.NS}} logs job/{{.JOB}}
+  #     - kubectl --namespace {{.NS}} delete job {{.JOB}}
+  #   vars:
+  #     JOB: wipe-disk-{{.NODE}}
+  #     NS: '{{.NS | default "default"}}'
+  #   env:
+  #     ROOK_DISK: '{{.ROOK_DISK}}'
+  #     JOB: '{{.JOB}}'
+  #     NODE: '{{.NODE}}'
+  #     NS: '{{.NS}}'
+  #   preconditions:
+  #     - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-disk-job.yaml.j2
+
+  # rook-data:
+  #   internal: true
+  #   cmds:
+  #     - minijinja-cli {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.yaml.j2 | kubectl apply --server-side --filename -
+  #     - until kubectl --namespace {{.NS}} get job/{{.JOB}} &>/dev/null; do sleep 5; done
+  #     - kubectl --namespace {{.NS}} wait job/{{.JOB}} --for=condition=complete --timeout=5m
+  #     - kubectl --namespace {{.NS}} logs job/{{.JOB}}
+  #     - kubectl --namespace {{.NS}} delete job {{.JOB}}
+  #   vars:
+  #     JOB: wipe-data-{{.NODE}}
+  #     NS: '{{.NS | default "default"}}'
+  #   env:
+  #     ROOK_DISK: '{{.ROOK_DISK}}'
+  #     JOB: '{{.JOB}}'
+  #     NODE: '{{.NODE}}'
+  #     NS: '{{.NS}}'
+  #   preconditions:
+  #     - test -f {{.BOOTSTRAP_RESOURCES_DIR}}/rook-data-job.yaml.j2
+
+  # flux:
+  #   internal: true
+  #   cmds:
+  #     - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/apps
+  #     - for: { var: TEMPLATES }
+  #       cmd: op run --env-file {{.CLUSTER_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.ITEM}} | kubectl apply --server-side --filename -
+  #     - kubectl apply --server-side --filename {{.CLUSTER_DIR}}/flux/vars/cluster-settings.yaml
+  #     - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/flux/config
+  #   vars:
+  #     TEMPLATES:
+  #       sh: ls {{.CLUSTER_DIR}}/bootstrap/apps/*.j2
+  #   env:
+  #     VAULT: '{{if eq .CLUSTER "main"}}kubernetes{{else}}{{.CLUSTER}}{{end}}'
+  #   preconditions:
+  #     - test -f {{.CLUSTER_DIR}}/flux/vars/cluster-settings.yaml
 
   flux:
     internal: true
     cmds:
-      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/apps
-      - for: { var: TEMPLATES }
-        cmd: op run --env-file {{.CLUSTER_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.ITEM}} | kubectl apply --server-side --filename -
+      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/flux
+      - sops --decrypt {{.CLUSTER_DIR}}/bootstrap/flux/age-key.secret.sops.yaml | kubectl apply --server-side --filename -
+      - sops --decrypt {{.CLUSTER_DIR}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | kubectl apply --server-side --filename -
+      - sops --decrypt {{.CLUSTER_DIR}}/flux/vars/cluster-secrets.secret.sops.yaml | kubectl apply --server-side --filename -
       - kubectl apply --server-side --filename {{.CLUSTER_DIR}}/flux/vars/cluster-settings.yaml
       - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/flux/config
-    vars:
-      TEMPLATES:
-        sh: ls {{.CLUSTER_DIR}}/bootstrap/apps/*.j2
-    env:
-      VAULT: '{{if eq .CLUSTER "main"}}kubernetes{{else}}{{.CLUSTER}}{{end}}' # ¯\_(ツ)_/¯
     preconditions:
+      - test -f {{.ROOT_DIR}}/age.key
+      - test -f {{.CLUSTER_DIR}}/bootstrap/flux/age-key.secret.sops.yaml
+      - test -f {{.CLUSTER_DIR}}/bootstrap/flux/github-deploy-key.secret.sops.yaml
       - test -f {{.CLUSTER_DIR}}/flux/vars/cluster-settings.yaml
-
-  # Ref: https://github.com/onedr0p/home-service
-  # matchbox:
-  #   desc: Sync required Matchbox config to PXEBoot machine [CLUSTER=main]
-  #   dotenv: ['{{.CLUSTER_DIR}}/cluster.env']
-  #   cmds:
-  #     - for: { var: ASSETS }
-  #       cmd: sops exec-file --input-type yaml --output-type yaml {{.ITEM}} "minijinja-cli {} | curl -skT - -u "devin:" sftp://voyager.internal//var/opt/home-service/apps/matchbox/data/config/assets/{{base .ITEM | replace ".sops.yaml.j2" ".yaml"}}"
-  #     - for: { var: GROUPS }
-  #       cmd: minijinja-cli {{.ITEM}} | curl -skT - -u "devin:" sftp://voyager.internal//var/opt/home-service/apps/matchbox/data/config/groups/{{base .ITEM}}
-  #     - for: { var: PROFILES }
-  #       cmd: minijinja-cli {{.ITEM}} | curl -skT - -u "devin:" sftp://voyager.internal//var/opt/home-service/apps/matchbox/data/config/profiles/{{base .ITEM}}
-  #     - ssh -l devin voyager.internal "cd /var/opt/home-service ; go-task restart-matchbox"
-  #   vars:
-  #     ASSETS:
-  #       sh: ls {{.CLUSTER_DIR}}/talos/*.yaml.j2
-  #     GROUPS:
-  #       sh: ls {{.CLUSTER_DIR}}/bootstrap/matchbox/groups/*.json
-  #     PROFILES:
-  #       sh: ls {{.CLUSTER_DIR}}/bootstrap/matchbox/profiles/*.json
-  #   requires:
-  #     vars: [CLUSTER]
-  #   preconditions:
-  #     - ping -c1 voyager.internal
+      - test -f {{.CLUSTER_DIR}}/flux/vars/cluster-secrets.secret.sops.yaml
+      - sops filestatus {{.CLUSTER_DIR}}/bootstrap/flux/age-key.secret.sops.yaml | jq --exit-status '.encrypted'
+      - sops filestatus {{.CLUSTER_DIR}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | jq --exit-status '.encrypted'
+      - sops filestatus {{.CLUSTER_DIR}}/flux/vars/cluster-secrets.secret.sops.yaml | jq --exit-status '.encrypted'
