@@ -1,5 +1,6 @@
+
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -20,15 +21,17 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   dependsOn:
+    - name: minio
+      namespace: default
     - name: openebs
       namespace: openebs-system
   values:
     crds:
       create: true
-    config:
-      data:
-        INHERITED_ANNOTATIONS: kyverno.io/ignore
+    monitoring:
+      podMonitorEnabled: false
+      grafanaDashboard:
+        create: true
