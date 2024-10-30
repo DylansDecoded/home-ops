@@ -5,7 +5,7 @@ metadata:
   name: postgres-lb
   annotations:
     external-dns.alpha.kubernetes.io/hostname: postgres.robsonhome.cloud
-    io.cilium/lb-ipam-ips: 10.1.20.40
+    lbipam.cilium.io/ips: 10.1.20.60
 spec:
   type: LoadBalancer
   ports:
@@ -15,4 +15,4 @@ spec:
       targetPort: 5432
   selector:
     cnpg.io/cluster: postgres16
-    role: primary
+    cnpg.io/instanceRole: primary
