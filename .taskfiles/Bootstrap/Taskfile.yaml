@@ -15,9 +15,9 @@ tasks:
       NODES: '{{ .NODES | default "m0,m1,m2,w0,w1,w2" }}'
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
-      - { task: etcd, vars: *vars }
-      - { task: conf, vars: *vars }
-      - { task: apps, vars: *vars }
+      # - { task: etcd, vars: *vars }
+      # - { task: conf, vars: *vars }
+      # - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
       - { task: flux, vars: *vars }
     requires:
@@ -56,11 +56,12 @@ tasks:
       - test -f {{.CLUSTER_DIR}}/talosconfig
       - test -f {{.CLUSTER_DIR}}/bootstrap/apps/helmfile.yaml
       - talosctl config info &>/dev/null
+
   rook:
     internal: true
     vars: &vars
       cluster: '{{.cluster}}'
-      nodes: m0 m1 m2 w0 w1 w2
+      nodes: m1 m2 w0 w1 w2
       disk: '/dev/sda'
     cmds:
       - for: { var: nodes }
