@@ -15,9 +15,9 @@ tasks:
       NODES: '{{ .NODES | default "m0,m1,m2,w0,w1,w2" }}'
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
-      # - { task: etcd, vars: *vars }
-      # - { task: conf, vars: *vars }
-      # - { task: apps, vars: *vars }
+      - { task: etcd, vars: *vars }
+      - { task: conf, vars: *vars }
+      - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
       - { task: flux, vars: *vars }
     requires:
