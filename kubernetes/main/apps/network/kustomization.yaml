@@ -10,5 +10,3 @@ resources:
   - ./external-dns/ks.yaml
   - ./multus/ks.yaml
   - ./nginx/ks.yaml
-  - ./openspeedtest/ks.yaml
-  
