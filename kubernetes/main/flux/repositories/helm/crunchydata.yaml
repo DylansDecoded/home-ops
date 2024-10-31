@@ -3,8 +3,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: piraeus
+  name: crunchydata
   namespace: flux-system
 spec:
-  interval: 2h
-  url: https://piraeus.io/helm-charts/
+  type: oci
+  interval: 5m
+  url: oci://registry.developers.crunchydata.com/crunchydata
