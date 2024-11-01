@@ -20,6 +20,6 @@ metadata:
 spec:
   allowFirstLastIPs: "Yes"
   blocks:
-    - # Controller VIP: 10.1.20.254
-      start: 10.1.20.30
-      stop: 10.1.20.149
+    - # Controller VIP: 10.1.20.120
+      start: 10.1.20.70
+      stop: 10.1.20.120
