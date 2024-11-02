@@ -17,7 +17,7 @@ cluster:
   name: main
 cni:
   exclusive: false
-devices: eno1+
+devices: eth0+
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true

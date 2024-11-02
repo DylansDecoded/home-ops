@@ -12,6 +12,7 @@ endpoint: https://10.1.20.120:6443
 
 # renovate: depName=ghcr.io/buroa/installer datasource=docker
 talosVersion: v1.8.2
+
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.31.2
 
@@ -39,7 +40,7 @@ nodes:
         vip:
           ip: 10.1.20.120
         vlans:
-          - vlanId: 30 # VPN/SERVICES
+          - vlanId: 30
             dhcp: false
             mtu: 1500
 
@@ -57,7 +58,7 @@ nodes:
         vip:
           ip: 10.1.20.120
         vlans:
-          - vlanId: 30 # VPN/SERVICES
+          - vlanId: 30
             dhcp: false
             mtu: 1500
 
@@ -74,7 +75,7 @@ nodes:
         vip:
           ip: 10.1.20.120
         vlans:
-          - vlanId: 30 # VPN/SERVICES
+          - vlanId: 30
             dhcp: false
             mtu: 1500
 
@@ -86,7 +87,9 @@ nodes:
       - interface: eth0
       # - deviceSelector:
       #     hardwareAddr: ac:e2:d3:10:d8:25
+      #     driver: e1000e
         dhcp: true
+        mtu: 9000
         vlans:
           - vlanId: 30 # VPN/SERVICES
             dhcp: false
@@ -100,6 +103,7 @@ nodes:
       - interface: eth0
       # - deviceSelector:
       #     hardwareAddr: ac:e2:d3:15:fd:f9
+      #     driver: e1000e
         dhcp: true
         mtu: 9000
         vlans:
@@ -115,7 +119,8 @@ nodes:
       - interface: eth0
       # - deviceSelector:
       #     hardwareAddr: 10:62:E5:1A:80:18
-      #   dhcp: true
+      #     driver: e1000e
+        dhcp: true
         mtu: 9000
         vlans:
           - vlanId: 30 # VPN/SERVICES
@@ -227,6 +232,14 @@ controlPlane:
               rsize=1048576
               wsize=1048576
 
+    # Configure NTP
+    - &ntpPatch |-
+      machine:
+        time:
+          disabled: false
+          servers:
+            - time.cloudflare.com
+
     # Custom sysctl settings
     - &sysctlPatch |-
       machine:
@@ -256,6 +269,9 @@ controlPlane:
             - cpufreq.default_governor=performance
             - intel_pstate=disable
             - mitigations=off
+            - net.ifnames=0
+            - pcie_ports=native
+          legacyBIOSSupport: true
 
     # Various udev rules
     - &udevPatch |-
@@ -347,6 +363,7 @@ worker:
     - *kubeletPatch
     - *kubePrismPatch
     - *nfsPatch
+    - *ntpPatch
     - *sysctlPatch
     - *sysfsPatch
     - *talosPatch
