@@ -16,10 +16,10 @@ tasks:
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
       # - { task: etcd, vars: *vars }
-      - { task: conf, vars: *vars }
-      - { task: apps, vars: *vars }
+      # - { task: conf, vars: *vars }
+      # - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
-      - { task: flux, vars: *vars }
+      # - { task: flux, vars: *vars }
     requires:
       vars: [CLUSTER]
     preconditions:
@@ -56,23 +56,74 @@ tasks:
       - test -f {{.CLUSTER_DIR}}/talosconfig
       - test -f {{.CLUSTER_DIR}}/bootstrap/apps/helmfile.yaml
       - talosctl config info &>/dev/null
-
   rook:
     internal: true
-    vars: &vars
-      cluster: '{{.cluster}}'
-      nodes: k8s-0 k8s-1 k8s-2 k8s-3 k8s-4 k8s-5
-      disk: '/dev/sda'
     cmds:
       - for: { var: nodes }
         task: rook-data
         vars:
           node: '{{.ITEM}}'
-      - for: { var: nodes }
+
+      - for: { var: k8s-0 }
         task: rook-disk
         vars:
-          node: '{{.ITEM}}'
-          disk: '{{.disk}}'
+          node: k8s-0
+          disk: '{{.ITEM}}'
+
+      - for: { var: k8s-1 }
+        task: rook-disk
+        vars:
+          node: k8s-1
+          disk: '{{.ITEM}}'
+
+      - for: { var: k8s-2 }
+        task: rook-disk
+        vars:
+          node: k8s-2
+          disk: '{{.ITEM}}'
+
+      - for: { var: k8s-3 }
+        task: rook-disk
+        vars:
+         node: k8s-3
+         disk: '{{.ITEM}}'
+
+      - for: { var: k8s-4 }
+        task: rook-disk
+        vars:
+         node: k8s-4
+         disk: '{{.ITEM}}'
+
+      - for: { var: k8s-5 }
+        task: rook-disk
+        vars:
+          node: k8s-5
+          disk: '{{.ITEM}}'
+
+    vars:
+      nodes: k8s-0 k8s-1 k8s-2 k8s-3 k8s-4 k8s-5
+      k8s-0: sdb
+      k8s-1: sda
+      k8s-2: sda
+      k8s-3: sda
+      k8s-4: sda
+      k8s-5: sda
+  # rook:
+  #   internal: true
+  #   vars: &vars
+  #     cluster: '{{.cluster}}'
+  #     nodes:  k8s-1 k8s-2 k8s-3 k8s-5
+  #     disk: '/dev/sdb'
+  #   cmds:
+  #     - for: { var: nodes }
+  #       task: rook-data
+  #       vars:
+  #         node: '{{.ITEM}}'
+  #     - for: { var: nodes }
+  #       task: rook-disk
+  #       vars:
+  #         node: '{{.ITEM}}'
+  #         disk: '{{.disk}}'
 
 
   rook-data:
