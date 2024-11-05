@@ -85,8 +85,8 @@ spec:
             readOnly: true
       media:
         type: nfs
-        server: expanse.internal
-        path: /eros/Media
+        server: truenas.robsonhome.cloud
+        path: /mnt/tank/media
         globalMounts:
           - path: /media/downloads
             subPath: downloads
