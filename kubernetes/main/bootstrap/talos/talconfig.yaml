@@ -33,8 +33,8 @@ nodes:
     installDisk: /dev/nvme0n1
     networkInterfaces:
       - interface: eth0
-      # - deviceSelector:
-      #     hardwareAddr: 10:62:e5:00:4c:12
+      - deviceSelector:
+          hardwareAddr: 10:62:e5:00:4c:12
         dhcp: true
         mtu: 9000
         vip:
@@ -166,6 +166,9 @@ controlPlane:
     # Enable cluster discovery
     - &discoveryPatch |-
       cluster:
+        network:
+          coreDNS:
+            enabled: false
         discovery:
           enabled: true
           registries:
@@ -254,13 +257,6 @@ controlPlane:
           net.ipv4.tcp_tw_reuse: 1
           net.ipv4.tcp_window_scaling: 1
 
-    - &sysfsPatch |-
-      machine:
-        sysfs:
-          block.nvme0n1.queue.scheduler: none
-          devices.system.cpu.cpufreq.boost: 0
-
-
     # Custom Talos installer patch
     - &talosPatch |-
       machine:
@@ -291,6 +287,7 @@ controlPlane:
     # Cluster configuration
     - |-
       cluster:
+      controlPlane:
         allowSchedulingOnMasters: true
         controllerManager:
           extraArgs:
@@ -302,19 +299,7 @@ controlPlane:
         scheduler:
           extraArgs:
             bind-address: 0.0.0.0
-          config:
-            apiVersion: kubescheduler.config.k8s.io/v1
-            kind: KubeSchedulerConfiguration
-            profiles:
-              - schedulerName: default-scheduler
-                pluginConfig:
-                  - name: PodTopologySpread
-                    args:
-                      defaultingType: List
-                      defaultConstraints:
-                        - maxSkew: 1
-                          topologyKey: kubernetes.io/hostname
-                          whenUnsatisfiable: ScheduleAnyway
+
 
     # ETCD configuration
     - |-
@@ -363,9 +348,7 @@ worker:
     - *kubeletPatch
     - *kubePrismPatch
     - *nfsPatch
-    - *ntpPatch
     - *sysctlPatch
-    - *sysfsPatch
     - *talosPatch
     - *udevPatch
 
