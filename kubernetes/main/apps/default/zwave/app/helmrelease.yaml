@@ -1,4 +1,3 @@
-
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -96,5 +95,9 @@ spec:
         existingClaim: zwave
         globalMounts:
           - path: /usr/src/app/store
+      cache:
+        existingClaim: zwave-cache
+        globalMounts:
+          - path: /usr/src/app/store/.config-db
       tmp:
         type: emptyDir

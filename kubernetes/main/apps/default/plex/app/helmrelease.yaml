@@ -42,7 +42,7 @@ spec:
             env:
               TZ: America/New_York
               PLEX_ADVERTISE_URL: https://plex.robsonhome.cloud:443,http://10.1.20.128:32400
-              PLEX_NO_AUTH_NETWORKS: 10.1.10.0/24,10.1.40.0/24,10.1.1.0/24
+              PLEX_NO_AUTH_NETWORKS: 10.1.1.0/24,10.1.10.0/24,10.1.40.0.24
             probes:
               liveness: &probes
                 enabled: true
@@ -87,7 +87,7 @@ spec:
         controller: plex
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.1.20.36
+          lbipam.cilium.io/ips: 10.1.20.128
         ports:
           http:
             port: 32400
@@ -107,15 +107,14 @@ spec:
     persistence:
       config:
         existingClaim: plex
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server
-
+        # TODO: If setting up Plex for the first time, you'll want to add the globalMounts section
+        # globalMounts:
+        #   - path: /config/Library/Application Support/Plex Media Server
       # Separate PVC for cache to avoid backing up cache files
       cache:
         existingClaim: plex-cache
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Cache
-
       logs:
         type: emptyDir
         globalMounts:
@@ -126,8 +125,15 @@ spec:
         type: emptyDir
       media:
         type: nfs
-        server: truenas.robsonhome.cloud
-        path: /mnt/tank/media
+        server: expanse.internal
+        path: /eros/Media
         globalMounts:
           - path: /media
+            readOnly: true
+      music:
+        type: nfs
+        server: expanse.internal
+        path: /eros/Music
+        globalMounts:
+          - path: /music
             readOnly: true

@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -73,7 +74,8 @@ spec:
               "--exclude-category", "manual",
               "--exclude-category", "music",
               "--exclude-tag", "added:1d",
-              "--include-tag", "unregistered"
+              "--include-tag", "unregistered",
+              "--with-data"
               # "--dry-run"
             ]
           expired:
@@ -83,7 +85,8 @@ spec:
               "--exclude-category", "manual",
               "--exclude-category", "music",
               "--exclude-tag", "added:1d",
-              "--include-tag", "expired"
+              "--include-tag", "expired",
+              "--with-data"
               # "--dry-run"
             ]
         pod:
@@ -93,13 +96,13 @@ spec:
         cronjob:
           <<: *cronJobSpec
           schedule: "@weekly"
+          suspend: true
         containers:
           app:
             <<: *container
             args: [
               "orphaned",
               "--exclude-pattern", "*_unpackerred*",
-              "--exclude-pattern", "*/manual/*"
               # "--dry-run"
             ]
         pod:
@@ -129,7 +132,6 @@ spec:
         runAsUser: 568
         runAsGroup: 568
         seccompProfile: { type: RuntimeDefault }
-        
     persistence:
       secret-file:
         type: secret
@@ -145,4 +147,5 @@ spec:
         advancedMounts:
           orphaned:
             app:
-              - path: /data/nas-media
+              - path: /media/downloads/torrents
+                subPath: downloads/torrents
