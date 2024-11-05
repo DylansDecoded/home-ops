@@ -125,15 +125,8 @@ spec:
         type: emptyDir
       media:
         type: nfs
-        server: expanse.internal
-        path: /eros/Media
+        server: truenas.internal
+        path: /mnt/tank/media
         globalMounts:
           - path: /media
-            readOnly: true
-      music:
-        type: nfs
-        server: expanse.internal
-        path: /eros/Music
-        globalMounts:
-          - path: /music
             readOnly: true
