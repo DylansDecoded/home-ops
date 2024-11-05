@@ -66,39 +66,33 @@ spec:
       storage:
         useAllNodes: false
         useAllDevices: false
-        # deviceFilter: sda
         config:
           osdsPerDevice: "1"
         nodes:
           - name: "k8s-0"
             devices:
-              - name: "/dev/sdb"
-              # - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874"
+              - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874"
 
           - name: "k8s-1"
             devices:
-              - name: "/dev/sda"
-              # - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056"
+              - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056"
 
           - name: "k8s-2"
             devices:
-              - name: "/dev/sdb"
-              # - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045"
+              - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045"
 
           - name: "k8s-3"
             devices:
-              - name: /dev/sda
-              # - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743"
+              - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743"
 
           - name: "k8s-4"
             devices:
-              - name: /dev/sda
-                #  "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441"
+              - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441"
 
           - name: "k8s-5"
             devices:
-              = name: "/dev/sda"
-              # - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B"
+              - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B"
+
       placement:
         mgr: &placement
           nodeAffinity:
