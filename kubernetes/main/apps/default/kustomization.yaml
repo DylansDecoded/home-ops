@@ -27,5 +27,5 @@ resources:
 - ./sonarr/ks.yaml
 # - ./tautulli/ks.yaml
 # - ./unpackerr/ks.yaml
-- ./zigbee2mqtt/ks.yaml
+# - ./zigbee2mqtt/ks.yaml
 - ./zwave/ks.yaml
