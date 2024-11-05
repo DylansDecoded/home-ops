@@ -16,7 +16,7 @@ tasks:
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
       # - { task: etcd, vars: *vars }
-      # - { task: conf, vars: *vars }
+      - { task: conf, vars: *vars }
       - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
       - { task: flux, vars: *vars }
