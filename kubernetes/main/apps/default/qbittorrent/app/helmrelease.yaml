@@ -85,7 +85,7 @@ spec:
                     name: qbittorrent-secret
               securityContext:
                 capabilities: { add: ["NET_ADMIN"] }
-                allowPrivilegeEscalation: false
+                allowPrivilegeEscalation: true
               resources:
                 limits:
                   squat.ai/tun: "1"
