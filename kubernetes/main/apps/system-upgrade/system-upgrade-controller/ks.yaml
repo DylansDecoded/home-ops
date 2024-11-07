@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -16,9 +17,9 @@ spec:
     name: home-kubernetes
   wait: true
   interval: 30m
-  retryInterval: 1m
   timeout: 5m
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -31,7 +32,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: system-upgrade-controller
-    - name: node-feature-discovery-features
+    - name: node-feature-discovery
   path: ./kubernetes/main/apps/system-upgrade/system-upgrade-controller/plans
   prune: true
   sourceRef:
@@ -39,7 +40,6 @@ spec:
     name: home-kubernetes
   wait: true
   interval: 30m
-  retryInterval: 1m
   timeout: 5m
   postBuild:
     substitute:
