@@ -36,12 +36,13 @@ spec:
           # reloader.stakater.com/auto: "true"
         pod:
           securityContext:
-            runAsNonRoot: true
+            runAsNonRoot: false
             runAsUser: 568
             runAsGroup: 568
             fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
             supplementalGroups:
+              - 0
               - 10000
               - 65542 # External-services Truenas
             seccompProfile: { type: RuntimeDefault }
@@ -66,12 +67,14 @@ spec:
                 repository: docker.io/powerdns/dnsdist-19
                 tag: 1.9.7
               restartPolicy: Always
+
             gluetun:
               dependsOn:
                 - dnsdist
+
               image:
                 repository: ghcr.io/qdm12/gluetun
-                tag: v3.39.1
+                tag: v3.35.0
               env:
                 DOT: "off"
                 DNS_ADDRESS: "127.0.0.2"
@@ -94,6 +97,7 @@ spec:
                 capabilities:
                   add:
                     - NET_ADMIN
+                    - NET
                 allowPrivilegeEscalation: false
 
         containers:
