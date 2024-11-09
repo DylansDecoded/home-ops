@@ -5,14 +5,18 @@ kind: Pod
 metadata:
   name: samplepod
   annotations:
-    k8s.v1.cni.cncf.io/networks: |
-              [{
-                "name":"multus-services",
-                "namespace": "network"
-              }]
+    k8s.v1.cni.cncf.io/networks: '[
+            { "name": "multus-services",
+
+              "ips": [ "10.1.1.101/24" ],
+              "mac": "c2:b0:57:49:47:f1",
+              "gateway": [ "10.1.1.1" ]
+            }]'
 spec:
   containers:
   - name: samplepod
-    command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
-    image: alpine
+    command: ["/bin/bash", "-c", "trap : TERM INT; sleep infinity & wait"]
+    image: dougbtv/centos-network
+    ports:
+    - containerPort: 80
 EOF
