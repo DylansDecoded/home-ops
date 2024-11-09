@@ -94,11 +94,12 @@ spec:
                   squat.ai/tun: "1"
               restartPolicy: Always
               securityContext:
+                # Gluetun won't run on-top of Talos / Cilium w/o this atm
+                privileged: true
                 capabilities:
                   add:
                     - NET_ADMIN
-                    - NET
-                allowPrivilegeEscalation: false
+                allowPrivilegeEscalation: true
 
         containers:
             app:
