@@ -1,8 +1,4 @@
 ---
-# This net-attach-def defines macvlan-conf with
-#   + ips capabilities to specify ip in pod annotation and
-#   + mac capabilities to specify mac address in pod annotation
-# default gateway is defined as well
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
