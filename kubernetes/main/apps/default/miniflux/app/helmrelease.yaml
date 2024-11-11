@@ -1,9 +1,9 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/app-template-3.4.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app miniflux
+  name: &app meshcentral
 spec:
   interval: 30m
   chart:
@@ -22,89 +22,78 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  dependsOn:
+    - name: longhorn
+      namespace: storage
+    - name: volsync
+      namespace: storage
   values:
     controllers:
-      miniflux:
-        strategy: RollingUpdate
+      meshcentral:
         annotations:
           reloader.stakater.com/auto: "true"
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: 16
-            envFrom: &envFrom
-              - secretRef:
-                  name: miniflux-secret
         containers:
           app:
             image:
-              repository: ghcr.io/miniflux/miniflux
-              tag: 2.2.2-distroless@sha256:87b040bcb034f70bbeebbf7286b8e896bf5466aaa9634d362d3c3051e167e32d
+              repository: ghcr.io/ylianst/meshcentral
+              tag: 1.1.33@sha256:f5c726b821297a95d1aa52c20052e636d0e690d0dd2e5eb8fd4df6472de3b190
             env:
-              BASE_URL: https://miniflux.robsonhome.cloud
-              CREATE_ADMIN: "1"
-              # DEBUG: "1"
-              LOG_DATE_TIME: "1"
-              METRICS_ALLOWED_NETWORKS: 10.42.0.0/16
-              METRICS_COLLECTOR: "1"
-              POLLING_SCHEDULER: entry_frequency
-              POLLING_FREQUENCY: "15"
-              PORT: &port 80
-              RUN_MIGRATIONS: "1"
-            envFrom: *envFrom
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthcheck
-                    port: *port
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+              TZ: ${TIMEZONE}
+              NODE_ENV: production
+              HOSTNAME: &host mesh.robsonhome.cloud
+              ALLOW_NEW_ACCOUNTS: "false"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
               limits:
-                memory: 512Mi
+                memory: 2Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: miniflux
+        controller: *app
         ports:
           http:
-            port: *port
-    serviceMonitor:
-      app:
-        serviceName: miniflux
-        endpoints:
-          - port: http
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
+            port: 8080
     ingress:
       app:
+        className: internal
         annotations:
-          external-dns.alpha.kubernetes.io/target: external.robsonhome.cloud
-        className: external
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         hosts:
-          - host: "{{ .Release.Name }}.robsonhome.cloud"
+          - host: *host
             paths:
               - path: /
                 service:
                   identifier: app
-                  port: http
+    persistence:
+      config:
+        type: configMap
+        name: meshcentral-config
+        advancedMounts:
+          meshcentral:
+            app:
+              - path: /opt/meshcentral/meshcentral-data/config.json
+                subPath: config.json
+      data:
+        existingClaim: *app
+        globalMounts:
+          - path: /root
+            subPath: rootdir
+          - path: /opt/meshcentral/meshcentral-data
+            subPath: data
+          - path: /opt/meshcentral/meshcentral-files
+            subPath: userfiles
+          - path: /opt/meshcentral/meshcentral-backups
+            subPath: backups
