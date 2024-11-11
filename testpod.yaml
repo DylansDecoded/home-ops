@@ -15,8 +15,6 @@ metadata:
 spec:
   containers:
   - name: samplepod
-    command: ["/bin/bash", "-c", "trap : TERM INT; sleep infinity & wait"]
-    image: alpine:3.16
-    ports:
-    - containerPort: 80
+    command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
+    image: alpine
 EOF
