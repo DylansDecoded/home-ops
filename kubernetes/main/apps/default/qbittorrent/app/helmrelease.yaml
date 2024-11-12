@@ -99,7 +99,6 @@ spec:
                 capabilities:
                   add:
                     - NET_ADMIN
-                allowPrivilegeEscalation: true
 
         containers:
             app:
