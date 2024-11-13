@@ -32,15 +32,6 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
-      pod:
-        annotations:
-          k8s.v1.cni.cncf.io/networks: |
-            [{
-              "name":"multus-services",
-              "namespace": "network",
-              "ips": ["10.1.40.250/24"],
-              "mac": "3e:59:e4:f7:43:08"
-            }]
         containers:
           app:
             image:
@@ -80,6 +71,14 @@ spec:
               limits:
                 memory: 512Mi
     defaultPodOptions:
+      annotations:
+          k8s.v1.cni.cncf.io/networks: |
+            [{
+              "name":"multus-services",
+              "namespace": "network",
+              "ips": ["10.1.40.250/24"],
+              "mac": "3e:59:e4:f7:43:08"
+            }]
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
