@@ -3,7 +3,7 @@ cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sample-podxwx
+  name: sample-pod
   namespace: default
   annotations:
     k8s.v1.cni.cncf.io/networks: |
@@ -19,4 +19,26 @@ spec:
   - name: sample-pod
     command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
     image: alpine
+EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-multus-ds
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      initContainers:
+      - command:
+        - /install-cni.sh
+        image: ghcr.io/siderolabs/install-cni:v1.7.0  # adapt to your talos version
+        name: install-cni
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /host/opt/cni/bin
+          mountPropagation: Bidirectional
+          name: cnibin
 EOF
