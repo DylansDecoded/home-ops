@@ -41,7 +41,7 @@ spec:
               tag: 1.41.1.9057-af5eaea7a@sha256:5926b77196bb7c9f75b52f431d0483abea0fef1f576b7201592b385449201456
             env:
               TZ: America/New_York
-              PLEX_ADVERTISE_URL: https://plex.robsonhome.cloud:443, http://10.1.20.128:32400
+              PLEX_ADVERTISE_URL: https://plex.robsonhome.cloud:443, http://10.1.20.129:32400
               PLEX_NO_AUTH_NETWORKS: 10.1.1.0/24,10.1.10.0/24,10.1.40.0.24
             probes:
               liveness: &probes
