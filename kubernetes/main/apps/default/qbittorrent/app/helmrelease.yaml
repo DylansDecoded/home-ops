@@ -128,7 +128,7 @@ spec:
       media:
         type: nfs
         server: truenas.robsonhome.cloud
-        path: /tank/media
+        path: /mnt/tank/media
         globalMounts:
           - path: /media/downloads/torrents
             subPath: downloads/torrents
