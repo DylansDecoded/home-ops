@@ -76,8 +76,8 @@ spec:
             [{
               "name":"multus-services",
               "namespace": "network",
-              "ips": ["10.1.40.250/24"],
-              "mac": "3e:59:e4:f7:43:08"
+              "ips": ["10.1.40.200/24"],
+              "mac": "3e:59:e4:f7:43:09"
             }]
       securityContext:
         runAsNonRoot: true
