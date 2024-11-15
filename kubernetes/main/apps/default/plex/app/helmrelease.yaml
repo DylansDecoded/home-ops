@@ -42,7 +42,7 @@ spec:
             env:
               TZ: America/New_York
               PLEX_ADVERTISE_URL: https://plex.robsonhome.cloud:443, http://10.1.20.105:32400
-              PLEX_NO_AUTH_NETWORKS: 10.1.1.0/24,10.1.10.0/24,10.1.40.0.24
+              PLEX_NO_AUTH_NETWORKS: 10.1.0.0/16
             probes:
               liveness: &probes
                 enabled: true
