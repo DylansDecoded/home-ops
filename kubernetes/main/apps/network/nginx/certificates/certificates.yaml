@@ -12,4 +12,3 @@ spec:
   dnsNames:
     - "robsonhome.cloud"
     - "*.robsonhome.cloud"
-    - "*.lan.robsonhome.cloud"
