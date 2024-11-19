@@ -15,10 +15,10 @@ tasks:
       NODES: '{{ .NODES | default "k8s-0,k8s-1,k8s-2,k8s-3,k8s-4,k8s-5" }}'
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
-      # - { task: etcd, vars: *vars }
-      # - { task: conf, vars: *vars }
-      # - { task: apps, vars: *vars }
-      # - { task: rook, vars: *vars }
+      - { task: etcd, vars: *vars }
+      - { task: conf, vars: *vars }
+      - { task: apps, vars: *vars }
+      - { task: rook, vars: *vars }
       - { task: flux, vars: *vars }
     requires:
       vars: [CLUSTER]
