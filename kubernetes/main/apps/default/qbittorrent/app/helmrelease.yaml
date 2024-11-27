@@ -131,7 +131,7 @@ spec:
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: *port # Allow access to qbittorrent
-              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/12,10.43.0.0/16
+              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/16,10.43.0.0/16
               WIREGUARD_ENDPOINT_IP:
                valueFrom:
                   secretKeyRef:
