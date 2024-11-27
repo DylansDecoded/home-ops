@@ -28,27 +28,89 @@ spec:
   values:
     controllers:
       qbittorrent:
+        annotations:
+          configmap.reloader.stakater.com/reload: qbittorrent-scripts,qbittorrent-dnsdist
+          secret.reloader.stakater.com/reload: qbittorrent-secret
+
         pod:
-          annotations:
-            reloader.stakater.com/auto: "true"
           securityContext:
+            runAsUser: 568
             fsGroup: 568
             fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 65542 # gladius:external-services
+          terminationGracePeriodSeconds: 120
+
+        initContainers:
+          dnsdist:
+            image:
+              repository: docker.io/powerdns/dnsdist-19
+              tag: 1.9.7
+            restartPolicy: Always
+
+          gluetun:
+            dependsOn:
+              - dnsdist
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.39.1
+            env:
+              DOT: "off"
+              DNS_ADDRESS: "127.0.0.2"
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              VPN_INTERFACE: wg0
+              WIREGUARD_ENDPOINT_PORT: 51820
+              VPN_PORT_FORWARDING: on
+              VPN_PORT_FORWARDING_PROVIDER: protonvpn
+              FIREWALL_INPUT_PORTS: 8080
+              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/12,10.43.0.0/16 # Allow access to k8s subnets
+              WIREGUARD_ENDPOINT_IP:
+               valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_ENDPOINT_IP
+              WIREGUARD_ADDRESSES:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_ADDRESSES
+              WIREGUARD_PRIVATE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_PRIVATE_KEY
+              WIREGUARD_PUBLIC_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_PUBLIC_KEY
+            resources:
+              limits:
+                squat.ai/tun: "1"
+            restartPolicy: Always
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+              allowPrivilegeEscalation: false
+
         containers:
           app:
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 4.6.7@sha256:5391f94b321d563c3b44136a5e799b7e4e4888926c1c31d3081a1cf3e74a9aec
             env:
+              env:
+              UMASK: "022"
               TZ: America/New_York
               QBITTORRENT__PORT: &port 80
               # QBITTORRENT__BT_PORT: &bittorrentPort 28163
-              QBT_Preferences__WebUI__AlternativeUIEnabled: true
-              QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
-              QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
-                10.42.0.0/12, 10.43.0.0/16, 10.1.0.0/16
-              QBT_Preferences__WebUI__LocalHostAuth: false
-              QBT_Preferences__WebUI__RootFolder: /addons/VueTorrent
+              # QBT_Preferences__WebUI__AlternativeUIEnabled: true
+              # QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
+              # QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
+              #   10.42.0.0/12, 10.43.0.0/16, 10.1.0.0/16
+              # QBT_Preferences__WebUI__LocalHostAuth: false
               CROSS_SEED_ENABLED: false
               CROSS_SEED_HOST: cross-seed.default.svc.cluster.local
               CROSS_SEED_PORT: 80
@@ -93,68 +155,7 @@ spec:
               limits:
                 memory: 12G
 
-          vuetorrent:
-            dependsOn: app
-            image:
-              repository: registry.k8s.io/git-sync/git-sync
-              tag: v4.3.0
-            args:
-              - --repo=https://github.com/VueTorrent/VueTorrent
-              - --ref=latest-release
-              - --period=86400s
-              - --root=/addons
-            resources:
-              requests:
-                cpu: 10m
-                memory: 25Mi
-              limits:
-                memory: 50Mi
-            securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              fsGroup: 568
-              fsGroupChangePolicy: OnRootMismatch
-              supplementalGroups:
-                - 65542
 
-          gluetun:
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.39.1@sha256:6a8058e626763cbf735ac2f78c774dbb24fec2490bd9d9f7d67e22592cb4a991
-            env:
-              # DOT: "off"
-              # DNS_ADDRESS: "127.0.0.2"
-              VPN_SERVICE_PROVIDER: custom
-              VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
-              VPN_PORT_FORWARDING: on
-              VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: *port # Allow access to qbittorrent
-              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/12,10.43.0.0/16
-              WIREGUARD_ENDPOINT_IP:
-               valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_ENDPOINT_IP
-              WIREGUARD_ADDRESSES:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_ADDRESSES
-              WIREGUARD_PRIVATE_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_PRIVATE_KEY
-              WIREGUARD_PUBLIC_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbittorrent-secret
-                    key: WIREGUARD_PUBLIC_KEY
-            securityContext:
-              capabilities: { add: ["NET_ADMIN"] }
-              allowPrivilegeEscalation: false
 
           port-forward:
             image:
@@ -205,6 +206,7 @@ spec:
                       values: ["sabnzbd"]
                 topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 300
+
     ingress:
       app:
         annotations:
@@ -217,24 +219,22 @@ spec:
                 service:
                   identifier: app
                   port: http
+
     persistence:
       config:
+        enabled: true
         existingClaim: qbittorrent
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /config
 
-      addons:
+      port-forward:
         type: emptyDir
-        globalMounts:
-          - path: /addons
-
-      tmp:
-        type: emptyDir
-
-      scripts:
-        type: configMap
-        name: qbittorrent-scripts
-        defaultMode: 0775
-        globalMounts:
-          - readOnly: true
+        advancedMounts:
+          qbittorrent:
+            port-forward:
+              - path: /config
 
       media:
         type: nfs
@@ -243,3 +243,22 @@ spec:
         globalMounts:
           - path: /media/downloads/torrents
             subPath: downloads/torrents
+
+      dnsdist:
+        type: configMap
+        name: qbittorrent-dnsdist
+        advancedMounts:
+          qbittorrent:
+            dnsdist:
+              - path: /etc/dnsdist/dnsdist.conf
+                subPath: dnsdist.conf
+                readOnly: true
+
+      scripts:
+        type: configMap
+        name: qbittorrent-scripts
+        defaultMode: 0775
+        globalMounts:
+          - readOnly: true
+
+
