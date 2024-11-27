@@ -32,14 +32,14 @@ spec:
           configmap.reloader.stakater.com/reload: qbittorrent-scripts,qbittorrent-dnsdist
           secret.reloader.stakater.com/reload: qbittorrent-secret
 
-        pod:
-          securityContext:
-            runAsUser: 568
-            fsGroup: 568
-            fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-              - 65542 # gladius:external-services
-          terminationGracePeriodSeconds: 120
+        # pod:
+        #   securityContext:
+        #     runAsUser: 568
+        #     fsGroup: 568
+        #     fsGroupChangePolicy: "OnRootMismatch"
+        #     supplementalGroups:
+        #       - 65542 # gladius:external-services
+        #   terminationGracePeriodSeconds: 120
 
         initContainers:
           dnsdist:
@@ -90,11 +90,14 @@ spec:
                 squat.ai/tun: "1"
             restartPolicy: Always
             securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+
               capabilities:
                 add:
                   - NET_ADMIN
                   - NET_RAW
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
 
         containers:
           app:
