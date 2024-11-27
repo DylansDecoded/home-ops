@@ -54,6 +54,21 @@ spec:
               CROSS_SEED_PORT: 80
               CROSS_SEED_SLEEP_INTERVAL: 0
               PUSHOVER_ENABLED: true
+              CROSS_SEED_API_KEY:
+               valueFrom:
+                  secretKeyRef:
+                   name: qbittorrent-secret
+                   key: CROSS_SEED_API_KEY
+              PUSHOVER_TOKEN:
+               valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: PUSHOVER_TOKEN
+              PUSHOVER_USER_KEY:
+               valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: PUSHOVER_USER_KEY
             probes:
               liveness:
                 enabled: true
@@ -116,10 +131,27 @@ spec:
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: *port # Allow access to qbittorrent
-              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/16, 10.43.0.0/16 # Allow access to k8s subnets
-            envFrom:
-              - secretRef:
-                  name: qbittorrent-secret
+              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/16,10.43.0.0/16 # Allow access to k8s subnets
+              WIREGUARD_ENDPOINT_IP:
+               valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_ENDPOINT_IP
+              WIREGUARD_ADDRESSES:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_ADDRESSES
+              WIREGUARD_PRIVATE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_PRIVATE_KEY
+              WIREGUARD_PUBLIC_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: WIREGUARD_PUBLIC_KEY
             securityContext:
               capabilities: { add: ["NET_ADMIN"] }
               allowPrivilegeEscalation: false
