@@ -96,7 +96,7 @@ spec:
                 add:
                   - NET_ADMIN
                   - NET_RAW
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
 
         containers:
           app:
@@ -145,9 +145,9 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 5
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              runAsNonRoot: true
+              runAsUser: 0
+              runAsGroup: 0
+              # runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -173,9 +173,9 @@ spec:
               CRON_SCHEDULE: "*/5 * * * *"
               LOG_TIMESTAMP: false
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              runAsNonRoot: true
+              runAsUser: 0
+              runAsGroup: 0
+              # runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -188,10 +188,10 @@ spec:
 
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        # runAsNonRoot: true
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [10000]
         seccompProfile: { type: RuntimeDefault }
