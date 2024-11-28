@@ -130,7 +130,7 @@ spec:
                 add:
                   - NET_ADMIN
                   - NET_RAW
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
 
           port-forward:
             image:
@@ -145,8 +145,8 @@ spec:
               CRON_SCHEDULE: "*/5 * * * *"
               LOG_TIMESTAMP: false
             securityContext:
-              runAsUser: 0
-              runAsGroup: 0
+              runAsUser: 568
+              runAsGroup: 568
               runAsNonRoot: false
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
