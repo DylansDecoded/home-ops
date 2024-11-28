@@ -26,32 +26,10 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   values:
-    defaultPodOptions:
-      nodeSelector:
-        topology.kubernetes.io/zone: w
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                    - key: app.kubernetes.io/name
-                      operator: In
-                      values: ["sabnzbd"]
-                topologyKey: kubernetes.io/hostname
-      terminationGracePeriodSeconds: 300
-
     controllers:
-      qbittorrent:
+     qbittorrent:
         annotations:
           reloader.stakater.com/auto: "true"
-        # initContainers:
-        #   dnsdist:
-        #     image:
-        #       repository: docker.io/powerdns/dnsdist-19
-        #       tag: 1.9.7
-        #     restartPolicy: Always
         containers:
           app:
             image:
@@ -174,13 +152,22 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+
+    defaultPodOptions:
+      securityContext:
+        # runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
     service:
       app:
         controller: qbittorrent
         ports:
           http:
             port: *port
-
     ingress:
       app:
         annotations:
