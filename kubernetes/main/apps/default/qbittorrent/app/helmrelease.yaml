@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: qbittorrent
+  name: &app qbittorrent
 spec:
   interval: 30m
   chart:
@@ -41,7 +41,6 @@ spec:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 4.6.7@sha256:5391f94b321d563c3b44136a5e799b7e4e4888926c1c31d3081a1cf3e74a9aec
             env:
-              env:
               UMASK: "022"
               TZ: America/New_York
               QBITTORRENT__PORT: &port 80
@@ -65,6 +64,8 @@ spec:
                   secretKeyRef:
                     name: qbittorrent-secret
                     key: PUSHOVER_USER_KEY
+              QBT_Preferences__WebUI__LocalHostAuth: false
+              QBT_Preferences__WebUI__RootFolder: /add-ons/VueTorrent
             probes:
               liveness:
                 enabled: true
@@ -78,9 +79,10 @@ spec:
             securityContext:
               runAsUser: 568
               runAsGroup: 568
-              fsGroup: 568
-              fsGroupChangePolicy: OnRootMismatch
-              supplementalGroups: [65542]
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 25m
@@ -88,10 +90,34 @@ spec:
               limits:
                 memory: 12G
 
+          vuetorrent:
+            dependsOn: app
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.3.0
+            args:
+              - --repo=https://github.com/VueTorrent/VueTorrent
+              - --ref=latest-release
+              - --period=86400s
+              - --root=/add-ons
+            resources:
+              requests:
+                cpu: 10m
+                memory: 25Mi
+              limits:
+                memory: 50Mi
+            securityContext:
+              runAsUser: 568
+              runAsGroup: 568
+              fsGroup: 568
+              fsGroupChangePolicy: OnRootMismatch
+              supplementalGroups:
+                - 65534
+
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
-              tag: v3.39.1
+              tag: v3.39.1@sha256:6a8058e626763cbf735ac2f78c774dbb24fec2490bd9d9f7d67e22592cb4a991
             env:
               # DOT: "off"
               # DNS_ADDRESS: "127.0.0.2"
@@ -124,13 +150,8 @@ spec:
                     name: qbittorrent-secret
                     key: WIREGUARD_PUBLIC_KEY
             securityContext:
-              runAsUser: 0
-              runAsGroup: 0
-              capabilities:
-                add:
-                  - NET_ADMIN
-                  - NET_RAW
-              allowPrivilegeEscalation: true
+              capabilities: { add: ["NET_ADMIN"] }
+              allowPrivilegeEscalation: false
 
           port-forward:
             image:
@@ -147,26 +168,18 @@ spec:
             securityContext:
               runAsUser: 568
               runAsGroup: 568
-              runAsNonRoot: false
+              runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-
-    # defaultPodOptions:
-    #   securityContext:
-    #     # runAsNonRoot: true
-    #     runAsUser: 568
-    #     runAsGroup: 568
-    #     fsGroup: 568
-    #     fsGroupChangePolicy: OnRootMismatch
-    #     seccompProfile: { type: RuntimeDefault }
-
     service:
       app:
-        controller: qbittorrent
+        controller: *app
+        nameOverride: *app
         ports:
           http:
             port: *port
+
     ingress:
       app:
         annotations:
@@ -184,17 +197,19 @@ spec:
       config:
         enabled: true
         existingClaim: qbittorrent
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config
 
-      port-forward:
+      add-ons:
+        enabled: true
         type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            port-forward:
-              - path: /config
+        globalMounts:
+          - path: /add-ons
+
+      scripts:
+        type: configMap
+        name: qbittorrent-scripts
+        defaultMode: 0775
+        globalMounts:
+          - readOnly: true
 
       media:
         type: nfs
@@ -204,21 +219,6 @@ spec:
           - path: /media/downloads/torrents
             subPath: downloads/torrents
 
-      dnsdist:
-        type: configMap
-        name: qbittorrent-dnsdist
-        advancedMounts:
-          qbittorrent:
-            dnsdist:
-              - path: /etc/dnsdist/dnsdist.conf
-                subPath: dnsdist.conf
-                readOnly: true
 
-      scripts:
-        type: configMap
-        name: qbittorrent-scripts
-        defaultMode: 0775
-        globalMounts:
-          - readOnly: true
 
 

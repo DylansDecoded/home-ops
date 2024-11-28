@@ -19,10 +19,6 @@ configMapGenerator:
     files:
       - post-process.sh=./resources/post-process.sh
 
-  - name: qbittorrent-dnsdist
-    files:
-      - dnsdist.conf=./resources/dnsdist.conf
-
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
