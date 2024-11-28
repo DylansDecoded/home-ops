@@ -32,14 +32,6 @@ spec:
           configmap.reloader.stakater.com/reload: qbittorrent-scripts,qbittorrent-dnsdist
           secret.reloader.stakater.com/reload: qbittorrent-secret
 
-        # pod:
-        #   securityContext:
-        #     runAsUser: 568
-        #     fsGroup: 568
-        #     fsGroupChangePolicy: "OnRootMismatch"
-        #     supplementalGroups:
-        #       - 65542 # gladius:external-services
-        #   terminationGracePeriodSeconds: 120
 
         initContainers:
           dnsdist:
@@ -108,12 +100,6 @@ spec:
               UMASK: "022"
               TZ: America/New_York
               QBITTORRENT__PORT: &port 80
-              # QBITTORRENT__BT_PORT: &bittorrentPort 28163
-              # QBT_Preferences__WebUI__AlternativeUIEnabled: true
-              # QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
-              # QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
-              #   10.42.0.0/12, 10.43.0.0/16, 10.1.0.0/16
-              # QBT_Preferences__WebUI__LocalHostAuth: false
               CROSS_SEED_ENABLED: false
               CROSS_SEED_HOST: cross-seed.default.svc.cluster.local
               CROSS_SEED_PORT: 80
@@ -175,7 +161,7 @@ spec:
             securityContext:
               runAsUser: 0
               runAsGroup: 0
-              # runAsNonRoot: true
+              runAsNonRoot: false
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -187,14 +173,14 @@ spec:
             port: *port
 
     defaultPodOptions:
-      securityContext:
-        # runAsNonRoot: true
-        runAsUser: 0
-        runAsGroup: 0
-        fsGroup: 0
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [10000]
-        seccompProfile: { type: RuntimeDefault }
+      # securityContext:
+      #   # runAsNonRoot: true
+      #   runAsUser: 0
+      #   runAsGroup: 0
+      #   fsGroup: 0
+      #   fsGroupChangePolicy: OnRootMismatch
+      #   supplementalGroups: [10000]
+      #   seccompProfile: { type: RuntimeDefault }
       nodeSelector:
         topology.kubernetes.io/zone: w
       affinity:
