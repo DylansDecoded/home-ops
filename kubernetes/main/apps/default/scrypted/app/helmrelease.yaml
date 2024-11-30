@@ -28,37 +28,39 @@ spec:
               [{
               "name":"multus-services",
               "namespace": "network",
-              "ips": ["10.1.40.210/24"],
-              "mac": "3e:59:e4:f7:43:09"
+              "ips": ["10.1.40.205/24"],
+              "mac": "3e:59:e4:f7:43:10"
               }]
+          nodeSelector:
+            google.feature.node.kubernetes.io/coral: "true"
           securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: "OnRootMismatch"
             supplementalGroups:
-              - 44
-              - 109
-              - 65542 # truenas:external-services
+              - 65542 # gladius:external-services
 
         containers:
           app:
             image:
-              repository: ghcr.io/bjw-s-labs/scrypted
-              tag: 0.122.0@sha256:f69bbb25463d027d7f690ffbc672ba19ee6fbff5117b4450aebbd0a29a52a8e5
+              repository: ghcr.io/koush/scrypted
+              tag: v0.123.24-jammy-full
             probes:
               liveness:
-                enabled: true
+                enabled: false
               readiness:
-                enabled: true
+                enabled: false
+              startup:
+                enabled: false
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 136m
                 memory: 1024Mi
               limits:
-                gpu.intel.com/i915: 1
-                squat.ai/coral: 1
-                memory: 8192Mi
+                memory: 4096Mi
+            securityContext:
+              privileged: true
+
     service:
       app:
         controller: scrypted
@@ -95,15 +97,21 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /.cache
-
       cache-npm:
         type: emptyDir
         globalMounts:
           - path: /.npm
-
-      recordings:
+      dev-bus-usb:
+        type: hostPath
+        hostPath: /dev/bus/usb
+        hostPathType: Directory
+      sys-bus-usb:
+        type: hostPath
+        hostPath: /sys/bus/usb
+        hostPathType: Directory
+      recs:
         type: nfs
         server: truenas.robsonhome.cloud
         path: /mnt/tank/apps/scrypted
         globalMounts:
-          - path: /recordings
+          - path: /recs
