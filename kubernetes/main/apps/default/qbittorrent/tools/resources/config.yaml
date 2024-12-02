@@ -11,11 +11,6 @@ trackers:
     required_seed_ratio: 1.01
     required_seed_days: 7.1
 
-  - name: hd-space
-    urls: ["hd-space.pw"]
-    required_seed_ratio: 0
-    required_seed_days: 2.1
-
   - name: infinity
     urls: ["infinitylibrary.net"]
     required_seed_ratio: 1.01
