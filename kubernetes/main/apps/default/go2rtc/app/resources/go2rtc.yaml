@@ -1,8 +1,0 @@
----
-log:
-  output: "stdout"
-
-streams:
-  ring_doorbell: rtsp://scrypted.default.svc.cluster.local:34136/
-  backporch: rtsp://scrypted.default.svc.cluster.local:44617/680c912f0a862971
-  driveway: rtsp://scrypted.default.svc.cluster.local:37269/d41123c0f2afb08c
