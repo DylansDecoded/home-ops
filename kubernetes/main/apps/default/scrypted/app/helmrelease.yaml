@@ -57,7 +57,7 @@ spec:
                 memory: 1024Mi
               limits:
                 gpu.intel.com/i915: 1
-                squat.ai/coral: 1
+                # squat.ai/coral: 1
                 memory: 8192Mi
 
     service:

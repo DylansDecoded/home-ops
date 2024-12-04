@@ -68,6 +68,7 @@ spec:
         hostPath: /sys
         globalMounts:
           - readOnly: true
+
       var-lib-kubelet-device-plugins:
         type: hostPath
         hostPath: /var/lib/kubelet/device-plugins
