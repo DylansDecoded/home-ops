@@ -95,11 +95,11 @@ cameras:
       output_args:
         record: preset-record-generic-audio-copy
       inputs:
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam?video=copy&audio=aac
           input_args: preset-rtsp-restream
           roles: ['record']
 
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub?video=copy&audio=aac
           input_args: preset-rtsp-restream
           roles: ['detect']
 
@@ -171,10 +171,10 @@ cameras:
       output_args:
         record: preset-record-generic-audio-copy
       inputs:
-        - path: rtsp://127.0.0.1:8554/backporch_cam
+        - path: rtsp://127.0.0.1:8554/backporch_cam?video=copy&audio=aac
           input_args: preset-rtsp-restream
           roles: ['record']
-        - path: rtsp://127.0.0.1:8554/backporch_cam_sub
+        - path: rtsp://127.0.0.1:8554/backporch_cam_sub?video=copy&audio=aac
           input_args: preset-rtsp-restream
           roles: ['detect']
 
