@@ -133,7 +133,7 @@ cameras:
       enabled: True
       width: 1536
       height: 576
-      fps: 15
+      fps: 5
 
     motion:
       mask: "0.732,1,0.603,0.195,0.851,0.397,0.955,0.501,1,0.218,0.997,0.992"
@@ -198,7 +198,7 @@ cameras:
       enabled: True
       width: 640
       height: 480
-      fps: 15
+      fps: 5
 
     # zones:
     #   back_porch:
