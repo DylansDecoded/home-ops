@@ -32,33 +32,32 @@ spec:
               "mac": "3e:59:e4:f7:43:10"
               }]
           securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: "OnRootMismatch"
             supplementalGroups:
-              - 44
-              - 109
-              - 65542 # truenas:external-services
+              - 65542 # gladius:external-services
 
         containers:
           app:
             image:
-              repository: ghcr.io/bjw-s-labs/scrypted
-              tag: 0.122.0@sha256:f69bbb25463d027d7f690ffbc672ba19ee6fbff5117b4450aebbd0a29a52a8e5
+              repository: ghcr.io/koush/scrypted
+              tag: v0.123.47-jammy-full
             probes:
               liveness:
-                enabled: true
+                enabled: false
               readiness:
-                enabled: true
+                enabled: false
+              startup:
+                enabled: false
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 136m
                 memory: 1024Mi
               limits:
-                gpu.intel.com/i915: 1
-                # squat.ai/coral: 1
-                memory: 8192Mi
+                memory: 4096Mi
+            securityContext:
+              privileged: true
 
     service:
       app:
