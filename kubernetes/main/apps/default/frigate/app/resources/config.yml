@@ -23,25 +23,9 @@ model:
   input_pixel_format: bgr
 
 
-# ffmpeg:
-#   # Optional: global ffmpeg args (default: shown below)
-#   global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
-#   # NOTE: See hardware acceleration docs for your specific device
-#   hwaccel_args: preset-vaapi
-#   # Optional: global input args (default: shown below)
-#   input_args: preset-rtsp-generic
-#   # Optional: global output args
-#   output_args:
-#     # Optional: output args for detect streams (default: shown below)
-#     detect: -threads 2 -f rawvideo -pix_fmt yuv420p
-#     # Optional: output args for record streams (default: shown below)
-#     record: preset-record-generic-audio-copy
-
 ffmpeg:
-  hwaccel_args: preset-intel-qsv-h264
-  input_args: preset-rtsp-generic
-  output_args:
-    record: preset-record-generic-audio-copy
+  global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
+  hwaccel_args: preset-vaapi
 
 objects:
   track:
@@ -80,19 +64,20 @@ record:
 go2rtc:
   streams:
     driveway_floodlight_cam:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
-      - "ffmpeg:driveway_floodlight_cam#audio=opus"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
+      - "ffmpeg:driveway_floodlight_cam#video=h264#hardware#audio=opus"
 
     driveway_floodlight_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
+      - "ffmpeg:driveway_floodlight_cam_sub#video=h264#hardware#audio=opus"
 
     backporch_cam:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
-      - "ffmpeg:backporch_cam#audio=opus"
+      - "ffmpeg:backporch_cam#video=h264#hardware#audio=opus"
 
     backporch_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
-      # - "ffmpeg:backporch_cam_sub#audio=opus"
+      - "ffmpeg:backporch_cam_sub#video=h264#hardware#audio=opus"
 
 
 cameras:
