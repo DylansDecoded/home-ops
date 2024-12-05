@@ -101,24 +101,6 @@ cameras:
     #     - front_yard_left
     #     - ront_yard_right
 
-    # objects:
-    #   filters:
-    #     car:
-    #       min_area: 15000
-    #       mask:
-    #         0,0.435,0.193,0.262,0.388,0.144,0.615,0.06,0.752,0.039,0.813,0.132,1,0.367,1,0,0,0
-    #     motorcycle:
-    #       min_area: 1000
-    #     person:
-    #       mask: 0.594,0.414,0.619,0.334,0.641,0.378,0.638,0.464,0.619,0.489
-    #       min_area: 5000
-    #       max_area: 105000
-    #   track:
-    #     - package
-    #     - person
-    #     - cat
-    #     - dog
-    #     - car
 
     detect:
       enabled: True
@@ -190,6 +172,15 @@ cameras:
       width: 640
       height: 480
       fps: 5
+
+    zones:
+     back_porch:
+      coordinates: 0.662,0.362,0.711,0.999,0.042,1,0.194,0.385
+      inertia: 3
+      objects:
+          - person
+          - dog
+          - cat
 
     # zones:
     #   back_porch:
