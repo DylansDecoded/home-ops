@@ -15,30 +15,30 @@ detectors:
     type: edgetpu
     device: pci
 
-model:
-  path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
-  width: 300
-  height: 300
-  input_tensor: nhwc
-  input_pixel_format: bgr
+# model:
+#   path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
+#   width: 300
+#   height: 300
+#   input_tensor: nhwc
+#   input_pixel_format: bgr
 
 
 ffmpeg:
   global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
   hwaccel_args: preset-vaapi
 
-objects:
-  track:
-    - person
-    - face
-    - license_plate
-    - dog
-    - cat
-    - car
-    - amazon
-    - fedex
-    - ups
-    - package
+# objects:
+#   track:
+#     - person
+#     - face
+#     - license_plate
+#     - dog
+#     - cat
+#     - car
+#     - amazon
+#     - fedex
+#     - ups
+#     - package
 
 snapshots:
   enabled: true
@@ -64,21 +64,16 @@ record:
 go2rtc:
   streams:
     driveway_floodlight_cam:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
-      - "ffmpeg:driveway_floodlight_cam#video=h264#hardware#audio=opus"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main#video=h264#audio=copy#audio=opus#hardware"
 
     driveway_floodlight_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
-      - "ffmpeg:driveway_floodlight_cam_sub#video=h264#hardware#audio=opus"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
 
     backporch_cam:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
-      - "ffmpeg:backporch_cam#video=h264#hardware#audio=opus"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_mainh264Preview_01_main#video=h264#audio=copy#audio=opus#hardware"
 
     backporch_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
-      - "ffmpeg:backporch_cam_sub#video=h264#hardware#audio=opus"
-
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
 
 cameras:
   driveway_floodlight_cam:
@@ -86,27 +81,27 @@ cameras:
       output_args:
         record: preset-record-generic-audio-copy
       inputs:
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam?video=copy&audio=aac
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
           input_args: preset-rtsp-restream
           roles: ['record']
 
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub?video=copy&audio=aac
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
           input_args: preset-rtsp-restream
           roles: ['detect']
-
-    # snapshots:
-    #   required_zones:
-    #     - front_porch
-    #     - driveway
-    #     - front_yard_left
-    #     - ront_yard_right
-
 
     detect:
       enabled: True
       width: 1536
       height: 576
-      fps: 5
+      fps: 7
+
+    objects:
+      track:
+        - person
+        - dog
+        - cat
+        - package
+        - cat
 
     motion:
       mask: "0.732,1,0.603,0.195,0.851,0.397,0.955,0.501,1,0.218,0.997,0.992"
@@ -120,23 +115,6 @@ cameras:
           - dog
           - cat
           - package
-
-
-    #   driveway:
-    #     coordinates: 0.126,0.76,0.418,0.232,0.552,0.257,0.534,0.285,0.502,0.994,0.153,0.997,0.119,0.831
-    #     inertia: 3
-
-    #   front_porch:
-    #     coordinates: 0.123,0.757,0.244,0.536,0.184,0.481,0.172,0.533,0.098,0.669
-    #     inertia: 3
-
-    #   front_yard_left:
-    #     coordinates: 0.181,0.478,0.289,0.298,0.344,0.257,0.41,0.235,0.246,0.536
-    #     inertia: 3
-
-    #   front_yard_right:
-    #     coordinates: 0.554,0.266,0.54,0.287,0.526,0.574,0.504,1,0.703,1,0.65,0.589,0.605,0.282
-    #     inertia: 3
 
 
   backporch_cam:
@@ -158,15 +136,6 @@ cameras:
         - dog
         - cat
 
-      filters:
-        cat:
-          min_area: 5000
-        dog:
-          min_area: 5000
-        person:
-          min_area: 32000
-          max_area: 320000
-
     detect:
       enabled: True
       width: 640
@@ -181,20 +150,5 @@ cameras:
           - person
           - dog
           - cat
-
-    # zones:
-    #   back_porch:
-    #     coordinates: 0.19,0.381,0.651,0.372,0.691,1,0.058,1
-    #     inertia: 3
-    #     loitering_time: 20
-    #     filters:
-    #       person:
-    #         min_area: 5000
-    #         max_area: 100000
-    #         threshold: 0.7
-    #       dog:
-    #         min_area: 5000
-    #         max_area: 100000
-    #         threshold: 0.7
 
 

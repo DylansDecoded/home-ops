@@ -33,7 +33,7 @@ spec:
               }]
           securityContext:
             supplementalGroups:
-              - 65542 # gladius:external-services
+              - 65542
 
         containers:
           app:
@@ -55,7 +55,7 @@ spec:
                 cpu: 136m
                 memory: 1024Mi
               limits:
-                memory: 4096Mi
+                memory: 2048Mi
             securityContext:
               privileged: true
 
