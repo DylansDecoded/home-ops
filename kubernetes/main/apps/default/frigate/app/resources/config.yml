@@ -27,19 +27,6 @@ ffmpeg:
   global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
   hwaccel_args: preset-vaapi
 
-# objects:
-#   track:
-#     - person
-#     - face
-#     - license_plate
-#     - dog
-#     - cat
-#     - car
-#     - amazon
-#     - fedex
-#     - ups
-#     - package
-
 snapshots:
   enabled: true
   clean_copy: true
@@ -70,7 +57,7 @@ go2rtc:
       - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
 
     backporch_cam:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_mainh264Preview_01_main#video=h264#audio=copy#audio=opus#hardware"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main#video=h264#audio=copy#audio=opus#hardware"
 
     backporch_cam_sub:
       - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
