@@ -28,9 +28,12 @@ spec:
               [{
               "name":"multus-services",
               "namespace": "network",
-              "ips": ["10.1.40.205/24"],
+              "ips": ["10.1.40.208/24"],
               "mac": "3e:59:e4:f7:43:10"
               }]
+
+          nodeSelector:
+            google.feature.node.kubernetes.io/coral: "true"
           securityContext:
             supplementalGroups:
               - 65542
@@ -39,7 +42,7 @@ spec:
           app:
             image:
               repository: ghcr.io/koush/scrypted
-              tag: v0.123.47-jammy-full
+              tag: v0.123.24-jammy-full
             probes:
               liveness:
                 enabled: false
@@ -55,9 +58,10 @@ spec:
                 cpu: 136m
                 memory: 1024Mi
               limits:
-                memory: 2048Mi
+                memory: 8192Mi
             securityContext:
               privileged: true
+
 
     service:
       app:
