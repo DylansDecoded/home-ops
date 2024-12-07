@@ -54,21 +54,17 @@ go2rtc:
   streams:
     driveway_floodlight_cam:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
-      # - rtsp://scrypted.default.svc.cluster.local:46425/7bedd5b68ea09fd2
       - "ffmpeg:driveway_floodlight_cam#video=h264#audio=copy#audio=opus#hardware"
     driveway_floodlight_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
-      # - rtsp://scrypted.default.svc.cluster.local:46425/d69ecb0f54d010b6
       - "ffmpeg:driveway_floodlight_cam_sub#video=copy#audio=copy#audio=opus"
 
     backporch_cam:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
-      # - rtsp://scrypted.default.svc.cluster.local:35681/ce89eb80814ce0e3
       - "ffmpeg:backporch_cam#video=h264#audio=copy#audio=opus#hardware"
 
     backporch_cam_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
-      # - rtsp://scrypted.default.svc.cluster.local:35681/948b3c6586e68d9b
       - "ffmpeg:backporch_cam_sub#video=copy#audio=copy#audio=opus"
 
 cameras:
