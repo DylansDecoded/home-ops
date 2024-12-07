@@ -24,8 +24,9 @@ detectors:
 
 
 ffmpeg:
-  global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
+  global_args: ["-hide_banner", "-loglevel", "warning"]
   hwaccel_args: preset-vaapi
+  output_args: preset-record-generic-audio-copy-aac
 
 snapshots:
   enabled: true
@@ -51,22 +52,25 @@ record:
 go2rtc:
   streams:
     driveway_floodlight_cam:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main#video=h264#audio=copy#audio=opus#hardware"
-
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
+      - "ffmpeg:driveway_floodlight_cam#video=h264#audio=copy#audio=opus#hardware"
     driveway_floodlight_cam_sub:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
+      - "ffmpeg:driveway_floodlight_cam_sub#video=copy#audio=copy#audio=opus"
 
     backporch_cam:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main#video=h264#audio=copy#audio=opus#hardware"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
+      - "ffmpeg:backporch_cam#video=h264#audio=copy#audio=opus#hardware"
 
     backporch_cam_sub:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
+      - "ffmpeg:backporch_cam_sub#video=copy#audio=copy#audio=opus"
 
 cameras:
   driveway_floodlight_cam:
     ffmpeg:
-      output_args:
-        record: preset-record-generic-audio-copy
+      # output_args:
+      #   record: preset-record-generic-audio-copy
       inputs:
         - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
           input_args: preset-rtsp-restream
@@ -106,8 +110,8 @@ cameras:
 
   backporch_cam:
     ffmpeg:
-      output_args:
-        record: preset-record-generic-audio-copy
+      # output_args:
+      #   record: preset-record-generic-audio-copy
       inputs:
         - path: rtsp://127.0.0.1:8554/backporch_cam?video=copy&audio=aac
           input_args: preset-rtsp-restream
@@ -115,7 +119,6 @@ cameras:
         - path: rtsp://127.0.0.1:8554/backporch_cam_sub?video=copy&audio=aac
           input_args: preset-rtsp-restream
           roles: ['detect']
-
 
     objects:
       track:
