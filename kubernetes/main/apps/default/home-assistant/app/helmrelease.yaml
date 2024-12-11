@@ -52,7 +52,7 @@ spec:
           app:
             image:
               repository: ghcr.io/onedr0p/home-assistant
-              tag: 2024.11.1@sha256:a3dd7577c28771702b21f817ad86600056467c2c7f45d261a1e7241910ddc2e2
+              tag: 2024.12.2@sha256:352d00833a6bb2a1a82e20e846c054bccb4a186c7f264d06b139ca406af288e1
             resources:
               requests:
                 cpu: 47m
@@ -69,7 +69,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.95.2@sha256:51b9ff106f67bfe56aa88c7e63e7413276d0b509fb85290c3d361a38e97bfa8c
+              tag: 4.95.3@sha256:6d74583d68179cbb6ddadc2518b450d2ac3eaec2d342474fe1941e03371cd2cf
             args:
               - --auth
               - none
