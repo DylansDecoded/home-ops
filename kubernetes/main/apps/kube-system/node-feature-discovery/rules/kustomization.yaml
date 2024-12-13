@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./google-coral-device.yaml
   - ./intel-gpu-device.yaml
-  # - ./zooz-zwave-device.yaml
+  - ./homeseer-zwave-device.yaml
