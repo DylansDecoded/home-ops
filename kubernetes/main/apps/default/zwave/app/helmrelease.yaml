@@ -61,6 +61,8 @@ spec:
               limits:
                 memory: 512Mi
     defaultPodOptions:
+      nodeSelector:
+        homeseer.feature.node.kubernetes.io/zwave: "true" # NFD label for zwave usb
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
@@ -99,3 +101,9 @@ spec:
           - path: /usr/src/app/store/.config-db
       tmp:
         type: emptyDir
+      usb:
+        type: hostPath
+        hostPath: /dev/serial/by-id/usb-1a86_USB_Single_Serial_58E9045056-if00
+        hostPathType: CharDevice
+        globalMounts:
+          - path: /dev/serial/by-id/usb-1a86_USB_Single_Serial_58E9045056-if00
