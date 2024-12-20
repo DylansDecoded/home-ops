@@ -43,6 +43,7 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
+      TALOS_SCHEMATIC_ID: 6e6f23cd5ca6099bbe4be57a2218f628e61314545d5da36dcc6516c59d3be64f
       # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
       KUBERNETES_VERSION: v1.32.0
       # renovate: depName=ghcr.io/buroa/installer datasource=docker
