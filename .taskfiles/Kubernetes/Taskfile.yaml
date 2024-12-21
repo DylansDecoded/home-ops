@@ -19,7 +19,7 @@ tasks:
         sh: flux --namespace flux-system get kustomizations {{base .PATH}} 2>&1
     preconditions:
       - test -f {{.CLUSTER_DIR}}/apps/{{.PATH}}/ks.yaml
-      - which flux kubectl yq
+      # - which flux kubectl yq
 
   browse-pvc:
     desc: Mount a PVC to an temp container [CLUSTER=main] [NS=default] [CLAIM=required]
