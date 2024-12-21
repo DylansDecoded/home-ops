@@ -3,10 +3,10 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: rook-ceph-operator
+  name: rook-ceph
 spec:
   interval: 30m
-  timeout: 15m
+  releaseName: rook-ceph
   chart:
     spec:
       chart: rook-ceph
@@ -15,25 +15,15 @@ spec:
         kind: HelmRepository
         name: rook-ceph
         namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
-  dependsOn:
-    - name: snapshot-controller
-      namespace: volsync-system
   values:
+    crds:
+      enabled: true
     csi:
       enableVolumeGroupSnapshot: false # TODO: enable this when v1beta1 CRDs are available
       cephFSKernelMountOptions: ms_mode=prefer-crc
       enableLiveness: true
       serviceMonitor:
         enabled: true
-    enableDiscoveryDaemon: true
     monitoring:
       enabled: true
     resources:
