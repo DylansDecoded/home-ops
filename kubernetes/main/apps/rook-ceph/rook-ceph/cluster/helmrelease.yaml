@@ -98,7 +98,6 @@ spec:
       storage:
         useAllNodes: false
         useAllDevices: false
-        # devicePathFilter: /dev/disk/by-id/ata-SAMSUNG_MZ7KM960.*
         config:
           osdsPerDevice: "1"
         nodes:
@@ -125,15 +124,15 @@ spec:
           - name: "k8s-5"
             devices:
               - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B"
-      placement:
-        mgr: &placement
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exists
-        mon: *placement
+      # placement:
+      #   mgr: &placement
+      #     nodeAffinity:
+      #       requiredDuringSchedulingIgnoredDuringExecution:
+      #         nodeSelectorTerms:
+      #           - matchExpressions:
+      #               - key: node-role.kubernetes.io/control-plane
+      #                 operator: Exists
+      #   mon: *placement
     cephBlockPools:
       - name: ceph-blockpool
         spec:
