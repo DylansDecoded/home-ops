@@ -59,28 +59,28 @@ tasks:
   rook:
     internal: true
     cmds:
-      # - for: { var: nodes }
-      #   task: rook-data
-      #   vars:
-      #     node: '{{.ITEM}}'
+      - for: { var: nodes }
+        task: rook-data
+        vars:
+          node: '{{.ITEM}}'
 
-      # - for: { var: k8s-0 }
-      #   task: rook-disk
-      #   vars:
-      #     node: k8s-0
-      #     disk: '{{.ITEM}}'
+      - for: { var: k8s-0 }
+        task: rook-disk
+        vars:
+          node: k8s-0
+          disk: '{{.ITEM}}'
 
-      # - for: { var: k8s-1 }
-      #   task: rook-disk
-      #   vars:
-      #     node: k8s-1
-      #     disk: '{{.ITEM}}'
+      - for: { var: k8s-1 }
+        task: rook-disk
+        vars:
+          node: k8s-1
+          disk: '{{.ITEM}}'
 
-      # - for: { var: k8s-2 }
-      #   task: rook-disk
-      #   vars:
-      #     node: k8s-2
-      #     disk: '{{.ITEM}}'
+      - for: { var: k8s-2 }
+        task: rook-disk
+        vars:
+          node: k8s-2
+          disk: '{{.ITEM}}'
 
       - for: { var: k8s-3 }
         task: rook-disk
@@ -101,10 +101,10 @@ tasks:
           disk: '{{.ITEM}}'
 
     vars:
-      nodes: k8s-3 k8s-4 k8s-5
-      # k8s-0: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874
-      # k8s-1: ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056
-      # k8s-2: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045
+      nodes: k8s-0 k8s-1 k8s-2 k8s-3 k8s-4 k8s-5
+      k8s-0: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874
+      k8s-1: ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056
+      k8s-2: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045
       k8s-3: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743
       k8s-4: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441
       k8s-5: ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B
