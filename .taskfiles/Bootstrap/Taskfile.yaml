@@ -15,11 +15,11 @@ tasks:
       NODES: '{{ .NODES | default "k8s-0,k8s-1,k8s-2,k8s-3,k8s-4,k8s-5" }}'
       ROOK_DISK: '{{.ROOK_DISK | default "/dev/sda"}}'
     cmds:
-      # - { task: etcd, vars: *vars }
-      # - { task: conf, vars: *vars }
-      # - { task: apps, vars: *vars }
+      - { task: etcd, vars: *vars }
+      - { task: conf, vars: *vars }
+      - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
-      # - { task: flux, vars: *vars }
+      - { task: flux, vars: *vars }
     requires:
       vars: [CLUSTER]
     preconditions:
@@ -64,11 +64,11 @@ tasks:
         vars:
           node: '{{.ITEM}}'
 
-      # - for: { var: k8s-0 }
-      #   task: rook-disk
-      #   vars:
-      #     node: k8s-0
-      #     disk: '{{.ITEM}}'
+      - for: { var: k8s-0 }
+        task: rook-disk
+        vars:
+          node: k8s-0
+          disk: '{{.ITEM}}'
 
       - for: { var: k8s-1 }
         task: rook-disk
@@ -82,17 +82,17 @@ tasks:
           node: k8s-2
           disk: '{{.ITEM}}'
 
-      # - for: { var: k8s-3 }
-      #   task: rook-disk
-      #   vars:
-      #    node: k8s-3
-      #    disk: '{{.ITEM}}'
+      - for: { var: k8s-3 }
+        task: rook-disk
+        vars:
+         node: k8s-3
+         disk: '{{.ITEM}}'
 
-      # - for: { var: k8s-4 }
-      #   task: rook-disk
-      #   vars:
-      #    node: k8s-4
-      #    disk: '{{.ITEM}}'
+      - for: { var: k8s-4 }
+        task: rook-disk
+        vars:
+         node: k8s-4
+         disk: '{{.ITEM}}'
 
       - for: { var: k8s-5 }
         task: rook-disk
@@ -102,29 +102,12 @@ tasks:
 
     vars:
       nodes: k8s-1 k8s-2 k8s-5
-      # k8s-0: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874
+      k8s-0: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874
       k8s-1: ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056
       k8s-2: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045
-      # k8s-3: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743
-      # k8s-4: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441
+      k8s-3: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743
+      k8s-4: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441
       k8s-5: ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B
-  # rook:
-  #   internal: true
-  #   vars: &vars
-  #     cluster: '{{.cluster}}'
-  #     nodes:  k8s-0 k8s-1 k8s-2 k8s-3 k8s-4 k8s-5
-  #     disk: '/dev/sdb'
-  #   cmds:
-  #     - for: { var: nodes }
-  #       task: rook-data
-  #       vars:
-  #         node: '{{.ITEM}}'
-  #     - for: { var: nodes }
-  #       task: rook-disk
-  #       vars:
-  #         node: '{{.ITEM}}'
-  #         disk: '{{.disk}}'
-
 
   rook-data:
     internal: true
