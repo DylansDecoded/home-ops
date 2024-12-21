@@ -64,23 +64,23 @@ tasks:
       #   vars:
       #     node: '{{.ITEM}}'
 
-      - for: { var: k8s-0 }
-        task: rook-disk
-        vars:
-          node: k8s-0
-          disk: '{{.ITEM}}'
+      # - for: { var: k8s-0 }
+      #   task: rook-disk
+      #   vars:
+      #     node: k8s-0
+      #     disk: '{{.ITEM}}'
 
-      - for: { var: k8s-1 }
-        task: rook-disk
-        vars:
-          node: k8s-1
-          disk: '{{.ITEM}}'
+      # - for: { var: k8s-1 }
+      #   task: rook-disk
+      #   vars:
+      #     node: k8s-1
+      #     disk: '{{.ITEM}}'
 
-      - for: { var: k8s-2 }
-        task: rook-disk
-        vars:
-          node: k8s-2
-          disk: '{{.ITEM}}'
+      # - for: { var: k8s-2 }
+      #   task: rook-disk
+      #   vars:
+      #     node: k8s-2
+      #     disk: '{{.ITEM}}'
 
       - for: { var: k8s-3 }
         task: rook-disk
@@ -101,18 +101,18 @@ tasks:
           disk: '{{.ITEM}}'
 
     vars:
-      nodes: k8s-2 k8s-3 k8s-4 k8s-5
-      k8s-0: sda
-      k8s-1: sda
-      k8s-2: sda
-      k8s-3: sda
-      k8s-4: sda
-      k8s-5: sda
+      nodes: k8s-3 k8s-4 k8s-5
+      # k8s-0: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874
+      # k8s-1: ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056
+      # k8s-2: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045
+      k8s-3: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743
+      k8s-4: ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441
+      k8s-5: ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B
   # rook:
   #   internal: true
   #   vars: &vars
   #     cluster: '{{.cluster}}'
-  #     nodes:  k8s-1 k8s-2 k8s-3 k8s-5
+  #     nodes:  k8s-0 k8s-1 k8s-2 k8s-3 k8s-4 k8s-5
   #     disk: '/dev/sdb'
   #   cmds:
   #     - for: { var: nodes }
@@ -152,7 +152,7 @@ tasks:
       - kubectl --namespace default logs job/{{.job}}
       - kubectl --namespace default delete job {{.job}}
     env:
-      disk: /dev/{{.disk}}
+      disk: /dev/disk/by-id/{{.disk}}
       job: '{{.job}}'
       node: '{{.node}}'
     vars:
