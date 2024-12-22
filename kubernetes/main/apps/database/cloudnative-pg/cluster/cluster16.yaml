@@ -5,8 +5,8 @@ kind: Cluster
 metadata:
   name: postgres16
 spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:d7822fa6eba284a6d3d035d51a51de22147bc5e72d87aa93e7dd9fa87455ed5c
   instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.6-17
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
@@ -16,12 +16,13 @@ spec:
   enableSuperuserAccess: true
   postgresql:
     parameters:
-      max_connections: "400"
-      shared_buffers: 256MB
+      max_connections: "250"
+      shared_buffers: 128MB
   resources:
     requests:
       cpu: 500m
     limits:
+      hugepages-2Mi: 2Gi # Requires sysctl set on the host
       memory: 4Gi
   monitoring:
     enablePodMonitor: true
@@ -34,7 +35,7 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://cloudnative-pg/
-      endpointURL: http://minio.default.svc.cluster.local:9000
+      endpointURL: https://5a8862340df663c8595cce75ffa77854.r2.cloudflarestorage.com
       # Note: serverName version needs to be incremented
       # when recovering from an existing cnpg cluster
       serverName: &currentCluster postgres16-v8
