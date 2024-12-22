@@ -63,7 +63,7 @@ tasks:
     requires:
       vars: ["node"]
     preconditions:
-      - test -f {{.TALOS_DIR}}/clusterconfig/talosconfig
+      # - test -f {{.TALOS_DIR}}/clusterconfig/talosconfig
       - talosctl config info >/dev/null 2>&1
       - talosctl --nodes {{.node}} get machineconfig >/dev/null 2>&1
 

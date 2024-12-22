@@ -56,7 +56,7 @@ releases:
     chart: oci://ghcr.io/spegel-org/helm-charts/spegel
     version: v0.0.28
     values:
-      - ../apps/kube-system/spegel/app/helm-values.yaml
+      - ../../apps/kube-system/spegel/app/helm-values.yaml
     needs:
       - observability/prometheus-operator-crds
       - kube-system/cilium
