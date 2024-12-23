@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: ${job}
+  name: volsync-unlock-{{ ENV.APP }}
   namespace: ${ns}
 spec:
   ttlSecondsAfterFinished: 3600
@@ -17,6 +17,9 @@ spec:
           envFrom:
             - secretRef:
                 name: ${app}-volsync-secret
+          volumeMounts:
+            - name: repository
+              mountPath: /repository
           resources: {}
         - name: r2
           image: docker.io/restic/restic:latest
@@ -25,3 +28,8 @@ spec:
             - secretRef:
                 name: ${app}-volsync-r2-secret
           resources: {}
+      volumes:
+        - name: repository
+          nfs:
+            server: truenas.robsonhome.cloud
+            path: /mnt/tank/apps/volsync

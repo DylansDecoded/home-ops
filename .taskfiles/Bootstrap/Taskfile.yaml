@@ -50,7 +50,7 @@ tasks:
     internal: true
     cmds:
       - until kubectl wait --for=condition=Ready=False nodes --all --timeout=10m; do sleep 5; done
-      - helmfile --file {{.CLUSTER_DIR}}/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+      - helmfile --file {{.CLUSTER_DIR}}/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install
       - until kubectl wait --for=condition=Ready nodes --all --timeout=10m; do sleep 5; done
     preconditions:
       - test -f {{.CLUSTER_DIR}}/talosconfig
