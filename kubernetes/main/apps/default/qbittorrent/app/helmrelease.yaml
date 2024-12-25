@@ -107,9 +107,9 @@ spec:
               limits:
                 memory: 50Mi
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              fsGroup: 568
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
               fsGroupChangePolicy: OnRootMismatch
               supplementalGroups:
                 - 65534
@@ -169,8 +169,8 @@ spec:
               CRON_SCHEDULE: "*/5 * * * *"
               LOG_TIMESTAMP: false
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
+              runAsUser: 1000
+              runAsGroup: 1000
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
