@@ -21,7 +21,7 @@ configMapGenerator:
 
   - name: qbittorrent-dnsdist
     files:
-      - dnsdist.conf=./config/dnsdist.conf
+      - dnsdist.conf=./resources/dnsdist.conf
 
 generatorOptions:
   disableNameSuffixHash: true
