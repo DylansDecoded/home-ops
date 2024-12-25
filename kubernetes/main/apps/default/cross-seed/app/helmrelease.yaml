@@ -36,13 +36,22 @@ spec:
               repository: ghcr.io/cross-seed/cross-seed
               tag: 6.5.2@sha256:d0a9e80d026e37806960ac3551e97b7cf75ae16470dbbf1df217a7aec86cf9c5
             env:
+              CROSS_SEED_PORT: &port 80
               TZ: America/New_York
             args: ["daemon"]
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -55,18 +64,17 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [10000]
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: cross-seed
         ports:
           http:
-            port: 80
+            port: *port
     persistence:
       config:
         type: emptyDir
