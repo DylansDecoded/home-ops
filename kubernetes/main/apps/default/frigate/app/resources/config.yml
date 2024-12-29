@@ -53,10 +53,10 @@ record:
 go2rtc:
   streams:
     driveway_floodlight_cam:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
-      - "ffmpeg:driveway_floodlight_cam#video=h264#audio=copy#audio=opus#hardware"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
+      - "ffmpeg:driveway_floodlight_cam#audio=copy#audio=opus#hardware"
     driveway_floodlight_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub
       - "ffmpeg:driveway_floodlight_cam_sub#video=copy#audio=copy#audio=opus"
 
     backporch_cam:
