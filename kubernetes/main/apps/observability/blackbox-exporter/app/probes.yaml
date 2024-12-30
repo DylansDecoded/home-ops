@@ -18,5 +18,4 @@ spec:
         # - receiver.robsonhome.cloud
         # - ups.robsonhome.cloud
         - vacuum.robsonhome.cloud
-        # - zigbee-controller.robsonhome.cloud
-        # - zwave-controller.robsonhome.cloud
+        - zigbee-controller.robsonhome.cloud
