@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: atuin
+  name: bazarr
 spec:
   interval: 30m
   chart:
@@ -27,30 +27,33 @@ spec:
       namespace: rook-ceph
   values:
     controllers:
-      atuin:
+      bazarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/atuin-server-sqlite
-              tag: v18.3.0@sha256:9d8e8b983d8a8113d87a72111b158552d49ad050ef98ebfe3e7bdd12a5207466
+              repository: ghcr.io/onedr0p/bazarr
+              tag: 1.5.0@sha256:5eb3ff2384c470fa351ff486b1b61660914a2ba144e908258cf111555a583356
             env:
-              ATUIN_PORT: &port 80
-              ATUIN_OPEN_REGISTRATION: "true"
               TZ: America/New_York
+            envFrom:
+              - secretRef:
+                  name: bazarr-secret
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /
-                    port: *port
+                    path: /health
+                    port: &port 6767
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -58,7 +61,22 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 256Mi
+                memory: 1Gi
+          subcleaner:
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.4.0@sha256:0330739a707a2969d617e859f096659ab6d149212658ac0ad7e550b59482ebf0
+            env:
+              GITSYNC_REPO: https://github.com/KBlixt/subcleaner
+              GITSYNC_REF: master
+              GITSYNC_PERIOD: 24h
+              GITSYNC_ROOT: /subcleaner
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 128Mi
+            securityContext: *securityContext
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -69,21 +87,46 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: atuin
+        controller: bazarr
         ports:
           http:
-            primary: true
             port: *port
     ingress:
       app:
         className: internal
         hosts:
-          - host: sh.robsonhome.cloud
+          - host: "{{ .Release.Name }}.robsonhome.cloud"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
     persistence:
+      subcleaner:
+        type: emptyDir
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /config/cache
       config:
-        existingClaim: atuin
+        existingClaim: bazarr
+      log:
+        type: emptyDir
+        globalMounts:
+          - path: /config/log
+      media:
+        type: nfs
+        server: truenas.robsonhome.cloud
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media
+      scripts:
+        type: configMap
+        name: bazarr-scripts
+        defaultMode: 0775
+        globalMounts:
+          - path: /scripts/subcleaner.sh
+            subPath: subcleaner.sh
+            readOnly: true
+      tmp:
+        type: emptyDir
