@@ -58,8 +58,6 @@ spec:
             uid: prometheus
             access: proxy
             url: http://prometheus-operated.observability.svc.cluster.local:9090
-            jsonData:
-              timeInterval: 1m
             isDefault: true
           - name: Loki
             type: loki
@@ -188,9 +186,9 @@ spec:
           revision: 1
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-        omada:
-          url: https://raw.githubusercontent.com/charlie-haley/omada_exporter/main/dashboard.json
-          datasource: Prometheus
+        # omada:
+        #   url: https://raw.githubusercontent.com/charlie-haley/omada_exporter/main/dashboard.json
+        #   datasource: Prometheus
         unpackerr:
           # renovate: depName="Unpackerr"
           gnetId: 18817
@@ -228,8 +226,6 @@ spec:
       enabled: true
     ingress:
       enabled: true
-      annotations:
-        external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
       ingressClassName: internal
       hosts: ["grafana.robsonhome.cloud"]
     persistence:

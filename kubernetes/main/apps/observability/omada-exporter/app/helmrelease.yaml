@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -33,9 +33,10 @@ spec:
               repository: ghcr.io/charlie-haley/omada_exporter
               tag: 0.13.1
             env:
-              OMADA_SITE: 'Homelab'
+              OMADA_HOST: "https://oc200.robsonhome.cloud"
+              OMADA_SITE: "Homelab"
               OMADA_REQUEST_TIMEOUT: 15
-              OMADA_INSECURE: 'true'
+              OMADA_INSECURE: true
             envFrom:
               - secretRef:
                   name: omada-exporter-secret
@@ -51,11 +52,14 @@ spec:
                 memory: 256Mi
                 cpu: 200m
 
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
 
     service:
       app:

@@ -6,7 +6,6 @@ metadata:
   name: loki
 spec:
   interval: 30m
-  timeout: 15m
   chart:
     spec:
       chart: loki
@@ -26,8 +25,8 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: openebs
-      namespace: openebs-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   values:
     deploymentMode: SingleBinary
     loki:
@@ -61,7 +60,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: openebs-hostpath
+        storageClass: ceph-block
         size: 50Gi
     gateway:
       replicas: 0
