@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app home-assistant
+  name: &app jellyseerr
   namespace: flux-system
 spec:
   targetNamespace: default
@@ -11,10 +11,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: emqx-cluster
     - name: external-secrets-stores
     - name: volsync
-  path: ./kubernetes/main/apps/default/home-assistant/app
+  path: ./kubernetes/main/apps/default/jellyseerr/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,5 +24,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: hass
+      GATUS_SUBDOMAIN: requests
+      GATUS_PATH: /api/v1/status
       VOLSYNC_CAPACITY: 5Gi
