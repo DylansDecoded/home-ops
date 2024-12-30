@@ -8,4 +8,4 @@ spec:
   endpoints:
     - dnsName: external.robsonhome.cloud
       recordType: CNAME
-      targets: ["${CLUSTER_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"]
+      targets: ["e901488f-a148-4024-b5a7-8537e7b42287.cfargotunnel.com"]

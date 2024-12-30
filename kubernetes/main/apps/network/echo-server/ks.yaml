@@ -3,21 +3,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cloudflared
+  name: &app echo-server
   namespace: flux-system
 spec:
   targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: external-dns-cloudflare
-    - name: external-secrets-stores
-  path: ./kubernetes/main/apps/network/cloudflared/app
+  path: ./kubernetes/main/apps/network/echo-server/app
   prune: false
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app

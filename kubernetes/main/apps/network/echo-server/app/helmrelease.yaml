@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -25,6 +25,7 @@ spec:
   values:
     controllers:
       echo-server:
+        replicas: 2
         strategy: RollingUpdate
         containers:
           app:
@@ -32,7 +33,7 @@ spec:
               repository: ghcr.io/mendhak/http-https-echo
               tag: 35
             env:
-              HTTP_PORT: &port 8080
+              HTTP_PORT: &port 80
               LOG_WITHOUT_NEWLINE: true
               LOG_IGNORE_PATH: /healthz
               PROMETHEUS_ENABLED: true
@@ -63,8 +64,8 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
+        runAsUser: 1000
+        runAsGroup: 1000
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
@@ -83,8 +84,6 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: external.robsonhome.cloud
         className: external
         hosts:
           - host: "{{ .Release.Name }}.robsonhome.cloud"
