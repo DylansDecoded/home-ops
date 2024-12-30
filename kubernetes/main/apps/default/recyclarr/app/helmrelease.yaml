@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -25,26 +25,22 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: volsync
-      namespace: volsync-system
   values:
     controllers:
       recyclarr:
         type: cronjob
-        annotations:
-          reloader.stakater.com/auto: "true"
         cronjob:
-          schedule: "@daily"
-          timeZone: &timeZone America/New_York
+          schedule: 0 0 * * *
+          backoffLimit: 0
+          concurrencyPolicy: Forbid
           successfulJobsHistory: 1
           failedJobsHistory: 1
+          ttlSecondsAfterFinished: 86400
         containers:
           app:
             image:
               repository: ghcr.io/recyclarr/recyclarr
               tag: 7.4.0@sha256:619c3b8920a179f2c578acd0f54e9a068f57c049aff840469eed66e93a4be2cf
-            env:
-              TZ: *timeZone
             envFrom:
               - secretRef:
                   name: recyclarr-secret
@@ -58,12 +54,14 @@ spec:
                 cpu: 10m
               limits:
                 memory: 128Mi
+        pod:
+          restartPolicy: Never
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     persistence:

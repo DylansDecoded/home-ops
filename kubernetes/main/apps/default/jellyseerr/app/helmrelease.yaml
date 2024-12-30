@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: sabnzbd
+  name: jellyseerr
 spec:
   interval: 30m
   chart:
@@ -27,39 +27,28 @@ spec:
       namespace: rook-ceph
   values:
     controllers:
-      sabnzbd:
+      jellyseerr:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/sabnzbd
-              tag: 4.4.1@sha256:4188d3c29c53de1018edcfd5dc2d0a0c7955b9a239b91ff6c859626abd3494dc
+              repository: docker.io/fallenbagel/jellyseerr
+              tag: 2.2.2@sha256:fe72f4b341fa5c3275826a39aebfff23cbd552c956b0ab2d51dfba6a49b528f8
             env:
               TZ: America/New_York
-              SABNZBD__PORT: &port 80
-              SABNZBD__HOST_WHITELIST_ENTRIES: >-
-                sabnzbd,
-                sabnzbd.default,
-                sabnzbd.default.svc,
-                sabnzbd.default.svc.cluster,
-                sabnzbd.default.svc.cluster.local,
-                sab.robsonhome.cloud
-              CROSS_SEED_ENABLED: false
-              CROSS_SEED_HOST: cross-seed.default.svc.cluster.local
-              CROSS_SEED_PORT: 80
-              CROSS_SEED_SLEEP_INTERVAL: 30
-              PUSHOVER_ENABLED: true
+              LOG_LEVEL: "info"
+              PORT: &port 80
             envFrom:
               - secretRef:
-                  name: sabnzbd-secret
+                  name: jellyseerr-secret
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /api?mode=version
+                    path: /api/v1/status
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
@@ -72,9 +61,9 @@ spec:
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 100m
+                cpu: 10m
               limits:
-                memory: 12Gi
+                memory: 2Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -85,15 +74,15 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: sabnzbd
+        controller: jellyseerr
         ports:
           http:
             port: *port
     ingress:
       app:
-        className: internal
+        className: external
         hosts:
-          - host: sab.robsonhome.cloud
+          - host: requests.robsonhome.cloud
             paths:
               - path: /
                 service:
@@ -101,19 +90,16 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: sabnzbd
+        existingClaim: jellyseerr
+        globalMounts:
+          - path: /app/config
+      cache:
+        existingClaim: jellyseerr-cache
+        globalMounts:
+          - path: /app/config/cache
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /app/config/logs
       tmp:
         type: emptyDir
-      scripts:
-        type: configMap
-        name: sabnzbd-scripts
-        defaultMode: 0775
-        globalMounts:
-          - readOnly: true
-      media:
-        type: nfs
-        server: truenas.robsonhome.cloud
-        path: /mnt/tank/media
-        globalMounts:
-          - path: /media/downloads/usenet
-            subPath: downloads/usenet

@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -30,14 +30,6 @@ spec:
       sonarr:
         annotations:
           reloader.stakater.com/auto: "true"
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: 16
-            envFrom: &envFrom
-              - secretRef:
-                  name: sonarr-secret
         containers:
           app:
             image:
@@ -53,7 +45,9 @@ spec:
               SONARR__SERVER__PORT: &port 80
               SONARR__UPDATE__BRANCH: develop
               TZ: America/New_York
-            envFrom: *envFrom
+            envFrom:
+              - secretRef:
+                  name: sonarr-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -79,11 +73,10 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [10000]
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
@@ -93,8 +86,6 @@ spec:
             port: *port
     ingress:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
         className: internal
         hosts:
           - host: "{{ .Release.Name }}.robsonhome.cloud"
@@ -106,16 +97,23 @@ spec:
     persistence:
       config:
         existingClaim: sonarr
+      cache:
+        existingClaim: sonarr-cache
+        globalMounts:
+          - path: /config/MediaCover
       scripts:
         type: configMap
         name: sonarr-configmap
         defaultMode: 0775
         globalMounts:
-          - path: /scripts/pushover-notify.sh
-            subPath: pushover-notify.sh
+          - path: /scripts/codec-tagger.sh
+            subPath: codec-tagger.sh
             readOnly: true
-          - path: /scripts/refresh-series.sh
-            subPath: refresh-series.sh
+          - path: /scripts/pushover-notifier.sh
+            subPath: pushover-notifier.sh
+            readOnly: true
+          - path: /scripts/tba-refresher.sh
+            subPath: tba-refresher.sh
             readOnly: true
       tmp:
         type: emptyDir

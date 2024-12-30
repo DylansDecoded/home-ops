@@ -6,11 +6,5 @@ resources:
   - ./ring-mqtt.secret.sops.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/guarded
-  - ../../../../templates/volsync
-# configMapGenerator:
-#   - name: ring-mqtt-configmap
-#     files:
-#       - config.json=./resources/config.json
-# generatorOptions:
-#   disableNameSuffixHash: true
+  - ../../../../../shared/templates/gatus/guarded
+  - ../../../../../shared/templates/volsync

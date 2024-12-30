@@ -6,12 +6,14 @@ resources:
   - ./externalsecret.yaml
   - ./pvc.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/guarded
+  - ../../../../../shared/templates/gatus/guarded
+  - ../../../../../shared/templates/volsync
 configMapGenerator:
   - name: sonarr-configmap
     files:
-      - pushover-notify.sh=./resources/pushover-notify.sh
-      - refresh-series.sh=./resources/refresh-series.sh
+      - codec-tagger.sh=./resources/codec-tagger.sh
+      - pushover-notifier.sh=./resources/pushover-notifier.sh
+      - tba-refresher.sh=./resources/tba-refresher.sh
 generatorOptions:
   disableNameSuffixHash: true
   annotations:

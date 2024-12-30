@@ -11,9 +11,8 @@ resources:
 - ./echo-server/ks.yaml
 - ./emqx/ks.yaml
 - ./filebrowser/ks.yaml
-- ./frigate/ks.yaml
 - ./home-assistant/ks.yaml
-- ./miniflux/ks.yaml
+- ./jellyseerr/ks.yaml
 - ./plex/ks.yaml
 - ./prowlarr/ks.yaml
 - ./qbittorrent/ks.yaml
