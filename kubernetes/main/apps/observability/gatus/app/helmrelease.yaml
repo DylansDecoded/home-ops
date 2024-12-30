@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -22,21 +22,16 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   values:
     controllers:
       gatus:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: 16
-            envFrom: &envFrom
-              - secretRef:
-                  name: gatus-secret
           init-config:
-            dependsOn: init-db
             image:
               repository: ghcr.io/kiwigrid/k8s-sidecar
               tag: 1.28.4@sha256:20caf4e241e1f9f9231527db5e75b735aa7b0da7bee3d262cbe369bb9b33469f
@@ -48,22 +43,24 @@ spec:
               UNIQUE_FILENAMES: true
               METHOD: WATCH
             restartPolicy: Always
-            resources: &resources
+            resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 256Mi
+                memory: 128Mi
         containers:
           app:
             image:
               repository: ghcr.io/twin/gatus
-              tag: v5.14.0@sha256:acc0c116458a8d65ce48f7caea13881afa20bf5a405bb95230c51430eb9e2313
+              tag: v5.15.0@sha256:45686324db605e57dfa8b0931d8d57fe06298f52685f06aa9654a1f710d461bb
             env:
               TZ: America/New_York
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
               WEB_PORT: &port 80
-            envFrom: *envFrom
+            envFrom:
+              - secretRef:
+                  name: gatus-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -81,16 +78,20 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-            resources: *resources
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 256Mi
     defaultPodOptions:
       dnsConfig:
         options:
           - { name: ndots, value: "1" }
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        fsGroup: 65534
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
@@ -110,8 +111,6 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: external.robsonhome.cloud
         className: external
         hosts:
           - host: status.robsonhome.cloud
@@ -125,7 +124,7 @@ spec:
       name: gatus
     persistence:
       config:
-        type: emptyDir
+        existingClaim: gatus
       config-file:
         type: configMap
         name: gatus-configmap
