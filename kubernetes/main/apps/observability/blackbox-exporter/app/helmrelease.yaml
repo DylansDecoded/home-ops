@@ -1,4 +1,3 @@
-
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -27,8 +26,6 @@ spec:
     fullnameOverride: blackbox-exporter
     ingress:
       enabled: true
-      annotations:
-        external-dns.alpha.kubernetes.io/target: internal.robsonhome.cloud
       className: internal
       hosts:
         - host: blackbox-exporter.robsonhome.cloud
