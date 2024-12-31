@@ -46,13 +46,18 @@ spec:
       bdev_async_discard = true
       osd_class_update_on_start = false
     cephClusterSpec:
+      cephVersion:
+        image: quay.io/ceph/ceph:v19.2.0 # TODO: Remove when Rook is updated >= v19.2.0
       crashCollector:
         disable: false
+      csi:
+        readAffinity:
+          enabled: true
       dashboard:
         enabled: true
         urlPrefix: /
         ssl: false
-        prometheusEndpoint: http://prometheus-operated.monitoring.svc.cluster.local:9090
+        prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
       mgr:
         modules:
           - name: insights
@@ -65,61 +70,37 @@ spec:
         provider: host
         connections:
           requireMsgr2: true
-      resources:
-        mgr:
-          requests:
-            cpu: 100m
-            memory: 512Mi
-          limits:
-            memory: 2Gi
-        mon:
-          requests:
-            cpu: 50m
-            memory: 512Mi
-          limits:
-            memory: 1Gi
-        osd:
-          requests:
-            cpu: 500m
-            memory: 2Gi
-          limits:
-            memory: 6Gi
-        mgr-sidecar:
-          requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            memory: 256Mi
+      # resources:
+      #   mgr:
+      #     requests:
+      #       cpu: 100m
+      #       memory: 512Mi
+      #     limits:
+      #       memory: 2Gi
+      #   mon:
+      #     requests:
+      #       cpu: 50m
+      #       memory: 512Mi
+      #     limits:
+      #       memory: 1Gi
+      #   osd:
+      #     requests:
+      #       cpu: 500m
+      #       memory: 2Gi
+      #     limits:
+      #       memory: 6Gi
+      #   mgr-sidecar:
+      #     requests:
+      #       cpu: 50m
+      #       memory: 128Mi
+      #     limits:
+      #       memory: 256Mi
       storage:
         useAllNodes: true
         useAllDevices: false
-        devicePathFilter: /dev/sda
+        devicePathFilter: /dev/disk/by-io//dev/disk/by-id/ata-SAMSUNG_MZ7KM960_.*
         config:
           osdsPerDevice: "1"
-        # nodes:
-        #   - name: "k8s-0"
-        #     devices:
-        #       - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874"
-
-        #   - name: "k8s-1"
-        #     devices:
-        #       - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-000FU_S2TLNX0J900056"
-
-        #   - name: "k8s-2"
-        #     devices:
-        #       - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H415045"
-
-        #   - name: "k8s-3"
-        #     devices:
-        #       - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H413743"
-
-        #   - name: "k8s-4"
-        #     devices:
-        #       - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNX0H414441"
-
-        #   - name: "k8s-5"
-        #     devices:
-        #       - name: "/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B"
       placement:
         mgr: &placement
           nodeAffinity:
@@ -187,7 +168,7 @@ spec:
                 cpu: 100m
                 memory: 1Gi
               limits:
-                memory: 3Gi
+                memory: 4Gi
         storageClass:
           enabled: true
           isDefault: false
@@ -210,20 +191,3 @@ spec:
       isDefault: false
       deletionPolicy: Delete
     cephObjectStores: []
-      # - name: ceph-objectstore
-      #   spec:
-      #     metadataPool:
-      #       failureDomain: host
-      #       replicated:
-      #         size: 3
-      #     dataPool:
-      #       failureDomain: host
-      #       erasureCoded:
-      #         dataChunks: 2
-      #         codingChunks: 1
-      #     preservePoolsOnDelete: true
-      #     gateway:
-      #       hostNetwork: false
-      #       port: 80
-      #       resources:
-      #         requests:
