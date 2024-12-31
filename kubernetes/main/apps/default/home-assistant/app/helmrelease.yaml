@@ -37,7 +37,7 @@ spec:
               tag: 2024.12.5@sha256:638e519c874a06389ce6f03e435dd80a6697e8692eac88b459775839410f3439
             env:
               TZ: America/New_York
-              HASS_HTTP_TRUSTED_PROXY_1: 192.168.42.0/24
+              HASS_HTTP_TRUSTED_PROXY_1: 10.1.20.0/24
               HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
             envFrom:
               - secretRef:
@@ -71,7 +71,7 @@ spec:
       annotations:
           k8s.v1.cni.cncf.io/networks: |
             [{
-              "name":"multus-iot",
+              "name":"multus-services",
               "namespace": "network",
               "ips": ["10.1.40.200/24"],
               "mac": "3e:59:e4:f7:43:09"
