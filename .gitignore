@@ -11,6 +11,9 @@ talosconfig
 *.key
 # Archive
 .archive/
+
+# clusterconfig
+clusterconfig/
 # Private
 .private/
 .bin
