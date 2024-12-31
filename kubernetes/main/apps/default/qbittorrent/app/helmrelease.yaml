@@ -37,7 +37,6 @@ spec:
             fsGroupChangePolicy: "OnRootMismatch"
         containers:
           app:
-            nameOverride: *app
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 5.0.3@sha256:025f32d260a3e924885405c0ca01ab8e396360330438ef8562ffd973d2dbb927
@@ -92,7 +91,7 @@ spec:
                 memory: 12G
 
           vuetorrent:
-            dependsOn: *app
+            dependsOn: app
             image:
               repository: registry.k8s.io/git-sync/git-sync
               tag: v4.4.0
