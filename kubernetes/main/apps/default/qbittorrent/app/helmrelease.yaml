@@ -37,6 +37,7 @@ spec:
             fsGroupChangePolicy: "OnRootMismatch"
         containers:
           app:
+            nameOverride: *app
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 5.0.3@sha256:025f32d260a3e924885405c0ca01ab8e396360330438ef8562ffd973d2dbb927
@@ -91,7 +92,7 @@ spec:
                 memory: 12G
 
           vuetorrent:
-            dependsOn: app
+            dependsOn: *app
             image:
               repository: registry.k8s.io/git-sync/git-sync
               tag: v4.4.0
@@ -159,7 +160,7 @@ spec:
           port-forward:
             image:
               repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
-              tag: 0.0.2@sha256:ebabf8031406a29a1e642cb9eb83b96de9fc442daf3effc85b23047dde7acbd1
+              tag: 0.0.2@sha256:14b9a10cda0a8dff6bd2d131686d3f6b8dd550a4a835674b22aaa711b4c34ecd
             env:
               GLUETUN_CONTROL_SERVER_HOST: localhost
               GLUETUN_CONTROL_SERVER_PORT: 8000
@@ -201,7 +202,6 @@ spec:
         existingClaim: qbittorrent
 
       add-ons:
-        enabled: true
         type: emptyDir
         globalMounts:
           - path: /add-ons
