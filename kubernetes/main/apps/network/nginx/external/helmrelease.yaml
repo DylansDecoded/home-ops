@@ -79,6 +79,14 @@ spec:
       extraArgs:
         default-ssl-certificate: network/robsonhome-cloud-tls
         publish-status-address: *hostname
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: nginx-external
+              app.kubernetes.io/component: controller
       terminationGracePeriodSeconds: 120
       publishService:
         enabled: false
