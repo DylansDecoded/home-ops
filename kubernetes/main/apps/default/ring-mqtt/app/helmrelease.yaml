@@ -26,7 +26,7 @@ spec:
     keepHistory: false
   dependsOn:
     - name: emqx
-      namespace: database
+      namespace: default
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: volsync
