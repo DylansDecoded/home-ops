@@ -167,14 +167,16 @@ spec:
     persistence:
       config:
         existingClaim: qbittorrent
-      tmp:
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /config
+      empty-config:
         type: emptyDir
-      scripts:
-        type: configMap
-        name: qbittorrent-scripts
-        defaultMode: 0775
-        globalMounts:
-          - readOnly: true
+        advancedMounts:
+          qbittorrent:
+            port-forward:
+              - path: /config
       media:
         type: nfs
         server: truenas.robsonhome.cloud
@@ -182,6 +184,14 @@ spec:
         globalMounts:
           - path: /media/downloads/torrents
             subPath: downloads/torrents
+      scripts:
+        type: configMap
+        name: qbittorrent-scripts
+        defaultMode: 0775
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /config/scripts
 
 
 
