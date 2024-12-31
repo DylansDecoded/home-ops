@@ -31,10 +31,13 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              apk add --no-cache sgdisk util-linux util-linux-misc parted device-mapper;
+              apk add --no-cache sgdisk findutils util-linux util-linux-misc parted device-mapper;
               DISK=$(find /dev/disk/by-id/ -iname "*{{ ENV.MODEL }}*" -not -name "*-part[0-9+]");
               echo "=== Wiping $DISK ===";
-
+              sgdisk --zap-all $DISK;
+              dd if=/dev/zero of=$DISK bs=1M count=100 oflag=direct;
+              blkdiscard $DISK;
+              partprobe $DISK;
           securityContext:
             privileged: true
           volumeMounts:
@@ -50,9 +53,3 @@ spec:
             path: /dev/disk/by-id
             type: Directory
       topologySpreadConstraints:
-        - maxSkew: 1
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: *app
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
