@@ -1,0 +1,28 @@
+# yamllint disable
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ring-mqtt-configmap-secret
+stringData:
+  config.json: ENC[AES256_GCM,data:IGeVy0R1d/5odkiSFepS/zGmQGGQEszqI3FAA7pqyxMTXmQ9oMhMxSPiId9foPje+PIWX7uzfAYvhzaz1H5l4QtO8yysWx0eGH+DysIIF17R+BIjF+Dx9HwaC8K35PrgI/3Qmr84GhV+ntX8Zg4LHsXdpFkVIUDA0FqUig/pKKv/lko/D/9PsHSbsKY7EwTb4QNjbTh0/JO6qQpPugz6pMEsL9eCtU26LeH+rwTRgRgxKQz2T9KatIHxDxWC2fl0oJIs+ak49xQKcFRYYlYpU2337jvixDoxx4W8bys1HGlBHP4MthswCpsKot+o0M4WtDfVd7XpYBSxbhD4cMCbR0yCE2JOvp1NruTBuhnIBy4F4yM2+UhUQfGBP9NsxXKaRlI/T/tRwB11ctEp/usHZwuhP8y+9N2ew6GqUP5IGSf6x3L8ODFxGqR1RzVwaFsg2H4stGQoRwaicaQ1PqjCpCewEXB9MQ==,iv:kO1NQGeIFRHNJLN5FKd6fghY4I+b4YzD5LrEBGl/DsQ=,tag:Ux2g2A089rHZoyYNxkTBOQ==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1jwm8ccjgfy04r9rwh65rehk72j6rkawkpjnf4rcu4ukwlcfyquhq4p2q23
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvNm1SUFZRZ1NYYTRyL1FX
+        Y3RNUWJQSlZIbnkxc3hiMG9hSlVhRGU2NXlnCkc2aGJxc2l4cG5nOHdEMW56VzVr
+        Z2lKSC94OTVwRXh0U3NQTVNta1JRZTQKLS0tIEZab0hpYmszeWV2R1gvSU1CbExa
+        NExJbTJlaVI1dFAxRXJSQnNHUXEwYkkKf6rVEJ8jvUKZt+qO/8jubIJ+wcIFcnoK
+        dQ1NU5bWbqHFtdngX7dKfHFkxE9PS59pwDkObDSbn8oYUog95Fv8+Q==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2024-12-31T19:11:24Z"
+  mac: ENC[AES256_GCM,data:2VlTm0lfiWnXai9Qedf3Vl2r+BT+zNkFXLJRpMmvduI4Ywd0OGi9gSTkPUGRpRmGmaca5dJ7BH8vCJVF5x7JgIzmvG5C0qF9Vx9sn2Hw4OCdeeyLZhiXX8S6Sf5R3ZBWvQliSACgSiYs78+9pYbRuW8sj+eL9CI/Re4ZGEtD2Ig=,iv:oFfhbNH2Lel5e+V8K2iOmLr793mEsiAw3jbkSLvdkBM=,tag:O+FesyKFVrXemHCelVrvrg==,type:str]
+  pgp: []
+  encrypted_regex: ^(data|stringData)$
+  mac_only_encrypted: true
+  version: 3.9.2
