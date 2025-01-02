@@ -97,5 +97,5 @@ spec:
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
-          - path: /media/Downloads
-            subPath: Downloads
+          - path: /media/downloads
+            subPath: downloads
