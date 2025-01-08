@@ -12,6 +12,9 @@ talosconfig
 # Archive
 .archive/
 
+# VSCode workspace
+*.code-workspace
+
 # clusterconfig
 clusterconfig/
 # Private
