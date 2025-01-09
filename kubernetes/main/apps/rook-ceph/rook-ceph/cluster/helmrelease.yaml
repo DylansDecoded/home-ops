@@ -1,3 +1,4 @@
+
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -24,10 +25,10 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-  - name: rook-ceph-operator
-    namespace: rook-ceph
-  - name: snapshot-controller
-    namespace: volsync-system
+    - name: rook-ceph-operator
+      namespace: rook-ceph
+    - name: snapshot-controller
+      namespace: volsync-system
   values:
     monitoring:
       enabled: true
@@ -58,12 +59,12 @@ spec:
         prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
       mgr:
         modules:
-        - name: insights
-          enabled: true
-        - name: pg_autoscaler
-          enabled: true
-        - name: rook
-          enabled: true
+          - name: insights
+            enabled: true
+          - name: pg_autoscaler
+            enabled: true
+          - name: rook
+            enabled: true
       network:
         provider: host
         connections:
@@ -74,8 +75,8 @@ spec:
         devicePathFilter: /dev/disk/by-io//dev/disk/by-id/ata-SAMSUNG_MZ7KM960_.*
         config:
           osdsPerDevice: "1"
-      cephBlockPools:
-        - name: ceph-blockpool
+    cephBlockPools:
+      - name: ceph-blockpool
         spec:
           failureDomain: host
           enableRBDStats: true
@@ -156,3 +157,45 @@ spec:
       isDefault: false
       deletionPolicy: Delete
     cephObjectStores: []
+      # - name: ceph-objectstore
+      #   spec:
+      #     metadataPool:
+      #       failureDomain: host
+      #       replicated:
+      #         size: 3
+      #     dataPool:
+      #       failureDomain: host
+      #       erasureCoded:
+      #         dataChunks: 2
+      #         codingChunks: 1
+      #     preservePoolsOnDelete: true
+      #     gateway:
+      #       hostNetwork: false
+      #       port: 80
+      #       resources:
+      #         requests:
+      #           cpu: 100m
+      #           memory: 1Gi
+      #         limits:
+      #           memory: 2Gi
+      #       instances: 2
+      #       priorityClassName: system-cluster-critical
+      #     healthCheck:
+      #       bucket:
+      #         interval: 60s
+      #   storageClass:
+      #     enabled: true
+      #     name: ceph-bucket
+      #     reclaimPolicy: Delete
+      #     volumeBindingMode: Immediate
+      #     parameters:
+      #       region: us-east-1
+      #   ingress:
+      #     enabled: true
+      #     annotations:
+      #       nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      #       nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+      #     ingressClassName: internal
+      #     host:
+      #       name: rgw.robsonhome.cloud
+      #       path: /
