@@ -75,7 +75,7 @@ spec:
         config:
           osdsPerDevice: "1"
       cephBlockPools:
-      - name: ceph-blockpool
+        - name: ceph-blockpool
         spec:
           failureDomain: host
           enableRBDStats: true
