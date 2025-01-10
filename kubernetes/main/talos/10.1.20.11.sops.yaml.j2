@@ -11,7 +11,7 @@ machine:
     - 127.0.0.1
     - 10.1.20.120
   kubelet:
-    image: ghcr.io/siderolabs/kubelet:{{ ENV.KUBERNETES_VERSION }}
+    image: ghcr.io/siderolabs/kubelet:v1.32.0
     extraArgs:
       rotate-server-certificates: "true"
     extraConfig:
@@ -82,7 +82,7 @@ machine:
       - mitigations=off
       # Less security, faster puter
       - security=none
-    image: factory.talos.dev/installer/6e6f23cd5ca6099bbe4be57a2218f628e61314545d5da36dcc6516c59d3be64f:{{ ENV.TALOS_VERSION }}
+    image: factory.talos.dev/installer/6e6f23cd5ca6099bbe4be57a2218f628e61314545d5da36dcc6516c59d3be64f:v1.9.1
   files:
     - op: create
       path: /etc/cri/conf.d/20-customization.part
