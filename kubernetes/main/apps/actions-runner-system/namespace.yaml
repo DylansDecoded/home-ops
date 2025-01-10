@@ -5,7 +5,7 @@ metadata:
   name: actions-runner-system
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
-    volsync.backube/privileged-movers: 'true'
+    volsync.backube/privileged-movers: "true"
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/notification.toolkit.fluxcd.io/provider_v1beta3.json
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
@@ -29,10 +29,10 @@ spec:
   eventSeverity: error
   eventSources:
     - kind: HelmRelease
-      name: '*'
+      name: "*"
   exclusionList:
     - "error.*lookup github\\.com"
     - "error.*lookup raw\\.githubusercontent\\.com"
-    - 'dial.*tcp.*timeout'
-    - 'waiting.*socket'
+    - "dial.*tcp.*timeout"
+    - "waiting.*socket"
   suspend: false
