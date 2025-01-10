@@ -46,3 +46,17 @@ Brewfile.lock.json
 Thumbs.db
 kubeconfig
 talosconfig
+
+
+/.private/
+/.task/
+*.secret.env
+*.secret.yaml
+*.crt
+*.key
+.decrypted~*
+.DS_Store
+Brewfile.lock.json
+Thumbs.db
+kubeconfig
+talosconfig
