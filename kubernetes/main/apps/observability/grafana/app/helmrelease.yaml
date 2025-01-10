@@ -180,10 +180,10 @@ spec:
           gnetId: 19105
           revision: 6
           datasource: Prometheus
-        smart:
-          # renovate: depName="Dashboard for smartctl_exporter"
-          gnetId: 20204
-          revision: 1
+        smartctl-exporter:
+          # renovate: depName="SMARTctl Exporter Dashboard"
+          gnetId: 22604
+          revision: 2
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
         # omada:
@@ -202,7 +202,7 @@ spec:
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
             - { name: VAR_REPLICATIONDESTNAME, value: .*-dst }
-    sidecar:
+     sidecar:
       dashboards:
         enabled: true
         searchNamespace: ALL

@@ -12,10 +12,8 @@ spec:
     staticConfig:
       static:
         - truenas.robsonhome.cloud
-        # - hdhomerun.robsonhome.cloud
-        - pfs.robsonhome.cloud
+        - kvm-switch.robsonhome.cloud
         - pikvm.robsonhome.cloud
-        # - receiver.robsonhome.cloud
         # - ups.robsonhome.cloud
         - vacuum.robsonhome.cloud
         - zigbee-controller.robsonhome.cloud
