@@ -3,12 +3,43 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
+  name: &name node-exporter
+spec:
+  staticConfigs:
+    - targets:
+        # - expanse.internal:9100
+        - pikvm.robsonhome.cloud:9100
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: *name
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
   name: &name pikvm
 spec:
   staticConfigs:
     - targets:
         - pikvm.robsonhome.cloud
   metricsPath: /api/export/prometheus/metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: *name
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: &name zigbee-controller
+spec:
+  staticConfigs:
+    - targets:
+        - zigbee-controller.robsonhome.cloud
+  metricsPath: /metrics
   relabelings:
     - action: replace
       targetLabel: job
