@@ -3,19 +3,19 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app external-secrets
+  name: &app flux-operator
   namespace: flux-system
 spec:
-  targetNamespace: external-secrets
+  targetNamespace: flux-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/external-secrets/external-secrets/app
-  prune: true
+  path: ./kubernetes/main/apps/flux-system/flux-operator/app
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
 ---
@@ -23,20 +23,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app external-secrets-stores
+  name: &app flux-instance
   namespace: flux-system
 spec:
-  targetNamespace: external-secrets
+  targetNamespace: flux-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets
-  path: ./kubernetes/main/apps/external-secrets/external-secrets/stores
-  prune: true
+    - name: flux-operator
+  path: ./kubernetes/main/apps/flux-system/flux-operator/instance
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
