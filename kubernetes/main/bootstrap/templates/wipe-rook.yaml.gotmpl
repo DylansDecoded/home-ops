@@ -30,12 +30,14 @@ controllers:
           - /bin/sh
           - -c
         args:
-          - |
-            apk add --no-cache findutils nvme-cli;
-            DISK=$(find /dev/disk/by-id/ -iname "*$(MODEL)*" -not -name "*_[0-9]");
-            echo "=== Wiping $DISK ===";
-            nvme format --lbaf=1 $DISK --force;
-            nvme format --block-size=4096 $DISK --force;
+            - |
+              apk add --no-cache sgdisk findutils util-linux util-linux-misc parted device-mapper;
+              DISK=$(find /dev/disk/by-id/ -iname "*$(MODEL)*" -not -name "*_[0-9]");
+              echo "=== Wiping $DISK ===";
+              sgdisk --zap-all $DISK;
+              dd if=/dev/zero of=$DISK bs=1M count=100 oflag=direct;
+              blkdiscard $DISK;
+              partprobe $DISK;
         securityContext:
           privileged: true
     pod:
