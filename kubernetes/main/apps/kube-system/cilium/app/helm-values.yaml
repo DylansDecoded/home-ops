@@ -4,10 +4,12 @@ bandwidthManager:
   enabled: true
   bbr: true
 bpf:
+  datapathMode: netkit
   masquerade: true
+  preallocateMaps: true
   tproxy: true
-# bgpControlPlane:
-#   enabled: true
+bgpControlPlane:
+  enabled: true
 cgroup:
   automount:
     enabled: false
@@ -17,14 +19,12 @@ cluster:
   name: main
 cni:
   exclusive: false
-# devices: eth0+
-enableRuntimeDeviceDetection: true
+devices: eth+
+enableIPv4BIGTCP: true
 endpointRoutes:
   enabled: true
 envoy:
   enabled: false
-externalIPs:
-  enabled: true
 hubble:
   enabled: false
 ipam:
@@ -41,7 +41,21 @@ loadBalancer:
   mode: dsr
 localRedirectPolicy: true
 operator:
+  replicas: 2
   rollOutPods: true
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  dashboards:
+    enabled: true
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    trustCRDsExist: true
+dashboards:
+  enabled: true
 rollOutCiliumPods: true
 routingMode: native
 securityContext:
@@ -54,6 +68,8 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
+      - PERFMON
+      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID
