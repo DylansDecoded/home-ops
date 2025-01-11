@@ -32,7 +32,7 @@ spec:
           args:
             - |
               apk add --no-cache sgdisk findutils util-linux util-linux-misc parted device-mapper;
-              DISK=$(find /dev/disk/by-id/ -iname "*{{ ENV.MODEL }}*" -not -name "*-part[0-9+]");
+              DISK=$(find /dev/disk/by-id/ -iname "ata-" -not -name "*-part[0-9+]");
               echo "=== Wiping $DISK ===";
               sgdisk --zap-all $DISK;
               dd if=/dev/zero of=$DISK bs=1M count=100 oflag=direct;
