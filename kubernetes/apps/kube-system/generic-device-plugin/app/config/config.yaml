@@ -5,7 +5,6 @@ devices:
       - paths:
           - path: /dev/apex_0
 
-devices:
   - name: tun
     groups:
       - count: 1000
