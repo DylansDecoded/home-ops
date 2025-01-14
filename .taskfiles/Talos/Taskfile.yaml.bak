@@ -59,7 +59,7 @@ tasks:
   reset-node:
     desc: Reset a Talos node
     prompt: Reset Talos node {{.node}} ... continue?
-    cmd: talosctl reset --nodes {{.node}} --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
+    cmd: talosctl reset --nodes {{.node}} --system-labels-to-wipe STATE --graceful=false --reboot
     requires:
       vars: ["node"]
     preconditions:
