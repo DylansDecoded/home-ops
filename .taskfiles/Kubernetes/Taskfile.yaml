@@ -35,6 +35,17 @@ tasks:
       - kubectl browse-pvc --version
       - which kubectl
 
+  node-shell:
+    desc: Open a shell to a node [NODE=required]
+    interactive: true
+    cmd: kubectl node-shell -n kube-system -x {{.NODE}}
+    requires:
+      vars: [NODE]
+    preconditions:
+      - kubectl get nodes {{.NODE}}
+      - kubectl node-shell --version
+      - which kubectl
+
   sync-secrets:
     desc: Sync all ExternalSecrets
     cmds:
@@ -60,10 +71,10 @@ tasks:
   upgrade-arc:
     desc: Upgrade the ARC
     cmds:
-      - helm -n actions-runner-system uninstall gha-runner-scale-set
-      - helm -n actions-runner-system uninstall gha-runner-scale-set-controller
+      - helm -n actions-runner-system uninstall home-ops-runner
+      - helm -n actions-runner-system uninstall actions-runner-controller
       - sleep 5
-      - flux -n actions-runner-system reconcile hr gha-runner-scale-set-controller
-      - flux -n actions-runner-system reconcile hr gha-runner-scale-set
+      - flux -n actions-runner-system reconcile hr actions-runner-controller
+      - flux -n actions-runner-system reconcile hr home-ops-runner
     preconditions:
       - which flux helm
