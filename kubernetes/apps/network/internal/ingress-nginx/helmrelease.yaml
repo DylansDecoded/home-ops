@@ -73,7 +73,7 @@ spec:
           namespaceSelector:
             any: true
       extraArgs:
-        default-ssl-certificate: network/robsonhome-cloud-tls
+        default-ssl-certificate: cert-manager/robsonhome-cloud-tls
         publish-status-address: *hostname
       topologySpreadConstraints:
         - maxSkew: 1
