@@ -6,12 +6,12 @@ metadata:
   name: &app echo-server
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/network/echo-server/app
-  prune: false
+  path: ./kubernetes/apps/default/echo-server/app
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
