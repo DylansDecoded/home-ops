@@ -22,9 +22,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: nginx-external
-      namespace: network
   values:
     controllers:
       cloudflared:
@@ -49,7 +46,7 @@ spec:
               - --config
               - /etc/cloudflared/config/config.yaml
               - run
-              - e901488f-a148-4024-b5a7-8537e7b42287
+              - 13a8cf0a-e16c-468b-a7c2-1fdd1719394e
             probes:
               liveness: &probes
                 enabled: true
