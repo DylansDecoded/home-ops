@@ -5,7 +5,7 @@ resources:
 # Pre Flux-Kustomizations
 - ./namespace.yaml
 # Flux-Kustomizations
-- ./atuin/ks.yaml
+# - ./atuin/ks.yaml
 - ./autobrr/ks.yaml
 - ./cross-seed/ks.yaml
 - ./echo-server/ks.yaml
@@ -22,7 +22,7 @@ resources:
 - ./sonarr/ks.yaml
 - ./unpackerr/ks.yaml
 - ./zigbee/ks.yaml
-- ./zwave/ks.yaml
+# - ./zwave/ks.yaml
 transformers:
   - |-
     apiVersion: builtin
