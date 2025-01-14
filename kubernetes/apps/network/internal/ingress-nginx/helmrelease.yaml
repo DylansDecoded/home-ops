@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nginx-internal
+  name: &app internal-ingress-nginx
 spec:
   interval: 30m
   chart:
@@ -23,13 +23,13 @@ spec:
       strategy: rollback
       retries: 3
   values:
-    fullnameOverride: nginx-internal
+    fullnameOverride: *app
     controller:
       replicaCount: 2
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: &hostname internal.robsonhome.cloud
-          lbipam.cilium.io/ips: 10.1.20.126
+          lbipam.cilium.io/ips: 10.1.20.125
       ingressClassResource:
         name: internal
         default: true
@@ -75,14 +75,6 @@ spec:
       extraArgs:
         default-ssl-certificate: cert-manager/robsonhome-cloud-tls
         publish-status-address: *hostname
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: nginx-internal
-              app.kubernetes.io/component: controller
       terminationGracePeriodSeconds: 120
       publishService:
         enabled: false
