@@ -54,8 +54,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: cert-manager-tls
   path: ./kubernetes/apps/network/internal/multus
   prune: true
   sourceRef:
