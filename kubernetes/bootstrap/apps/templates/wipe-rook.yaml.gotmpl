@@ -6,7 +6,7 @@ controllers:
       helm.sh/hook-delete-policy: "before-hook-creation"
     job:
       backoffLimit: 0
-      parallelism: 6
+      parallelism: {{ requiredEnv "NODE_COUNT" }}
     initContainers:
       data:
         image:
@@ -24,15 +24,13 @@ controllers:
         image:
           repository: docker.io/library/alpine
           tag: latest
-        env:
-          MODEL: "
         command:
           - /bin/sh
           - -c
         args:
-            - |
+          - |
               apk add --no-cache sgdisk findutils util-linux util-linux-misc parted device-mapper;
-              DISK=$(find /dev/disk/by-id/ -iname "*$(MODEL)*" -not -name "*_[0-9]");
+              DISK=$(find /dev/disk/by-id/ -iname "*{{ requiredEnv "ROOK_DISK" }}*" -not -name "*_[0-9]" -not -name "*-part[0-9]");
               echo "=== Wiping $DISK ===";
               sgdisk --zap-all $DISK;
               dd if=/dev/zero of=$DISK bs=1M count=100 oflag=direct;
@@ -49,7 +47,7 @@ defaultPodOptions:
       whenUnsatisfiable: DoNotSchedule
       labelSelector:
         matchLabels:
-          app.kubernetes.io/name: wipe-disk-job
+          app.kubernetes.io/name: wipe-rook
 persistence:
   host-var:
     type: hostPath
