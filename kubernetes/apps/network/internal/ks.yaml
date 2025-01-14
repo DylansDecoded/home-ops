@@ -3,19 +3,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cert-manager
+  name: &app internal-external-dns
   namespace: flux-system
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cert-manager/cert-manager/app
+  dependsOn:
+    - name: external-secrets-stores
+  path: ./kubernetes/apps/network/internal/external-dns
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
 ---
@@ -23,22 +25,21 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cert-manager-issuers
+  name: &app internal-ingress-nginx
   namespace: flux-system
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cert-manager
-    - name: external-secrets-stores
-  path: ./kubernetes/apps/cert-manager/cert-manager/issuers
+    - name: cert-manager-tls
+  path: ./kubernetes/apps/network/internal/ingress-nginx
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
 ---
@@ -46,21 +47,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cert-manager-tls
+  name: &app multus
   namespace: flux-system
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cert-manager-issuers
-    - name: external-secrets-stores
-  path: ./kubernetes/apps/cert-manager/cert-manager/tls
+    - name: cert-manager-tls
+  path: ./kubernetes/apps/network/internal/multus
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m

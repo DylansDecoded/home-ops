@@ -5,10 +5,15 @@ kind: Kustomization
 resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
+  - ../../templates/alerts
   # Flux-Kustomizations
-  - ./cloudflare-ddns/ks.yaml
-  - ./cloudflared/ks.yaml
-  - ./echo-server/ks.yaml
-  - ./external-dns/ks.yaml
-  - ./multus/ks.yaml
-  - ./nginx/ks.yaml
+  - ./external/ks.yaml
+  - ./internal/ks.yaml
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: not-used
+      namespace: network
+    unsetOnly: true

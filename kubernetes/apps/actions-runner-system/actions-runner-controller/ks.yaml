@@ -3,21 +3,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app external-dns-cloudflare
+  name: &app actions-runner-controller
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: actions-runner-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-  path: ./kubernetes/apps/network/external-dns/cloudflare
-  prune: false
+  path: ./kubernetes/apps/actions-runner-system/actions-runner-controller/app
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
 ---
@@ -25,20 +25,18 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app external-dns-technitium
+  name: &app actions-runner-controller-runners
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: actions-runner-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: external-secrets-stores
-  path: ./kubernetes/apps/network/external-dns/technitium
-  prune: false
+  path: ./kubernetes/apps/actions-runner-system/actions-runner-controller/runners
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m

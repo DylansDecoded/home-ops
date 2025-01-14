@@ -8,7 +8,7 @@ resources:
   # Flux-Kustomizations
   - ./cilium/ks.yaml
   - ./coredns/ks.yaml
-  # - ./csi-driver-nfs/ks.yaml
+  - ./csi-driver-nfs/ks.yaml
   - ./descheduler/ks.yaml
   - ./fstrim/ks.yaml
   - ./generic-device-plugin/ks.yaml
@@ -17,3 +17,11 @@ resources:
   - ./node-feature-discovery/ks.yaml
   - ./reloader/ks.yaml
   - ./spegel/ks.yaml
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: not-used
+      namespace: kube-system
+    unsetOnly: true
