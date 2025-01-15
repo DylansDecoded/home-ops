@@ -2,17 +2,17 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources: []
+resources:
   # Pre Flux-Kustomizations
-  # - ./namespace.yaml
-  # - ../../templates/alerts
+  - ./namespace.yaml
+  - ../../templates/alerts
   # Flux-Kustomizations
-#   - ./actions-runner-controller/ks.yaml
-# transformers:
-#   - |-
-#     apiVersion: builtin
-#     kind: NamespaceTransformer
-#     metadata:
-#       name: not-used
-#       namespace: actions-runner-system
-#     unsetOnly: true
+  - ./actions-runner-controller/ks.yaml
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: not-used
+      namespace: actions-runner-system
+    unsetOnly: true
