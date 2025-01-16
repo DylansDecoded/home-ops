@@ -43,7 +43,7 @@ spec:
   values:
     githubConfigUrl: https://github.com/DylansDecoded/home-ops
     minRunners: 1
-    maxRunners: 2
+    maxRunners: 3
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
@@ -51,7 +51,7 @@ spec:
         storageClassName: openebs-hostpath
         resources:
           requests:
-            storage: 10Gi
+            storage: 25Gi
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
