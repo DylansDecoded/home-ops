@@ -114,6 +114,12 @@ spec:
         existingClaim: home-assistant
         globalMounts:
           - path: /config
+
+      cache:
+        existingClaim: home-assistant-cache
+        globalMounts:
+          - path: /config/.venv
+
       logs:
         type: emptyDir
         globalMounts:
