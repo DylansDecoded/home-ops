@@ -21,7 +21,7 @@ resources:
 - ./sabnzbd/ks.yaml
 - ./sonarr/ks.yaml
 - ./unpackerr/ks.yaml
-# - ./zigbee/ks.yaml
+- ./zigbee/ks.yaml
 - ./zwave/ks.yaml
 transformers:
   - |-
