@@ -10,4 +10,4 @@ spec:
     name: letsencrypt-production
     kind: ClusterIssuer
   commonName: robsonhome.cloud
-  dnsNames: [".io", "*.robsonhome.cloud"]
+  dnsNames: ["robsonhome.cloud", "*.robsonhome.cloud"]
