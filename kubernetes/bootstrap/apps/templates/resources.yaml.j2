@@ -7,7 +7,7 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: onepassword-connect-secret
+  name: onepassword-secret
   namespace: external-secrets
 stringData:
   1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS }}
@@ -24,4 +24,5 @@ metadata:
   name: sops-age
   namespace: flux-system
 stringData:
-  age.agekey: {{ ENV.FLUX_SOPS_PRIVATE_KEY | indent(4) }}
+  age.agekey: |
+    {{ ENV.FLUX_SOPS_PRIVATE_KEY | indent(4) }}

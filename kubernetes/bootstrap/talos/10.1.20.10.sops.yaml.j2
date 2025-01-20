@@ -62,8 +62,6 @@ machine:
       - 10.1.20.1
   install:
     disk: /dev/nvme0n1
-    partitions:
-      - mountpoint: /var/mnt/extra
     extraKernelArgs:
       # Use eth0 instead of eno1
       - net.ifnames=0
