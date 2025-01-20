@@ -55,8 +55,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
   path: ./kubernetes/apps/network/internal/multus
-   prune: true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
