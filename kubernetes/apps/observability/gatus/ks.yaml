@@ -6,21 +6,22 @@ metadata:
   name: &app gatus
   namespace: flux-system
 spec:
-  targetNamespace: observability
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
-  path: ./kubernetes/apps/observability/gatus/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: false
+    - name: onepassword-store
   interval: 30m
-  timeout: 5m
+  path: ./kubernetes/apps/observability/gatus/app
   postBuild:
     substitute:
       APP: *app
       GATUS_SUBDOMAIN: status
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: observability
+  timeout: 5m
+  wait: false

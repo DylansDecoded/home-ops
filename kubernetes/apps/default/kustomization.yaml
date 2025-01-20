@@ -1,11 +1,12 @@
+---
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-# Pre Flux-Kustomizations
-- ./namespace.yaml
-# Flux-Kustomizations
-# - ./atuin/ks.yaml
+  # Pre Flux-Kustomizations
+  - ./namespace.yaml
+  # Flux-Kustomizations
+- ./atuin/ks.yaml
 - ./autobrr/ks.yaml
 - ./cross-seed/ks.yaml
 - ./echo-server/ks.yaml
@@ -23,6 +24,8 @@ resources:
 - ./unpackerr/ks.yaml
 - ./zigbee/ks.yaml
 - ./zwave/ks.yaml
+components:
+  - ../../components/alerts
 transformers:
   - |-
     apiVersion: builtin

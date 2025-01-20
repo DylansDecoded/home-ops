@@ -12,7 +12,7 @@ spec:
     staticConfig:
       static:
         - truenas.robsonhome.cloud
-        - kvm-switch.robsonhome.cloud
+        # - kvm-switch.robsonhome.cloud
         - pikvm.robsonhome.cloud
         # - ups.robsonhome.cloud
         - vacuum.robsonhome.cloud

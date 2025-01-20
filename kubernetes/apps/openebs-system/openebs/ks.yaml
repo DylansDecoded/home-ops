@@ -6,15 +6,16 @@ metadata:
   name: &app openebs
   namespace: flux-system
 spec:
-  targetNamespace: openebs-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
   path: ./kubernetes/apps/openebs-system/openebs/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: false
-  interval: 30m
+    namespace: flux-system
+  targetNamespace: openebs-system
   timeout: 5m
+  wait: false

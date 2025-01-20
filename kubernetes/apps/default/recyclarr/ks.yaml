@@ -6,22 +6,25 @@ metadata:
   name: &app recyclarr
   namespace: flux-system
 spec:
-  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-store
     - name: volsync
-  path: ./kubernetes/apps/default/recyclarr/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: false
   interval: 30m
-  timeout: 5m
+  path: ./kubernetes/apps/default/recyclarr/app
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 1Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: default
+  timeout: 5m
+  wait: false
