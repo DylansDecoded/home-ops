@@ -101,7 +101,7 @@ spec:
       app:
         className: external
         hosts:
-          - host: status.devbu.io
+          - host: status.robsonhome.cloud
             paths:
               - path: /
                 service:
