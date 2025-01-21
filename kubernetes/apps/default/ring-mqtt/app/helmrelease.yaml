@@ -78,17 +78,15 @@ spec:
             port: 55123
 
     persistence:
-      config:
+      data:
         existingClaim: ring-mqtt
-        advancedMounts:
-          ring-mqtt:
-            app:
-              - path: /data
-
-      config-file:
-        type: secret
-        name: ring-mqtt-configmap-secret
         globalMounts:
-          - path: /data/config.json
-            subPath: config.json
+          - path: /data
+
+      secret-file:
+        type: secret
+        name: ring-mqtt-config-secret
+        globalMounts:
+          - path: /config/config.yaml
+            subPath: config.yaml
             readOnly: true
