@@ -56,8 +56,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
-            # securityContext:
-            #   privileged: true
 
     defaultPodOptions:
       securityContext:
@@ -83,10 +81,10 @@ spec:
         globalMounts:
           - path: /data
 
-      secret-file:
-        type: secret
-        name: ring-mqtt-config-secret
+      config:
+        type: configMap
+        name: ring-mqtt-config
         globalMounts:
-          - path: /config/config.yaml
-            subPath: config.yaml
+          - path: /data/config.json
+            subPath: config.json
             readOnly: true
