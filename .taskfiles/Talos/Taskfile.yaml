@@ -28,7 +28,7 @@ tasks:
     dotenv: ['{{.BOOTSTRAP_DIR}}/.cluster.env']
     cmds:
       - task: down
-      - talosctl --nodes {{.IP}} upgrade --image="factory.talos.dev/installer/{{.TALOS_SCHEMATIC_ID}}:$TALOS_VERSION" --timeout=10m
+      - talosctl --nodes {{.IP}} upgrade --image="factory.talos.dev/installer/{{.TALOS_SCHEMATIC_ID}}:$TALOS_VERSION" --timeout=10mtalo
       - talosctl --nodes {{.IP}} health
       - task: up
     vars:

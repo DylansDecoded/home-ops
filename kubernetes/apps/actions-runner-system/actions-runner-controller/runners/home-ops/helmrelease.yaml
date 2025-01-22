@@ -1,9 +1,8 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name home-ops-runner
+  name: &app home-ops-runner
 spec:
   interval: 30m
   chart:
@@ -22,11 +21,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: actions-runner-controller
-      namespace: actions-runner-system
-    - name: openebs
-      namespace: openebs-system
   valuesFrom:
     - targetPath: githubConfigSecret.github_app_id
       kind: Secret
@@ -48,10 +42,10 @@ spec:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: openebs-hostpath
         resources:
           requests:
             storage: 25Gi
+        storageClassName: openebs-hostpath
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
@@ -59,8 +53,9 @@ spec:
       spec:
         containers:
           - name: runner
-            image: ghcr.io/onedr0p/actions-runner:2.321.0@sha256:a7539dc157f3f0129f49459826576ab53a529580916bb8a09a395e61e38354c0
-            command: ["/home/runner/run.sh"]
+            image: ghcr.io/buroa/actions-runner:2.321.0@sha256:d28622cbd00742d45f180f3ebb24c24880311a7188f1344f240f2f3ba4a15336
+            command:
+              - /home/runner/run.sh
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
@@ -72,8 +67,8 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
-        serviceAccountName: *name
+        serviceAccountName: *app
         volumes:
           - name: talos
             secret:
-              secretName: *name
+              secretName: *app

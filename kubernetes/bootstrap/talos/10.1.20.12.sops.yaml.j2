@@ -7,9 +7,7 @@ machine:
   ca:
     crt: ENC[AES256_GCM,data:I+85n3yPtNIjvvF9tY0vkC7bSJTxvqm3n9zL+rDofMfERxUoZ55KS598kCHDQba34sDMKn5XVw7zK11DV/sMeOQ/wRo3bu8XGnYLfIWpgiH35XrGPPo0egyMDw6P6GrjvcetR5CRPhfuwUnXXNTqj6A35Q5sOY81dyD0sjMvZEMqFCELtePewWJ8uaWnGgkDuRMqjqZIKrH19yopqqmXzSl/7/UDdxiRRpt6cbPIChsfdshs+N0ekJto708QSvNZhSj6FsBhLOEzy1+cPyE6SCJqfT789O/WhEmOSsnHhv8LkCA+0TZ2zOsZ4ATwS7iTlpzFsHUPcCYFgxdCirwxK1qFW+FNfBADZltdhJDdK7Stb67ht11I9FxOLqCtpJZQEOa4Wq60oJ3SnGYaPOTUSv+OM8WJh9E0+fL3zRe8hcGN4qAPUT79OSeFMdnTmOItphIQMrVLLZUl4vYDQkxeFwlflV3/47Sv8CZzColIy259/2MObah3bWCeJ9VcHDmI6/MuOR49e/ArOwjcuDaXqvdqppvC3q1AdBAPrfxI8BL3y3M8A2g0yFVuHkVRo8GSUGzaa9GasL1PF7yvBGGnK2/lyl6CuwF+HvyBD8sM9JlCftH9ZBefu2JdULCVYtnahpF4nGNwIPHHZ1NWKiUxbjVSurbQDc4jIGYlFwTEmUxCM+0n78uTzPKm50BCfxZmlr/t6hNYSSIor1qAueaAi1XnAs4rRAFHaL9lg56cdCpy79eXhLsFeifGJV2hu3AUk0YfM/q+Ta8mjZDPZF7+MDyVNM2vLurv+Ntf6tcJbI+akSn4CsuKxu1dWRRNe97vSGwwR5Q13odsKCsekY8Ow4D0LZo0tL2XFQS66Zy7UkA4P3wt,iv:+mkD/prwI7jZ3kd0KGQD921v2CZkVSubvGYF8xryg/M=,tag:OfW1GCNeMhvf7brRm5fcdg==,type:str]
     key: ENC[AES256_GCM,data:OZIRLcQLlzLVEOZIlsAgh6h7VUQQiFYwxES4lvR4eFmZ73EawHUzCaqJV7uMGG1VJoJy7gXjRrkaeXImzW/1g0Yx2lfeOqY5Td3Kh6LEvLiLhZM4rduoF61FgZNox5Zbihu7GB5yOTPxru+9rBaFsSwbXR5qHtsnlt8VfEW/KJ5IEadn8CRHNUktPZIn88jTDL7b9w/KQC8tbYM5f5PMwTrGaCALGIjlTOeKLCtve6hYMEB6,iv:i+hQF95MIM9yW0GpBuD5mNVDaHAB6EXn0TYkdPa7C8A=,tag:aWVX0u2I3rups8xWLMH/gg==,type:str]
-  certSANs:
-    - 127.0.0.1
-    - 10.1.20.120
+  certSANs: ["127.0.0.1", "10.1.20.120"]
   kubelet:
     image: ghcr.io/siderolabs/kubelet:{{ ENV.KUBERNETES_VERSION }}
     extraConfig:
@@ -26,6 +24,7 @@ machine:
   network:
     nameservers:
       - 10.1.20.1
+      - 10.1.20.43
     hostname: k8s-2
     interfaces:
       - interface: eth0
@@ -130,6 +129,7 @@ machine:
         - os:admin
       allowedKubernetesNamespaces:
         - system-upgrade
+        - actions-runner-system
     apidCheckExtKeyUsage: true
     diskQuotaSupport: true
     kubePrism:
@@ -181,9 +181,7 @@ cluster:
     extraArgs:
       runtime-config: admissionregistration.k8s.io/v1alpha1=true
       feature-gates: MutatingAdmissionPolicy=true
-    certSANs:
-      - 127.0.0.1
-      - 10.1.20.120
+    certSANs: ["127.0.0.1", "10.1.20.120"]
     disablePodSecurityPolicy: true
     auditPolicy:
       apiVersion: audit.k8s.io/v1

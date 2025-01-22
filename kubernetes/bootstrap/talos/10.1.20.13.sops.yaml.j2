@@ -7,9 +7,7 @@ machine:
   ca:
     crt: ENC[AES256_GCM,data:Oo6MPeHZ8MfPnYGDLcljFkK2yKyBz72udheJOxvd0v7o+ruI4DKgHW+61P9gmrADgN5gwHByP0m9pYbruuyaIOmcr8MIlrzEdCMkdPmVvkuBM1DCyycpxdSUhiFMvLhIwFtmFFk1GbeqvCGxL/ogzJRvDjk9/nBxuiX6trikXx6y0NKZXe6LjUm68L96q0bOIIaklbM0Bt7rskjUkQlWWF8c8ZnSR30MoTTJM7pGKp41QcPGXavARPu9/mkBQPSsIV5QNIH+5BlN70PgQzI3YO/gS11OHO8WEC/8uFhTdHBVkSJXQq4OOJ+wcQ5WAZ5yKNKjIWrFmXPvaX/GNuLeSRUqnKMJCgQT3L+LFu83lbW9O6Qctx7x5AW1lnnEEKjS88oGWb3c8IsLZE8TNQvRY8sfN+Q3gXJwh3bsngIQ/aDeFdEGl9CmYpC2IytQliWfLjv68ybLV35VncU982yCE3kX8Mibd9g2YB0Svl57vN+8aVqXZ4azOBj/8AbReqz6DZJiOOkxmPPnlNCS/H5M0hhLHoaanXLfW2/AEWzMM9A/tainiHetzdo0/Ualj9eu1Tzshv2mUaEkpdTcj8uTrgePywEgpGYxkeYFxEdydKhccfAwsRiq8h/tqWi8jeZFt/rh0ct4u1Bnorl0DdVUez2cRZ4eMnIrMlhqe0RIzF5mKMOcbQaKaOe3OlyTo5/my1F7bi1OG9n2mL34fwZZiiS/SPVd18IqoaoW2m1JAsLhQkTO1t3mzneDqWicbhbbFuG6eyvgP6mczKkODd43oc6AHA5Fk8DBe9Wis0Ws++krCbtq4Er6SPLYbuTPkPHZfPbjHFNIq1L/Cd0eDItYly6yAdYKZ77xOxe0E6a7/7nkh5i9,iv:RmX0vWfWP9AscSFW0RzLVc4rUyxLpotYTiab/NV0SaY=,tag:wlHMur48c2QPYHByFRjpcQ==,type:str]
     key: ""
-  certSANs:
-    - 127.0.0.1
-    - 10.1.20.120
+  certSANs: ["127.0.0.1", "10.1.20.120"]
   kubelet:
     image: ghcr.io/siderolabs/kubelet:{{ ENV.KUBERNETES_VERSION }}
     extraConfig:
@@ -26,6 +24,7 @@ machine:
   network:
     nameservers:
       - 10.1.20.1
+      - 10.1.20.43
     hostname: k8s-3
     interfaces:
       - interface: eth0
