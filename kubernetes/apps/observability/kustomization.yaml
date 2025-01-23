@@ -13,7 +13,7 @@ resources:
   - ./silence-operator/ks.yaml
   - ./smartctl-exporter/ks.yaml
 components:
-  - ../../flux/components/alerts
+  # - ../../flux/components/alerts
   - ../../flux/components/sops
   - ../../flux/components/namespace
 patches:
