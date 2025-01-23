@@ -34,7 +34,7 @@ spec:
   interval: 30m
   dependsOn:
     - name: kyverno
-  path: ./kubernetes/main/apps/kyverno/kyverno/policies
+  path: ./kubernetes/apps/kyverno/kyverno/policies
   prune: true
   sourceRef:
     kind: GitRepository
