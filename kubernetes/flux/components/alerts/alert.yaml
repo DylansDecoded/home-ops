@@ -3,7 +3,7 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
 metadata:
-  name: alert-manager
+  name: alert-managers
 spec:
   providerRef:
     name: alert-manager
