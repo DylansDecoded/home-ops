@@ -113,12 +113,6 @@ machine:
     net.ipv4.tcp_window_scaling: 1
     # postgresql
     vm.nr_hugepages: 1024
-  # sysfs:
-  #   devices.system.cpu.intel_pstate.hwp_dynamic_boost: 1
-  #   devices.system.cpu.cpu0.cpufreq.energy_performance_preference: balance_performance
-  #   devices.system.cpu.cpu1.cpufreq.energy_performance_preference: balance_performance
-  #   devices.system.cpu.cpu2.cpufreq.energy_performance_preference: balance_performance
-  #   devices.system.cpu.cpu3.cpufreq.energy_performance_preference: balance_performance
   features:
     rbac: true
     stableHostname: true
@@ -162,6 +156,10 @@ cluster:
   ca:
     crt: ENC[AES256_GCM,data:9L1brf6kEq83EVnhKq5dXeUNA+qxU9gqk1FCI/VKhuiLACMqJxB59hGeAUEwaWGvMs6x9QKBg1vjfCBzir07MqTRQRGxKzoInQiY17EwoaUMzFQMYpiI7vjbEfMQjlWPQnyw75s5xFp037p5lsycD9UoZNjhV6v8PbfXwo0+k4wuZ3Zez59cAtD2yX1YDiknLd1NXEqo+OCZfuEhCthctlAbJtUggTMln6+TBELtAY1sfijL5Mem+YCcuN61tTAdw/4Dus8mMAEZJSs4k2656enq6eWxCJvDsY5Kq5x4xZAN5cxjsdaSfyGwC5en3ksu9qF8XVyLN3sax1ltAnFXb0OzpovIAxpqI3Z+IyUx7o3YX43gVN7gr94JqZlPkDdibjDwwH7n7fTeavpuD8/w9fqvm4tx0DXADX0+0YymuiH7W0b4QtIdlGhsXFP08MyyZQAb42cLxzjQ6ku041KdD1BU1IZKLWw1kdVFbMZ7FZCRpm7p99+9X+rBkYZBt1qD7IMV621JbhsIyBnzANjLUbbgRWDjUuYQdpmHS0S4BP6xFJdLGp3MSrnIQuFaX7lcdYiwXbLcqFul84VkD5IpCQDrVX376fqNP1YxFpd13I6eAzajlDjl4+RYwMucc9lgnJmD6nsXaF4NB6dn7rTKBfA67ZaBHKnoahxSwGMuEOJIr2zUebRndLWu/5u5gwoQsTIzn94nVtaeTcic5NmMUQ7TU67mAEePqnQNJqJ21P+Jaw6/uvF9aU/f2sxn4ZgKdsm2y297rfkJe5iFPG4mjK4Rp91GJjWh+CwO/zpn7bLCugwqrhwcPaOYt95wqqKgP/aZRexItofmfkKOBUr8YZyVozCF6153r2kyImpEhY4R8WLKkaM4U9M5diM3e7sWF1s+zs8IGDqWcX+/S4JiVDGCJuL2IBEMJrb/a8EITy4ISb6gFwoA4d1LcIBVt9t3Jmw72tnNUufDB5vdVgPtlZBrf/APYXhQnYSDLR8nvdE94AdGcnFG45g2raH9mLL27AJxpx/PqiE4BNog5pE+freOYvw=,iv:LnFXJ+/97c/QU7F9tjtM2EFDFYRypoqa6sWsXA89mgU=,tag:SwDAi9othsbef1wsO1REPw==,type:str]
     key: ""
+  apiServer:
+    extraArgs:
+      runtime-config: admissionregistration.k8s.io/v1alpha1=true
+      feature-gates: MutatingAdmissionPolicy=true
   discovery:
     enabled: true
     registries:

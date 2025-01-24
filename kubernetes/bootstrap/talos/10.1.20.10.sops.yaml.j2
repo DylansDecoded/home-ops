@@ -7,9 +7,7 @@ machine:
   ca:
     crt: ENC[AES256_GCM,data:3Oie/m9svGeFf6KwQwbZlzbqhFT6citymS1Yg9P8c48/4+zZnOQ0Dh4WhVFcN05v9rQLudm9Tf51xlTvxBEgCZPEXtpaWnitGrRuGWigZ3njrX8TQK4R+89o8tnaQoxrKGIcZpvgNTVPWKNhgd1VKQprv1dKk7CQs3PcfdQAYfAOB5PQThGooZ4qX9LM65qCFAn03F5DEf4sPVkN/cW7xST0dfLVbfCtVugsdwOGv7VO4AcMJET+sloo0BpuXoewuAkYnxWG7XaqoG8eybFO9+pJ3Q2ipr9rnLi7nk3PLH+ehmqyI6HwiB+x5cfphkaErZ/VVkJenVMyCZpR/UKG6eeL94C3KQzkEaQ95tgKofVQoGQHmOYt6J+O4nb4BKzWQ5rC1w/7BL/4aJPdIiV44bEVSnmrSFgz9vmaNBS6ccpJRqH5Vj/1MpwLZ6t1Orlruh3HwTJo8WKDIsYinE9PNOvV/aQ3+EEISrGbaBaNWa8c//QwokoXlW1dMvGe3EWtwmZBGsnO5r5h33W6m/FvBxh6jnuAt0H+TEUoxsl6FFnZqzc1sec0aiGYVJPKRO6T90chtqceElKCIn+Pmi3z85jNR7p0YX4k8U0GQe/NRzb874W10P2VFTBmh5JrP73I5Y3vCY5YeqdeezJCrtTtglsY9NbFD+PFbEv37EWkPtfh2SeGmISo3pR/w1hcciIcXW1QtikEYBLAfmHxXkBkoHlVtfdzMeg/azIH6yLQa65LO+za7gvGldcN9P9dhPR1km1Qvc2BM//CsbCfpzWRBTTFrq8RiFY1prSqTNmaD+lHYbf+PnFICC6gQDAwF+VoqcQOkxrT11rTXPWLe5gpc14DDhQdIb7H3ncPmsXoIgcD2CM1,iv:9u8P5vBaGcN/Hok28KN1/DeyVJY4v4+0aqv5P6zt3Hw=,tag:2eLD/eBCgHVLELp7JHbU7w==,type:str]
     key: ENC[AES256_GCM,data:gzc/rFnsNe8ESy6Bd94x1mhde1ysS+pVLJuIIwX1xISpTGB+bYzD1ZWV0N8axSBf3PZuaZ0YrZADKhOECEmR4OtI24p0M8hOHbjaOUymJkNZawOVUVdoJGVcpxBpDLRVbUdGHlgWUMRfYiBRoIONckXhFI836clFueYOJIi4ZirV9ngTDiNXuZai9hLlutCAMx0UpKkbIp04s2KUQ93r7vjki621TCyxTykiooOzmWhh3WCw,iv:vKw08O2MhbiqGslFNrOGJjGniYABy5mXHUzRgs2HHCQ=,tag:mXhyUs5Lbxdsv157OYqjsA==,type:str]
-  certSANs:
-    - 127.0.0.1
-    - 10.1.20.120
+  certSANs: ["127.0.0.1", "10.1.20.120"]
   kubelet:
     image: ghcr.io/siderolabs/kubelet:{{ ENV.KUBERNETES_VERSION }}
     extraConfig:
@@ -183,9 +181,7 @@ cluster:
     extraArgs:
       runtime-config: admissionregistration.k8s.io/v1alpha1=true
       feature-gates: MutatingAdmissionPolicy=true
-    certSANs:
-      - 127.0.0.1
-      - 10.1.20.120
+    certSANs: ["127.0.0.1", "10.1.20.120"]
     disablePodSecurityPolicy: true
     auditPolicy:
       apiVersion: audit.k8s.io/v1

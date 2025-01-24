@@ -162,6 +162,10 @@ cluster:
   ca:
     crt: ENC[AES256_GCM,data:N7H/Z9aE9mlDwyxR3Vqfe6xs1dDlXPVdH2DeWe2ZRbPMK4QXJOmWT8llGyQSxIdMFXI5eg52HGhuRHVMuoCn3ntnkBeoJqMzstVHRSGxSysetO3eRnM4M5hJQba1gznqbjUgbiUb2WiIlhg/Rsmsi53Y6Wp8cq7QNv5DTxNzHoMkyJTwUVyjkLbxLT2hfSpMQK9c1CO1roIf1dD7xl+bFM1WttFguKlNaDp20cBpu5ubESK9US9QDDcEfEjG8p6txAWXg/P+Jeju7iAwjg+umkIkPyosup0ipV6tkxMeOzqZeykngg3iwB/I27gKAEra6zT1ntCNBONqHoHwwBD3hKnjLJh+7lhF66fT/fAbmyfILYAchKYJiPDPh4RkX0gMryg8H1NG0PO6kG+sT2R57441jGJLqLkcbEScBmv/lklblWbnHJLwjJ4oTf7ExYG5vLEk1sERkrfb8fSjZVxFqSdeeagTXLwFhTF0F/OGdiPhf9Yqflccn2qjxz3MBl2nTXRoMnykXPaB28F1xVzmgqmU/eCV2OvNAOen48TbT3l2OTvbKny3k1N3bDyhu+nglFeqTX875+t2aPNZpmarqJr6UzQe/kb16NXFWecExPSGrttrmwxKLjx0g2r8DWoSF4zW1tDiyDGNcCTQMWzOayrDZcHOKVFzvz0oOYJrQpklrBIr92SOOcIfV5pPDBMpB+uCVDa1XfV8wMEV5+iRJA7OZrRBc7LliGylHDPPnUEFCsMur3WC8au57tjt0srOfgiI7Y3T1zh43jGEwFB+8fxzUnmKBVnEr7krL+TG4VZEFaLF7r5PwTGTxWL24wqUBAhGI8654LA7Z+zWrkzK1K2hZve8gzjnkHE4t4A4vJb5/Qs96BTYi+VEcAQn4GcM6d+ZEOOw9pk3ffl81bIyzjljpshY4NCmwkS/iTq0T9UgD+m5gB9rQXSsVyRpjort4Ob/ubFVa1jK2vja8yz1i4zluVLKOg5BZZgkpz/s0U/pSVxHQlkJAsWNUSJ0w/g+M9fS69gKnO1GMRV+fnJPnjNrAFU=,iv:TPkfuIzNq/x778wMW7M/sBuHDZqrspWfl/VVNwVwnVE=,tag:T42X3/60eTh8Quai94GOwg==,type:str]
     key: ""
+  apiServer:
+    extraArgs:
+      runtime-config: admissionregistration.k8s.io/v1alpha1=true
+      feature-gates: MutatingAdmissionPolicy=true
   discovery:
     enabled: true
     registries:
