@@ -99,16 +99,20 @@ machine:
       port: 7445
     hostDNS:
       enabled: true
-      forwardKubeDNSToHost: false
       resolveMemberNames: true
+      # Incompatible with Cilium bpf masquerade
+      forwardKubeDNSToHost: false
   udev:
     rules:
+      # Thunderbolt
       - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+      # Coral Edge M.2 TPU
       - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
+      # Intel GPU
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
   nodeLabels:
     topology.kubernetes.io/region: main
-    topology.kubernetes.io/zone: m
+    topology.kubernetes.io/zone: w
 cluster:
   id: ENC[AES256_GCM,data:4ivnslXfUsLDGtzB+VpiB6MfVQzlg3/XE7tEczmDiWs6cMzWOLDkSbrBXwA=,iv:qRQcPraaiFtO5T3m1cRZaT4j/8OlrkX5TVJc87+eTH4=,tag:CAj0UjIteN9PZGKL3TI7Pw==,type:str]
   secret: ENC[AES256_GCM,data:Y/T9rLRSgzrZHVT7TuTKXAiQLDyjaLybFT/5f80QpZvD8TG0TuLouQJ9bs4=,iv:kQX+gmCxblMn62EdiOL0Gj5lEF6GXuBysSfefa/RF1A=,tag:ZmzG6IvzN7iSzzeK7FBxvA==,type:str]
