@@ -9,6 +9,8 @@ vars:
   CLUSTER_DIR: '{{.ROOT_DIR}}/kubernetes'
   BOOTSTRAP_DIR: '{{.CLUSTER_DIR}}/bootstrap'
 
+dotenv: ['{{.BOOTSTRAP_DIR}}/.cluster.env']
+
 env:
   KUBECONFIG: '{{.CLUSTER_DIR}}/kubeconfig'
   MINIJINJA_CONFIG_FILE: '{{.ROOT_DIR}}/.minijinja.toml'
@@ -18,7 +20,6 @@ env:
 includes:
   bootstrap: .taskfiles/bootstrap
   kubernetes: .taskfiles/kubernetes
-  # rook: .taskfiles/rook
   talos: .taskfiles/talos
   volsync: .taskfiles/volsync
   workstation: .taskfiles/workstation
