@@ -28,7 +28,7 @@ machine:
         - 10.1.20.0/24
     disableManifestsDirectory: true
   network:
-    hostname: k8s-3
+    hostname: k8s-5
     interfaces:
       - interface: eth0
         addresses:
@@ -42,7 +42,7 @@ machine:
           - vlanId: 40
             dhcp: false
             addresses:
-              - 10.1.40.13/24
+              - 10.1.40.15/24
             routes:
               - network: 0.0.0.0/0
                 gateway: 10.1.40.1

@@ -28,7 +28,7 @@ machine:
         - 10.1.20.0/24
     disableManifestsDirectory: true
   network:
-    hostname: k8s-0
+    hostname: k8s-2
     interfaces:
       - interface: eth0
         addresses:
@@ -44,7 +44,7 @@ machine:
           - vlanId: 40
             dhcp: false
             addresses:
-              - 10.1.40.10/24
+              - 10.1.40.12/24
             routes:
               - network: 0.0.0.0/0
                 gateway: 10.1.40.1
@@ -133,7 +133,6 @@ machine:
       - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
   nodeLabels:
-    node.kubernetes.io/exclude-from-external-load-balancers: ""
     topology.kubernetes.io/region: main
     topology.kubernetes.io/zone: m
 cluster:
