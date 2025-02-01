@@ -19,7 +19,7 @@ spec:
     - extract:
         key: cloudflare
     - extract:
-        key: volsync-restic-template
+        key: volsync-r2-template
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
