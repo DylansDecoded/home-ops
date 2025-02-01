@@ -61,10 +61,10 @@ tasks:
   reboot-node:
     desc: Reboot Talos on a single node [IP=required] [MODE=default]
     cmds:
-      - task: down
+      # - task: down
       - talosctl --nodes {{.IP}} reboot --mode={{.MODE}}
       - talosctl --nodes {{.IP}} health
-      - task: up
+      # - task: up
     vars:
       MODE: '{{.MODE | default "default"}}'
     requires:
@@ -104,7 +104,7 @@ tasks:
   reset-cluster:
     desc: Reset Talos across the whole cluster
     prompt: Reset the Talos cluster ... continue?
-    cmd: talosctl reset --nodes {{.IP_ADDRS}} --graceful=false
+    cmd: talosctl reset --nodes {{.IP_ADDRS}} --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false
     vars:
       IP_ADDRS:
         sh: talosctl config info --output json | jq --join-output '[.nodes[]] | join(",")'
