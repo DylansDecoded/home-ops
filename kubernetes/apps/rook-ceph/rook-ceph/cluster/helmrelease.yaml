@@ -96,7 +96,8 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        devicePathFilter: /dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP_.*
+        deviceFilter: /dev/sda
+        # devicePathFilter: /dev/sda
       # storage:
       #   useAllNodes: false
       #   useAllDevices: false
