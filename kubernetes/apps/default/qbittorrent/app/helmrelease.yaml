@@ -179,11 +179,12 @@ spec:
               - path: /config
       downloads:
         type: nfs
-        server: gladius.bjw-s.internal
-        path: /mnt/tank/Media
+        server: truenas.robsonhome.cloud
+        path: /mnt/tank/media
         globalMounts:
-          - path: /data/nas-media/Downloads/qbittorrent
-            subPath: Downloads/qbittorrent
+          - path: /mnt/tank/media/downloads/torrents
+            subPath: downloads/torrents
+
       gluetun-auth:
         type: secret
         name: qbittorrent-gluetun-secret
