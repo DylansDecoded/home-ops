@@ -187,7 +187,7 @@ spec:
 
       gluetun-auth:
         type: secret
-        name: qbittorrent-gluetun-secret
+        name: qbittorrent-secret
         advancedMounts:
           qbittorrent:
             gluetun:
