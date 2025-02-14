@@ -128,7 +128,7 @@ spec:
               GLUETUN_CONTROL_SERVER_API_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: qbittorrent-gluetun-secret
+                    name: qbittorrent-secret
                     key: GLUETUN_CONTROL_SERVER_API_KEY
               QBITTORRENT_HOST: localhost
               QBITTORRENT_WEBUI_PORT: *port
