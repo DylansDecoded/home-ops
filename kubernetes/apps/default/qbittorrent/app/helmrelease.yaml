@@ -24,14 +24,14 @@ spec:
         type: statefulset
 
         annotations:
-          secret.reloader.stakater.com/reload: qbittorrent-secret,qbittorrent-gluetun-secret
+          secret.reloader.stakater.com/reload: qbittorrent-secret,
 
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
             supplementalGroups:
-              - 65542 # gladius:external-services
+              - 65542 # truenas:external-services
           terminationGracePeriodSeconds: 120
 
         initContainers:
@@ -128,7 +128,7 @@ spec:
               GLUETUN_CONTROL_SERVER_API_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: qbittorrent-secret
+                    name: qbittorrent-gluetun-secret
                     key: GLUETUN_CONTROL_SERVER_API_KEY
               QBITTORRENT_HOST: localhost
               QBITTORRENT_WEBUI_PORT: *port
@@ -171,12 +171,14 @@ spec:
           qbittorrent:
             app:
               - path: /config
+
       empty-config:
         type: emptyDir
         advancedMounts:
           qbittorrent:
             port-forward:
               - path: /config
+
       downloads:
         type: nfs
         server: truenas.robsonhome.cloud
@@ -187,12 +189,13 @@ spec:
 
       gluetun-auth:
         type: secret
-        name: qbittorrent-secret
+        name: qbittorrent-gluetun-secret
         advancedMounts:
           qbittorrent:
             gluetun:
               - path: *gluetunAuthPath
                 subPath: auth.toml
+
       dnsdist:
         type: configMap
         name: qbittorrent-dnsdist
