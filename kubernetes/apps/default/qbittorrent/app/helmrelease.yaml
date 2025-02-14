@@ -184,7 +184,7 @@ spec:
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
-          - path: /mnt/tank/media/downloads/torrents
+          - path: /media/downloads/torrents
             subPath: downloads/torrents
 
       gluetun-auth:
