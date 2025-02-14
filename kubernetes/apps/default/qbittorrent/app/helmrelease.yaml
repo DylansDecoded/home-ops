@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.1
+      version: 3.7.1
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -24,14 +24,14 @@ spec:
         type: statefulset
 
         annotations:
-          secret.reloader.stakater.com/reload: qbittorrent-secret,qbittorrent-gluetun-secret
+          secret.reloader.stakater.com/reload: qbittorrent-secret,
 
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
             supplementalGroups:
-              - 65542 # gladius:external-services
+              - 65542 # truenas:external-services
           terminationGracePeriodSeconds: 120
 
         initContainers:
@@ -58,7 +58,7 @@ spec:
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: 80
-              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/12,10.43.0.0/16 # Allow access to k8s subnets
+              FIREWALL_OUTBOUND_SUBNETS: 10.42.0.0/16,10.43.0.0/16 # Allow access to k8s subnets
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
@@ -171,28 +171,31 @@ spec:
           qbittorrent:
             app:
               - path: /config
+
       empty-config:
         type: emptyDir
         advancedMounts:
           qbittorrent:
             port-forward:
               - path: /config
+
       downloads:
         type: nfs
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
-          - path: /mnt/tank/media/downloads/torrents
+          - path: /media/downloads/torrents
             subPath: downloads/torrents
 
       gluetun-auth:
         type: secret
-        name: qbittorrent-secret
+        name: qbittorrent-gluetun-secret
         advancedMounts:
           qbittorrent:
             gluetun:
               - path: *gluetunAuthPath
                 subPath: auth.toml
+
       dnsdist:
         type: configMap
         name: qbittorrent-dnsdist
