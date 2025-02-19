@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: default
 resources:
   # - ./autobrr/ks.yaml
-  # - ./cross-seed/ks.yaml
+  - ./cross-seed/ks.yaml
   - ./echo-server/ks.yaml
   - ./emqx/ks.yaml
   - ./home-assistant/ks.yaml
