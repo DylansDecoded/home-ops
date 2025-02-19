@@ -62,16 +62,6 @@ snapshots:
       person: 30
 
 
-record:
-  enabled: true
-  retain:
-    mode: all
-  events:
-    pre_capture: 2
-    retain:
-      default: 20
-      mode: all
-
 go2rtc:
   streams:
     driveway_floodlight_cam:
