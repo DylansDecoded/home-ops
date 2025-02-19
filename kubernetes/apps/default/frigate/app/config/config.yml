@@ -1,0 +1,86 @@
+---
+logger:
+  default: info
+
+mqtt:
+  host: emqx-listeners.database.svc.cluster.local
+  topic_prefix: frigate
+  user: "{FRIGATE_MQTT_USERNAME}"
+  password: "{FRIGATE_MQTT_PASSWORD}"
+
+database:
+  path: /data/frigate.db
+
+model:
+  path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+
+ffmpeg:
+  hwaccel_args: preset-intel-qsv-h264
+snapshots:
+  enabled: true
+  timestamp: true
+  bounding_box: true
+  retain:
+    default: 14
+motion:
+  threshold: 45
+  contour_area: 20
+record:
+  enabled: true
+  retain:
+    days: 3
+    mode: active_objects
+  alerts:
+    retain:
+      days: 3
+      mode: active_objects
+  detections:
+    retain:
+      days: 14
+      mode: active_objects
+objects:
+  track:
+    - person
+    - animal
+  filters:
+    person:
+      min_area: 5000
+      max_area: 100000
+      threshold: 0.7
+detectors:
+  coral1:
+    type: edgetpu
+    device: pci
+
+go2rtc:
+  streams:
+    backporch:
+      - rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@10.1.90.3:554/h265Preview_01_main
+      - "ffmpeg:backporch#video=h264#hardware"
+    driveway:
+      - rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@10.1.90.4:554/h265Preview_01_main
+      - "ffmpeg:frontyard#video=h264#hardware"
+
+detect:
+  fps: 5
+  enabled: true
+
+cameras:
+  backporch:
+    ffmpeg:
+      inputs:
+        - path: rtsp://localhost:8554/backporch
+          roles: ["record", "detect"]
+
+  driveway:
+    ffmpeg:
+      inputs:
+        - path: rtsp://localhost:8554/driveway
+          roles: ["record", "detect"]
+    detect:
+      width:  4096
+      height: 1536
