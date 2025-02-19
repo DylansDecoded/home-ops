@@ -11,12 +11,12 @@ mqtt:
 database:
   path: /data/frigate.db
 
-model:
-  path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
-  width: 300
-  height: 300
-  input_tensor: nhwc
-  input_pixel_format: bgr
+# model:
+#   path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
+#   width: 300
+#   height: 300
+#   input_tensor: nhwc
+#   input_pixel_format: bgr
 
 ffmpeg:
   hwaccel_args: preset-intel-qsv-h264
@@ -59,10 +59,10 @@ detectors:
 go2rtc:
   streams:
     backporch:
-      - rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@10.1.90.3:554/h265Preview_01_main
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h265Preview_01_main
       - "ffmpeg:backporch#video=h264#hardware"
     driveway:
-      - rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@10.1.90.4:554/h265Preview_01_main
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
       - "ffmpeg:frontyard#video=h264#hardware"
 
 detect:
