@@ -15,12 +15,12 @@ detectors:
     type: edgetpu
     device: pci
 
-model:
-  path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
-  width: 300
-  height: 300
-  input_tensor: nhwc
-  input_pixel_format: bgr
+# model:
+#   path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
+#   width: 300
+#   height: 300
+#   input_tensor: nhwc
+#   input_pixel_format: bgr
 
 
 ffmpeg:
