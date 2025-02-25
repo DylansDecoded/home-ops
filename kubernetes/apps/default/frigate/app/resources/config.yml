@@ -28,7 +28,6 @@ ffmpeg:
   global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
   # NOTE: See hardware acceleration docs for your specific device
   hwaccel_args: preset-vaapi
-  hwaccel_device: /dev/dri/renderD128
   # Optional: global input args (default: shown below)
   input_args: preset-rtsp-generic
   # Optional: global output args
