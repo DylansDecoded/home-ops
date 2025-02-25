@@ -33,7 +33,7 @@ ffmpeg:
   # Optional: global output args
   output_args:
     # Optional: output args for detect streams (default: shown below)
-    detect: -threads 2 -f rawvideo -c:v h264_vaapi
+    # detect: -threads 2 -f rawvideo -c:v h264_vaapi
     # Optional: output args for record streams (default: shown below)
     record: preset-record-generic
   retry_interval: 10
