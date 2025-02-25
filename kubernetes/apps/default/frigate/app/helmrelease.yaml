@@ -67,11 +67,11 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 1000Mi
+                memory: 1Gi
                 gpu.intel.com/i915: '1'
               limits:
                 gpu.intel.com/i915: '1'
-                memory: 4Gi
+                memory: 2Gi
             securityContext:
               privileged: true
     service:

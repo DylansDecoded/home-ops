@@ -28,12 +28,13 @@ ffmpeg:
   global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
   # NOTE: See hardware acceleration docs for your specific device
   hwaccel_args: preset-vaapi
+  hwaccel_device: /dev/dri/renderD128
   # Optional: global input args (default: shown below)
   input_args: preset-rtsp-generic
   # Optional: global output args
   output_args:
     # Optional: output args for detect streams (default: shown below)
-    detect: -threads 2 -f rawvideo -pix_fmt yuv420p
+    detect: -threads 2 -f rawvideo -pix_fmt yuv420p -c:v h264_vaapi output.mp4
     # Optional: output args for record streams (default: shown below)
     record: preset-record-generic
   retry_interval: 10
@@ -65,11 +66,11 @@ snapshots:
 go2rtc:
   streams:
     driveway_floodlight_cam:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
       - "ffmpeg:driveway_floodlight_cam#video=copy#audio=copy#audio=opus"
 
     driveway_floodlight_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
 
     backporch_cam:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
@@ -86,96 +87,47 @@ cameras:
       output_args:
         record: preset-record-generic-audio-copy
       inputs:
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
-          input_args: preset-rtsp-restream
-          roles: ['record']
-
         - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
           input_args: preset-rtsp-restream
           roles: ['detect']
 
-    # snapshots:
-    #   required_zones:
-    #     - front_porch
-    #     - driveway
-    #     - front_yard_left
-    #     - ront_yard_right
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
+          input_args: preset-rtsp-restream
+          roles: ['record']
 
+    # detect:
+    #   enabled: True
+    #   width: 1536
+    #   height: 576
     # objects:
-    #   filters:
-    #     car:
-    #       min_area: 15000
-    #       mask:
-    #         0,0.435,0.193,0.262,0.388,0.144,0.615,0.06,0.752,0.039,0.813,0.132,1,0.367,1,0,0,0
-    #     motorcycle:
-    #       min_area: 1000
-    #     person:
-    #       mask: 0.594,0.414,0.619,0.334,0.641,0.378,0.638,0.464,0.619,0.489
-    #       min_area: 5000
-    #       max_area: 105000
-
-    detect:
-      enabled: True
-      width: 1536
-      height: 576
-      fps: 5
-      min_initialized: 2
-      max_disappeared: 25
-
-    # motion:
-    #   mask:
-    #     - 0.371,0.133,0.598,0.152,1,0.227,1,1,0.708,1,0.613,0.273,0.567,0.26,0.45,0.232,0.416,0.227,0.351,0.246,0.292,0.285
-
-    # zones:
-    #   driveway:
-    #     coordinates: 0.126,0.76,0.418,0.232,0.552,0.257,0.534,0.285,0.502,0.994,0.153,0.997,0.119,0.831
-    #     inertia: 3
-
-    #   front_porch:
-    #     coordinates: 0.123,0.757,0.244,0.536,0.184,0.481,0.172,0.533,0.098,0.669
-    #     inertia: 3
-
-    #   front_yard_left:
-    #     coordinates: 0.181,0.478,0.289,0.298,0.344,0.257,0.41,0.235,0.246,0.536
-    #     inertia: 3
-
-    #   front_yard_right:
-    #     coordinates: 0.554,0.266,0.54,0.287,0.526,0.574,0.504,1,0.703,1,0.65,0.589,0.605,0.282
-    #     inertia: 3
+    #   track:
+    #     - person
+    #     - car
+    #     - dog
+    #     - cat
+    #     - ups
+    #     - amazon
+    #     - fedex
+    #     - package
 
 
   backporch_cam:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/backporch_cam
-          input_args: preset-rtsp-restream
-          roles: ['record']
         - path: rtsp://127.0.0.1:8554/backporch_cam_sub
           input_args: preset-rtsp-restream
           roles: ['detect']
 
-
-    detect:
-      enabled: True
-      width: 640
-      height: 480
-      fps: 5
-      min_initialized: 2
-      max_disappeared: 25
-
-    # zones:
-    #   back_porch:
-    #     coordinates: 0.19,0.381,0.651,0.372,0.691,1,0.058,1
-    #     inertia: 3
-    #     loitering_time: 20
-    #     filters:
-    #       person:
-    #         min_area: 5000
-    #         max_area: 100000
-    #         threshold: 0.7
-    #       dog:
-    #         min_area: 5000
-    #         max_area: 100000
-    #         threshold: 0.7
+        - path: rtsp://127.0.0.1:8554/backporch_cam
+          input_args: preset-rtsp-restream
+          roles: ['record']
 
 
+
+    # detect:
+    #   enabled: True
+    #   width: 640
+    #   height: 480
+    #   fps: 5
+    #   min_initialized: 2
+    #   max_disappeared: 25
