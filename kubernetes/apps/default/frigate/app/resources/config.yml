@@ -33,7 +33,7 @@ ffmpeg:
   # Optional: global output args
   output_args:
     # Optional: output args for detect streams (default: shown below)
-    detect: -threads 2 -f rawvideo -pix_fmt yuv420p -c:v h264_vaapi output.mp4
+    detect: -threads 2 -f rawvideo -c:v h264_vaapi
     # Optional: output args for record streams (default: shown below)
     record: preset-record-generic
   retry_interval: 10
@@ -94,20 +94,20 @@ cameras:
           input_args: preset-rtsp-restream
           roles: ['record']
 
-    # detect:
-    #   enabled: True
-    #   width: 1536
-    #   height: 576
-    # objects:
-    #   track:
-    #     - person
-    #     - car
-    #     - dog
-    #     - cat
-    #     - ups
-    #     - amazon
-    #     - fedex
-    #     - package
+    detect:
+      enabled: True
+      width: 1536
+      height: 576
+    objects:
+      track:
+        - person
+        - car
+        - dog
+        - cat
+        - ups
+        - amazon
+        - fedex
+        - package
 
 
   backporch_cam:
@@ -123,10 +123,10 @@ cameras:
 
 
 
-    # detect:
-    #   enabled: True
-    #   width: 640
-    #   height: 480
-    #   fps: 5
-    #   min_initialized: 2
-    #   max_disappeared: 25
+    detect:
+      enabled: True
+      width: 640
+      height: 480
+      fps: 5
+      min_initialized: 2
+      max_disappeared: 25
