@@ -15,6 +15,18 @@ detectors:
     type: edgetpu
     device: pci
 
+record:
+  enabled: True
+  retain:
+    days: 7
+    mode: motion
+  alerts:
+    retain:
+      days: 30
+  detections:
+    retain:
+      days: 30
+
 # model:
 #   path: plus://05fafebf939bb56823f402e6cf2f3d0f #EdgeTPU Model
 #   width: 300
@@ -37,19 +49,6 @@ ffmpeg:
     # Optional: output args for record streams (default: shown below)
     record: preset-record-generic
   retry_interval: 10
-
-objects:
-  track:
-    - person
-    - face
-    - license_plate
-    - dog
-    - cat
-    - car
-    - amazon
-    - fedex
-    - ups
-    - package
 
 snapshots:
   enabled: true
