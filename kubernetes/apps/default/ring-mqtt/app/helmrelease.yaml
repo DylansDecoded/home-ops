@@ -36,7 +36,6 @@ spec:
       ring-mqtt:
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
           app:
             image:
@@ -80,11 +79,11 @@ spec:
         existingClaim: ring-mqtt
         globalMounts:
           - path: /data
-
-      config:
-        type: configMap
-        name: ring-mqtt-config
+      secret-file:
+        type: secret
+        name: ring-config-secret
         globalMounts:
           - path: /data/config.json
             subPath: config.json
             readOnly: true
+

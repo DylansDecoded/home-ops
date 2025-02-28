@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: qbtools-config-secret
+  name: ring-config-secret
 stringData:
   config.json: ENC[AES256_GCM,data:xFMR1eRBhv/SMUOksr/ebxR1L/Jc3QsLm9j2dngEYnpcT3QusdB8Ih3A5//fDvZ/lY7EQEMGSHfeafrGL8WAfTGqxW8E5z7Uy3d3QBiFqharTk36ftEhT4N6xHpiZNFlXmAgX+fNhVx1qw8ObXLi5JYK4dIqzM/2qaT2u7gAr41wNhjMbj8IBVVV1WcmpQOSvENOdSzENStmC/FFlqf64SFVhn6F+5zNm+n9Q8HuPz3pXQFDKrGQ+UAxCLkLZloa99ycjY2tJ7ysdg+Teng/b5Fz6MErtxwup6+/thS6Q6Uh/QMbgNNTmxPr0D7JQebUJ4STMrrVwzvEbh4Mwgc/fGYnBRH+kXkJCT54KoZuzXpy0IcI0eyCySyq0pblk/PdYNXmo3Rb6CZbqrlGbxZ8jAVaE4QeLlxYnb4CYeXcqwOjnBxX1n5GLDn3JsH3O9sVSt0VczGLli+P0CUPw3yo71uuVw==,iv:qNzaO4T6V4LGvHvqwFJc12UAEELDYdmQRyp4s3F6bXs=,tag:JqpaRk+IR1nd7dtOX9FWHg==,type:str]
 sops:
