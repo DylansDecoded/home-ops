@@ -8,7 +8,7 @@ resources:
 configMapGenerator:
   - name: ring-mqtt-config
     files:
-      - config.json=./resources/config.json
+      - config.json=./ring-config.sops.yaml
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
