@@ -20,6 +20,14 @@ spec:
       namespace: rook-ceph
   values:
     defaultPodOptions:
+      annotations:
+          k8s.v1.cni.cncf.io/networks: |
+            [{
+              "name":"netattach-iot",
+              "namespace": "network",
+              "ips": ["10.1.40.203/24"],
+              "mac": "3e:59:e4:f7:43:09"
+            }]
       nodeSelector:
           google.feature.node.kubernetes.io/coral: 'true'
           intel.feature.node.kubernetes.io/gpu: 'true'
