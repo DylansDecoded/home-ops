@@ -36,19 +36,23 @@ record:
 
 
 ffmpeg:
+  path: "5.0"
   # Optional: global ffmpeg args (default: shown below)
   global_args: ["-hide_banner", "-loglevel", "warning", "-threads", "2"]
   # NOTE: See hardware acceleration docs for your specific device
   hwaccel_args: preset-vaapi
   # Optional: global input args (default: shown below)
-  input_args: preset-rtsp-generic
-  # Optional: global output args
+  input_args: preset-rtsp-restream
   output_args:
-    # Optional: output args for detect streams (default: shown below)
-    # detect: -threads 2 -f rawvideo -c:v h264_vaapi
-    # Optional: output args for record streams (default: shown below)
-    record: preset-record-generic
-  retry_interval: 10
+    record: preset-record-generic-audio-aac
+
+  # Optional: global output args
+  # output_args:
+  #   # Optional: output args for detect streams (default: shown below)
+  #   # detect: -threads 2 -f rawvideo -c:v h264_vaapi
+  #   # Optional: output args for record streams (default: shown below)
+  #   record: preset-record-generic
+  # retry_interval: 10
 
 snapshots:
   enabled: true
@@ -82,15 +86,11 @@ cameras:
 
   driveway_floodlight_cam:
     ffmpeg:
-      output_args:
-        record: preset-record-generic-audio-copy
       inputs:
         - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
-          input_args: preset-rtsp-restream
           roles: ['detect']
 
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
-          input_args: preset-rtsp-restream
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
           roles: ['record']
 
     detect:

@@ -19,6 +19,20 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   values:
+    defaultPodOptions:
+      nodeSelector:
+          google.feature.node.kubernetes.io/coral: 'true'
+          intel.feature.node.kubernetes.io/gpu: 'true'
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 44
+          - 109
+          - 65542 # gladius:external-services
     controllers:
       scrypted:
         annotations:
@@ -36,32 +50,12 @@ spec:
                 enabled: true
             resources:
               requests:
-                cpu: 136m
+                cpu: 10m
                 memory: 1Gi
+                gpu.intel.com/i915: '1'
               limits:
-                gpu.intel.com/i915: 1
-                squat.ai/coral: 1
-                memory: 4Gi
-
-    defaultPodOptions:
-      # annotations:
-      #     k8s.v1.cni.cncf.io/networks: |
-      #       [{
-      #         "name":"",
-      #         "namespace": "network",
-      #         "ips": ["10.1.40.205/24"],
-      #         "mac": "3e:59:e4:f7:43:10"
-      #       }]
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 44
-          - 109
-          - 65542 # gladius:external-services
+                gpu.intel.com/i915: '1'
+                memory: 2Gi
 
     service:
       app:
