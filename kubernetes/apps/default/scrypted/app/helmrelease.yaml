@@ -44,14 +44,14 @@ spec:
                 memory: 4Gi
 
     defaultPodOptions:
-      annotations:
-          k8s.v1.cni.cncf.io/networks: |
-            [{
-              "name":"netattach-iot",
-              "namespace": "network",
-              "ips": ["10.1.40.205/24"],
-              "mac": "3e:59:e4:f7:43:10"
-            }]
+      # annotations:
+      #     k8s.v1.cni.cncf.io/networks: |
+      #       [{
+      #         "name":"",
+      #         "namespace": "network",
+      #         "ips": ["10.1.40.205/24"],
+      #         "mac": "3e:59:e4:f7:43:10"
+      #       }]
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
