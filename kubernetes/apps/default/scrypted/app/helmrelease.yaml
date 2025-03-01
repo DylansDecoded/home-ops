@@ -23,25 +23,6 @@ spec:
       scrypted:
         annotations:
           reloader.stakater.com/auto: "true"
-
-        pod:
-          annotations:
-            k8s.v1.cni.cncf.io/networks: |
-              [{
-                "name":"netattach-iot",
-                "namespace": "network",
-                "ips": ["10.1.40.222/24"],
-                "mac": "76:fa:11:c0:c9:84"
-              }]
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-              - 44
-              - 109
-              - 65542 # gladius:external-services
         containers:
           app:
             image:
@@ -60,7 +41,21 @@ spec:
                 gpu.intel.com/i915: 1
                 squat.ai/coral: 1
                 memory: 8192Mi
-
+    defaultPodOptions:
+      annotations:
+          k8s.v1.cni.cncf.io/networks: |
+            [{
+              "name":"netattach-iot",
+              "namespace": "network",
+              "ips": ["10.1.40.201/24"],
+              "mac": "3d:59:e4:f7:43:10"
+            }]
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
         controller: scrypted
