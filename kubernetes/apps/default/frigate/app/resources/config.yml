@@ -54,6 +54,13 @@ ffmpeg:
   #   record: preset-record-generic
   # retry_interval: 10
 
+objects:
+  track:
+    - person
+    - car
+    - dog
+    - cat
+
 snapshots:
   enabled: true
   clean_copy: true
@@ -98,8 +105,6 @@ cameras:
       mask:
         - 0.618,0.279,0.741,0.998,0.94,1,0.87,0.845,0.919,0.641,0.885,0.452,0.788,0.359
 
-
-
     snapshots:
       required_zones:
         - entire_front_yard
@@ -111,8 +116,6 @@ cameras:
         loitering_time: 5
         objects:
           - person
-          - dog
-          - cat
       front_yard_street:
         coordinates: 0.394,0.197,0.338,0.268,0.434,0.268,0.614,0.29,0.611,0.208
         objects:
