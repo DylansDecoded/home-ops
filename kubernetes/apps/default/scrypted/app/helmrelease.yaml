@@ -19,38 +19,34 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   values:
-    defaultPodOptions:
-      annotations:
-          k8s.v1.cni.cncf.io/networks: |
-            [{
-              "name":"netattach-iot",
-              "namespace": "network",
-              "ips": ["10.1.40.203/24"],
-              "mac": "3e:59:e4:f7:43:09"
-            }]
-      nodeSelector:
-          google.feature.node.kubernetes.io/coral: 'true'
-          intel.feature.node.kubernetes.io/gpu: 'true'
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 44
-          - 109
-          - 65542 # gladius:external-services
     controllers:
       scrypted:
         annotations:
           reloader.stakater.com/auto: "true"
 
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name":"netattach-iot",
+                "namespace": "network",
+                "ips": ["10.1.40.222/24"],
+                "mac": "76:fa:11:c0:c9:84"
+              }]
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 44
+              - 109
+              - 65542 # gladius:external-services
         containers:
           app:
             image:
-              repository: ghcr.io/koush/scrypted
-              tag: v0.138.0-noble-full
+              repository: ghcr.io/bjw-s-labs/scrypted
+              tag: 0.137.0@sha256:8efdd2846735f831c925b49052f00372f8d6de913f72359628bd8e095e11a6f6
             probes:
               liveness:
                 enabled: true
@@ -58,12 +54,12 @@ spec:
                 enabled: true
             resources:
               requests:
-                cpu: 10m
-                memory: 1Gi
-                gpu.intel.com/i915: '1'
+                cpu: 136m
+                memory: 1024Mi
               limits:
-                gpu.intel.com/i915: '1'
-                memory: 2Gi
+                gpu.intel.com/i915: 1
+                squat.ai/coral: 1
+                memory: 8192Mi
 
     service:
       app:
@@ -99,10 +95,12 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /.cache
+
       cache-npm:
         type: emptyDir
         globalMounts:
           - path: /.npm
+
       recs:
         type: nfs
         server: truenas.robsonhome.cloud
