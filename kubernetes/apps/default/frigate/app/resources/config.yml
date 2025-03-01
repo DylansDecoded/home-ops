@@ -68,18 +68,12 @@ snapshots:
 go2rtc:
   streams:
     driveway_floodlight_cam:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_main
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_main
       - "ffmpeg:driveway_floodlight_cam#video=copy#audio=copy#audio=opus"
-
-    driveway_floodlight_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h265Preview_01_sub
 
     backporch_cam:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_main
       - "ffmpeg:backporch_cam#video=copy#audio=copy#audio=opus"
-
-    backporch_cam_sub:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.3:554/h264Preview_01_sub
 
 
 cameras:
@@ -87,11 +81,10 @@ cameras:
   driveway_floodlight_cam:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
-          roles: ['detect']
-
-        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam_sub
-          roles: ['record']
+        - path: rtsp://127.0.0.1:8554/driveway_floodlight_cam
+          roles:
+            - detect
+            - record
 
     detect:
       enabled: True
@@ -112,13 +105,11 @@ cameras:
   backporch_cam:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/backporch_cam_sub
-          input_args: preset-rtsp-restream
-          roles: ['detect']
-
         - path: rtsp://127.0.0.1:8554/backporch_cam
           input_args: preset-rtsp-restream
-          roles: ['record']
+          roles:
+            - detect
+            - record
 
 
 
