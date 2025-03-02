@@ -75,7 +75,7 @@ snapshots:
 go2rtc:
   streams:
     driveway:
-      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554//h265Preview_01_main#video=h264#audio=copy#audio=opus"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554//h264Preview_01_main#video=h264#audio=copy#audio=opus"
     driveway_sub:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.1.90.4:554/h264Preview_01_sub#video=copy#audio=copy#audio=opus"
 
