@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: qbtools
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: app-template
@@ -131,7 +131,6 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
-        seccompProfile: { type: RuntimeDefault }
     persistence:
       secret-file:
         type: secret

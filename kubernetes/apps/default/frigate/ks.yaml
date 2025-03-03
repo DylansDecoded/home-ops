@@ -10,18 +10,24 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/gatus/guarded
+    - ../../../../components/gatus/external
     - ../../../../components/volsync
   dependsOn:
-    - name: volsync
-      namespace: volsync-system
-  interval: 30m
+    - name: emqx-cluster
+      namespace: default
+    - name: onepassword
+      namespace: external-secrets
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 1h
   path: ./kubernetes/apps/default/frigate/app
   postBuild:
     substitute:
       APP: *app
+      GATUS_SUBDOMAIN: hass
       VOLSYNC_CAPACITY: 5Gi
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system

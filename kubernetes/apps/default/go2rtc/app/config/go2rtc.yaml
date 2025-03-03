@@ -1,6 +1,0 @@
----
-log:
-  output: "stdout"
-
-streams:
-  driveway_floodlight_cam: rtsp://scrypted.default.svc.cluster.local:34136/
