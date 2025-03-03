@@ -1,3 +1,4 @@
+
 ---
 autoDirectNodeRoutes: true
 bandwidthManager:
@@ -19,7 +20,7 @@ cluster:
   name: main
 cni:
   exclusive: false
-devices: eth+
+devices: enp+
 enableIPv4BIGTCP: true
 endpointRoutes:
   enabled: true
@@ -41,14 +42,14 @@ loadBalancer:
   mode: dsr
 localRedirectPolicy: true
 operator:
-  replicas: 2
-  rollOutPods: true
+  dashboards:
+    enabled: true
   prometheus:
     enabled: true
     serviceMonitor:
       enabled: true
-  dashboards:
-    enabled: true
+  replicas: 2
+  rollOutPods: true
 prometheus:
   enabled: true
   serviceMonitor:

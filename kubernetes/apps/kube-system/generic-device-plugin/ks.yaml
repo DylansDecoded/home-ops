@@ -12,6 +12,7 @@ spec:
   interval: 30m
   path: ./kubernetes/apps/kube-system/generic-device-plugin/app
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -19,3 +20,4 @@ spec:
   targetNamespace: *namespace
   timeout: 5m
   wait: false
+
