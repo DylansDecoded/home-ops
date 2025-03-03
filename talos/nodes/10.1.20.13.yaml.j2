@@ -1,0 +1,16 @@
+machine:
+  network:
+      hostname: k8s-3
+      interfaces:
+        - interface: eth0
+          dhcp: true
+          mtu: 1500
+          vlans:
+            - vlanId: 40
+              dhcp: true
+              mtu: 1500
+              dhcpOptions:
+                routeMetric: 4096
+      disableSearchDomain: true
+  install:
+    image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}
