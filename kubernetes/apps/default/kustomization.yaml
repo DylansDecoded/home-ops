@@ -22,6 +22,7 @@ resources:
   - ./sabnzbd/ks.yaml
   # - ./scrypted/ks.yaml
   - ./sonarr/ks.yaml
+  - ./threadfin/ks.yaml
   - ./unpackerr/ks.yaml
   - ./zigbee/ks.yaml
   - ./zwave/ks.yaml
