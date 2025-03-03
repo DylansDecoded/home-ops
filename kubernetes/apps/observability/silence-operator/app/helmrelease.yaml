@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: silence-operator
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: silence-operator
@@ -23,8 +23,6 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: kube-prometheus-stack
-      namespace: observability
     - name: silence-operator-crds
       namespace: observability
   values:
@@ -64,16 +62,16 @@ spec:
             - name: device
               value: /dev/sd.*
               isRegex: true
-      # - apiVersion: monitoring.giantswarm.io/v1alpha1
-      #   kind: Silence
-      #   metadata:
-      #     name: expanse-memory-high-utilization
-      #     namespace: observability
-      #   spec:
-      #     matchers:
-      #       - name: alertname
-      #         value: NodeMemoryHighUtilization
-      #         isRegex: false
-      #       - name: instance
-      #         value: expanse.internal:9100
-      #         isRegex: false
+      - apiVersion: monitoring.giantswarm.io/v1alpha1
+        kind: Silence
+        metadata:
+          name: expanse-memory-high-utilization
+          namespace: observability
+        spec:
+          matchers:
+            - name: alertname
+              value: NodeMemoryHighUtilization
+              isRegex: false
+            - name: instance
+              value: expanse.internal:9100
+              isRegex: false
