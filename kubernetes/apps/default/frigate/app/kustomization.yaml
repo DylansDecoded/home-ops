@@ -8,12 +8,14 @@ resources:
 configMapGenerator:
   - name: frigate-configmap
     files:
-      - config.yml=./resources/config.yml
+      - config.yml=./config.yml
   - name: frigate-loki-rules
     files:
-      - frigate.yaml=./resources/lokirule.yaml
+      - frigate.yaml=./lokirule.yaml
     options:
       labels:
         loki_rule: "true"
 generatorOptions:
   disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled

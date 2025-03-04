@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: emqx
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: emqx-operator
@@ -26,6 +26,7 @@ spec:
     - name: cert-manager
       namespace: cert-manager
   values:
-    fullnameOverride: emqx-operator
+    fullnameOverride: emqx
+    replicaCount: 1
     image:
       repository: ghcr.io/emqx/emqx-operator
