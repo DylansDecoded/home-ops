@@ -20,7 +20,7 @@ cluster:
   name: main
 cni:
   exclusive: false
-devices: enp+
+devices: eth+
 enableIPv4BIGTCP: true
 endpointRoutes:
   enabled: true
