@@ -40,6 +40,7 @@ spec:
           path: /
     toolbox:
       enabled: true
+
     configOverride: |
       [global]
       bdev_enable_discard = true
