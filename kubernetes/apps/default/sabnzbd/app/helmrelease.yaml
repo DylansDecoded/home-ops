@@ -5,15 +5,11 @@ kind: HelmRelease
 metadata:
   name: sabnzbd
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -22,9 +18,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       sabnzbd:
@@ -82,7 +75,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: sabnzbd
@@ -102,8 +94,6 @@ spec:
     persistence:
       config:
         existingClaim: sabnzbd
-      tmp:
-        type: emptyDir
       scripts:
         type: configMap
         name: sabnzbd-scripts
@@ -112,8 +102,10 @@ spec:
           - readOnly: true
       media:
         type: nfs
-        server: truenas.robsonhome.cloud
-        path: /mnt/tank/media
+        server: expanse.internal
+        path: /mnt/eros/Media
         globalMounts:
-          - path: /media/downloads/usenet
-            subPath: downloads/usenet
+          - path: /media/Downloads/sabnzbd
+            subPath: Downloads/sabnzbd
+      tmp:
+        type: emptyDir
