@@ -1,0 +1,54 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: &app wipe-rook-0
+  namespace: default
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  parallelism: 1
+  template:
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      nodeName: k8s-5
+      initContainers:
+        - name: data
+          image: docker.io/library/alpine:latest
+          command: ["/bin/sh", "-c"]
+          args: ["rm -rf /mnt/host_var/lib/rook"]
+          volumeMounts:
+            - mountPath: /mnt/host_var
+              name: host-var
+          securityContext:
+            privileged: true
+          resources: {}
+      containers:
+        - name: disk
+          image: docker.io/library/alpine:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              apk add --no-cache sgdisk findutils util-linux util-linux-misc parted device-mapper;
+              DISK=/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B
+              echo "=== Wiping $DISK ===";
+              sgdisk --zap-all $DISK;
+              dd if=/dev/zero of=$DISK bs=1M count=100 oflag=direct;
+              blkdiscard $DISK;
+              partprobe $DISK;
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: host-dev
+              mountPath: /dev/disk/by-id
+          resources: {}
+      volumes:
+        - name: host-var
+          hostPath:
+            path: /var
+        - name: host-dev
+          hostPath:
+            path: /dev/disk/by-id
+            type: Directory
+      topologySpreadConstraints:
