@@ -31,7 +31,7 @@ spec:
       dashboard:
         ingressClassName: internal
         host:
-          name: rook.devbu.io
+          name: rook.robsonhome.cloud
           path: /
     toolbox:
       enabled: true
