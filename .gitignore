@@ -10,3 +10,5 @@ Thumbs.db
 kubeconfig
 talosconfig
 
+controlplane.yaml
+worker.yaml
