@@ -96,7 +96,7 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        devicePathFilter: /dev/disk/by-id/ata-SAMSUNG_.*
+        devicePathFilter: /dev/sda
         config:
           osdsPerDevice: "1"
       # storage:
