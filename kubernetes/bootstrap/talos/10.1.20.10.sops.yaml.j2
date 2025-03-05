@@ -48,22 +48,13 @@ machine:
   install:
     disk: /dev/nvme0n1
     extraKernelArgs:
-      # Use eth0 instead of eno1
-      - net.ifnames=0
-      # Less security, faster puter
-      - apparmor=0
-      # Less security, faster puter
-      - init_on_alloc=0
-      # Less security, faster puter
-      - init_on_free=0
-      # PCI Passthrough
-      - intel_iommu=on
-      # PCI Passthrough
-      - iommu=pt
-      # Less security, faster puter
-      - mitigations=off
-      # Less security, faster puter
-      - security=none
+      - net.ifnames=0                       # eth0 instead of enp0
+      - apparmor=0                          # Less security, faster puter
+      - init_on_alloc=0                     # Less security, faster puter
+      - init_on_free=0                      # Less security, faster puter
+      - intel_iommu=on                      # PCI Passthrough
+      - iommu=pt                            # PCI Passthrough
+      - mitigations=off                     # Less security, faster puter
     image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}
     wipe: false
   files:

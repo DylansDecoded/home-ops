@@ -10,14 +10,14 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/gatus/guarded
-    - ../../../../components/volsync
+    - ../../../../flux/components/gatus/guarded
+    - ../../../../flux/components/volsync
   dependsOn:
-    - name: onepassword
+    - name: onepassword-store
       namespace: external-secrets
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-  interval: 1h
+    - name: volsync
+      namespace: volsync-system
+  interval: 30m
   path: ./kubernetes/apps/default/sabnzbd/app
   postBuild:
     substitute:
@@ -25,7 +25,6 @@ spec:
       GATUS_SUBDOMAIN: sab
       VOLSYNC_CAPACITY: 1Gi
   prune: true
-  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system

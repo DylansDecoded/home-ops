@@ -5,7 +5,7 @@ kind: EMQX
 metadata:
   name: emqx
 spec:
-  image: public.ecr.aws/emqx/emqx:5.8.5
+  image: public.ecr.aws/emqx/emqx:5.8.4
   config:
     data: |
       authentication {
@@ -32,7 +32,7 @@ spec:
       annotations:
         reloader.stakater.com/auto: "true"
     spec:
-      replicas: 2
+      replicas: 3
       envFrom:
         - secretRef:
             name: emqx-secret
@@ -48,6 +48,6 @@ spec:
   listenersServiceTemplate:
     metadata:
       annotations:
-        lbipam.cilium.io/ips: 10.1.20.128
+        lbipam.cilium.io/ips: 10.1.20.130
     spec:
       type: LoadBalancer
