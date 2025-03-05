@@ -10,22 +10,23 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../flux/components/gatus/guarded
-    - ../../../../flux/components/volsync
+    - ../../../../components/gatus/guarded
+    - ../../../../components/volsync
   dependsOn:
     - name: emqx-cluster
       namespace: default
-    - name: onepassword-store
+    - name: onepassword
       namespace: external-secrets
-    - name: volsync
-      namespace: volsync-system
-  interval: 30m
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 1h
   path: ./kubernetes/apps/default/zigbee/app
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 1Gi
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
