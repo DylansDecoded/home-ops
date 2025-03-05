@@ -48,7 +48,6 @@ machine:
   install:
     disk: /dev/nvme0n1
     extraKernelArgs:
-      - net.ifnames=0                       # eth0 instead of enp0
       - apparmor=0                          # Less security, faster puter
       - init_on_alloc=0                     # Less security, faster puter
       - init_on_free=0                      # Less security, faster puter
@@ -133,6 +132,15 @@ cluster:
       - 10.43.0.0/16
   coreDNS:
     disabled: true
+  extraManifests:
+    {% for crd in ["alertmanagerconfigs", "alertmanagers", "podmonitors", "probes", "prometheusagents", "prometheuses", "prometheusrules", "scrapeconfigs", "servicemonitors", "thanosrulers"] %}
+    - # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+      https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_{{ crd }}.yaml
+    {% endfor %}extraManifests:
+    {% for crd in ["alertmanagerconfigs", "alertmanagers", "podmonitors", "probes", "prometheusagents", "prometheuses", "prometheusrules", "scrapeconfigs", "servicemonitors", "thanosrulers"] %}
+    - # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+      https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_{{ crd }}.yaml
+    {% endfor %}
   token: ENC[AES256_GCM,data:lwR/hqdu5e34IVB8iGoQeHN/tzlbGBs=,iv:iCXcSCO1YIAMLDO8MYXwlnPTlp/eEDUAutrwq1yp3OM=,tag:JF3w1mom6ydRs6BGpa3uwA==,type:str]
   secretboxEncryptionSecret: ENC[AES256_GCM,data:AIN246Ob0qvWj5W7XxbTEOf00IcFjqL3lw323Uj0ySUxhhRPS3f3PWf3640=,iv:jvr68KLPiUib01fgIU3A6Td091SZ8V7A3oPVHLvPBYk=,tag:tCYMH7uB159b24JPWrHoyw==,type:str]
   ca:
