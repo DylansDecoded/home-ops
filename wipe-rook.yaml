@@ -12,7 +12,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       restartPolicy: Never
-      nodeName: k8s-5
+      nodeName: k8s-0
       initContainers:
         - name: data
           image: docker.io/library/alpine:latest
@@ -31,7 +31,7 @@ spec:
           args:
             - |
               apk add --no-cache sgdisk findutils util-linux util-linux-misc parted device-mapper;
-              DISK=/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HMJP-00005_S3HSNWAJ300236B
+              DISK=/dev/disk/by-id/ata-SAMSUNG_MZ7KM960HAHP-00005_S2HTNXAH300874
               echo "=== Wiping $DISK ===";
               sgdisk --zap-all $DISK;
               dd if=/dev/zero of=$DISK bs=1M count=100 oflag=direct;
