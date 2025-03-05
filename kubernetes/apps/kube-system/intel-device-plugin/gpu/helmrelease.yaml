@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: intel-device-plugin-gpu
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: intel-device-plugins-gpu
@@ -22,10 +22,7 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: intel-device-plugin-operator
-      namespace: kube-system
   values:
-    name: intel-gpu-plugin
-    sharedDevNum: 3
+    name: i915
     nodeFeatureRule: false
+    sharedDevNum: 3
