@@ -20,7 +20,6 @@ resources:
   - ./recyclarr/ks.yaml
   - ./ring-mqtt/ks.yaml
   - ./sabnzbd/ks.yaml
-  - ./scrypted/ks.yaml
   - ./sonarr/ks.yaml
   - ./unpackerr/ks.yaml
   - ./zigbee/ks.yaml
