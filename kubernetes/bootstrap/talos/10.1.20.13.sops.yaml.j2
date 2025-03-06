@@ -3,15 +3,15 @@ debug: false
 persist: true
 machine:
   type: worker
-  token: ENC[AES256_GCM,data:L+7Dw8EAqBbE32x9V0kTdo76ykjQjwk=,iv:xUD/E4Ox7+ambEAEw1Qe5hgI6+eKyOcjDJEVzPba/Ow=,tag:TNr0QRr5ANa5ACB9hIfJHA==,type:str]
+  token: ENC[AES256_GCM,data:21PQJDeIGS2RXT8aGykl2LpKkNv1wyw=,iv:peb10pbQRH8IUPnFI1hjma2dRCu/um7hg9hhVzjyl2w=,tag:Yhza3ldz+URcCO82F8lrFA==,type:str]
   ca:
-    crt: ENC[AES256_GCM,data:L+Q5eYzh3clKtqS394KHH4rRQwwbG9xQ7hDzcqvpxxJ27rijEJR52WfiMAdZwiePdJP08xeImsyRe6IdPHYLNIuDMjp6OkQAw71fQ+fAKDesBb7zlweS5xg5aPDeZysbWmz0gNGhbKTK9IgcYnS3kQwXe2u2NF4VdYloFuTyw8X/FInRSii9oGsqKLJ9ya6k6pKOgbnCjTzUa3RIjZM6nY7JWAYjKmHDVyeojT9XQVpx3plcAvO6hFzAlBKRfmw9GRar2PT5vn9B02U7y8FAyYjaVlLuIc8xUUwqD8sLmvwus+QRtWVc3m1j+5u05jjt9cEKavwCJTzEDGuw2meblfrST2qb+98B3PrjP0S8PJPfo4wMLr9sySI6Ym+r0HwZJr37BekzWQWJsubua//8NeDJ5gxY3XyTWqgyP/7vOYSPbLZ9KAyP9AnKUS5tfWAdGDLtf9Cb0yzKet5u5urmtmWcgKWa+mTIIbOSKb3BT28wG7IqoFz6TunbQOlzXOEk8hTErGmTujVXB8ApDwdzXPkSN8qpi/+hwOCX9AbEpzaRKW1pWVIrK7b0LCP2NDVgtsehE2TkEqTXj9qRqIQpgJQj4hgGl51PyoRrew1Ar5yR/GzwxCxToHjA0/IdruxcrfYNNZdlUEFMyCk88OweREY/RR1qrcDMGT6HXrKbjNuW4Zd9ZSC1f8FUrCqs10a4uosTNy4gl2bOsA0s510LxhSvYRF1yD1zyPexE+iNp1c2TUKi+aKN9YfAB8igYiaGedPoFn/vPYVSiU/gysOjf5zRu4XZm8/o1XHEelcHN6u0ExnCAwVOBdksnIv9tuqHgelv2g0nV1ml/JtRaAYF50xf79LEKTH+FOWBi4Man7wBvvN2,iv:X+EFAvtoIaGGjnNpK+VA7E0XWLjQ5gO+EjQsptt1kvY=,tag:XSOUYCX6GC9SE9QDqOn/Hw==,type:str]
+    crt: ENC[AES256_GCM,data:gAq8Up1LwGLq6JAWd3FhMZLE8l9zyjhLWMQCso6tiYIpX9VZiqPIUL/Me0iA6EZGfXjLrv7ZkqWBYM8HenCeQiehzOuJiNEKQ6xpzYEHDHcbEl+Md2JjoYTE4DP0P/24kT1XvCWolHev2JQKl2c2lKLgqghhDgGVLcRFq4wZ2J0vTJ4Nlq00ik8frn0IOAvVOkPzNTeD8d+xp2DHy+h9MeSAnI4ToYXfkr3GxuWGL8F7fdqQsT46kxh/nc6fT0XRt1JNbSt7F+DkkVc1Ap3DAoplIEFDZUqXhuEGUCZU/vRzcyJPvuxdWX9Ln6bmwjlVtLyU+8aPM7NfPjdAMiQSYPLuYnHKebTqVsde3XGgl9lphII042ZiZ4Z++pd8nIY7d/JGh3eJPZPvzseGdIDD7tb76MW2Ps7Nh/P10k6tbtnWmpfpS563SqNN4yDRlynIqGdlgytOOdRR9Q6zXtigPe6oNzuAXcQNVNUtJLlZgQ+aadsSszgawXcsd3VnPBobQws3qcuSRaU0ew/coJm1gtFZaTJTfLi6L5m9xbKx8DPjOYtjc65hpjWBa9UL/8nPBNkbTJk1RDF9q306TPo8M1xv+u/o+qgXvWs0UYv5Byx/iV1w+IRYMT+j0wh+FEYiXqt+VGag70wkpVXnWFH14RvKRBmy4CJDuqTs/5zr5OzroYa02N1mo+Kn5m+QU6qBxzZUrGe9iz/AuDCxlTFb+6/oqlIevsJDIJcQnhSUXI15x7lglZMlE2ixKHaFHDla6S/37aRZYhUvtLhoVJHlnn5b58hwNZABIEfone5XcJYINLnVpRbYrwj2ViKMtXtAfj9LBzEj1UUf/EhwpVxTuJYpbC6LMJPrisEl4OcsM3zdTQTl,iv:TJ/fee4OCm80uzAt5AFl58302CR56U/2xzCJeOv6VxI=,tag:aZJwYeDwg24RkMcfsATwRg==,type:str]
     key: ""
   certSANs:
-    - 10.1.20.120
     - 127.0.0.1
+    - 10.1.20.120
   kubelet:
-    image: ghcr.io/siderolabs/kubelet:{{ ENV.KUBERNETES_VERSION }}
+    image: ghcr.io/siderolabs/kubelet:v1.32.2
     extraMounts:
       - destination: /var/openebs/local
         type: bind
@@ -30,15 +30,15 @@ machine:
   network:
     hostname: k8s-3
     interfaces:
-      - interface: eth0
+      - deviceSelector:
+          hardwareAddr: ac:e2:d3:10:d8:25
+          driver: e1000e
+        mtu: 9000
         dhcp: true
-        mtu: 1500
         vlans:
           - vlanId: 40
-            dhcp: true
             mtu: 1500
-            dhcpOptions:
-              routeMetric: 4096
+            dhcp: true
     disableSearchDomain: true
   time:
     servers:
@@ -46,8 +46,6 @@ machine:
   install:
     disk: /dev/nvme0n1
     extraKernelArgs:
-      # eth0 instead of enp0
-      - net.ifnames=0
       # Less security, faster puter
       - apparmor=0
       # Less security, faster puter
@@ -60,8 +58,12 @@ machine:
       - iommu=pt
       # Less security, faster puter
       - mitigations=off
-    image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}
+      # Less security, faster puter
+      - security=none
+      # Less security, faster puter
+      - talos.auditd.disabled=1
     wipe: false
+    image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:v1.9.4
   files:
     # Spegel
     - op: create
@@ -80,22 +82,31 @@ machine:
         noatime=True
   sysctls:
     # Watchdog
-    fs.inotify.max_user_instances: 8192
-    # Watchdog
     fs.inotify.max_user_watches: 1048576
-    # Cloudflared / QUIC
-    net.core.rmem_max: 67108864
-    # Cloudflared / QUIC
-    net.core.wmem_max: 67108864
-    # 1Gb/s
+    # Watchdog
+    fs.inotify.max_user_instances: 8192
+    # 10Gb/s
     net.core.default_qdisc: fq
-    # 1Gb/s | Jumbo frames
-    net.ipv4.tcp_mtu_probing: 1
+    # 10Gb/s | Cloudflared / QUIC
+    net.core.rmem_max: 67108864
+    # 10Gb/s | Cloudflared / QUIC
+    net.core.wmem_max: 67108864
+    # 10Gb/s
     net.ipv4.tcp_congestion_control: bbr
-    # 1Gb/s
+    # Send and accept data in the opening SYN packet
+    net.ipv4.tcp_fastopen: 3
+    # 10Gb/s | Jumbo frames
+    net.ipv4.tcp_mtu_probing: 1
+    # 10Gb/s
+    net.ipv4.tcp_rmem: 4096 87380 33554432
+    # 10Gb/s
+    net.ipv4.tcp_wmem: 4096 65536 33554432
+    # 10Gb/s
     net.ipv4.tcp_window_scaling: 1
-    # postgresql
+    # PostgreSQL
     vm.nr_hugepages: 1024
+  sysfs:
+    devices.system.cpu.intel_pstate.hwp_dynamic_boost: 1
   features:
     rbac: true
     stableHostname: true
@@ -110,15 +121,24 @@ machine:
       forwardKubeDNSToHost: false
   udev:
     rules:
+      # Thunderbolt
       - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+      # Coral TPU
       - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
+      # Intel GPU
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
+  # kernel:
+  #   modules:
+  #     - name: nbd
+  #     - name: thunderbolt
+  #     - name: thunderbolt_net
   nodeLabels:
+    intel.feature.node.kubernetes.io/gpu: "true"
     topology.kubernetes.io/region: main
     topology.kubernetes.io/zone: w
 cluster:
-  id: ENC[AES256_GCM,data:hW+Z7HD/3L/YgUBk2xmuGCOSVN7ZAMA8ZPu4hyWDiQHYJ9PlEzrmzSqYOFk=,iv:JB26ny8AskkE6aY+De0GMIyDfH/11VAAmnIHpUKDfH0=,tag:FBbY2sMEAGWq1fmMJWyJjw==,type:str]
-  secret: ENC[AES256_GCM,data:0IkGJjmY0m3yOgULJMylbQ02jDnzwk/nY7ukF6E9jyZo2+ckIqL35WxCtXI=,iv:ucbcL6JJNavA6zg2DJBAPJvDjTIHFpQX55TXGJd2lag=,tag:DplF0QSXJ1ZYOII0tsPHNw==,type:str]
+  id: ENC[AES256_GCM,data:7FjEgvlK27Rit9npDjJgjT378kra5S4H5KR0xpGxtwJ4sjoOZhU22bqZZOg=,iv:oTiIon9WnBw3o9ZME6Lxh8AfBy6LYqXXiumrKSP1Q08=,tag:DEvu1F4A53mjaUt1k3M7BA==,type:str]
+  secret: ENC[AES256_GCM,data:gCdImzciKNC0iq2bAmq/hRSrG29RLVzkhp4X2bUs5zeMW/RENA9/Gy6s/AU=,iv:7iCPIHtZS4eoHdqkPy42zIGVpN/D2YhPjyysEZVEwi8=,tag:xYsmw8U0VJIxqRAgILxYSw==,type:str]
   controlPlane:
     endpoint: https://10.1.20.120:6443
   clusterName: main
@@ -132,9 +152,30 @@ cluster:
       - 10.43.0.0/16
   coreDNS:
     disabled: true
-  token: ENC[AES256_GCM,data:P1sSR1qhhRn1o1lTWOEffOZdgPXhag4=,iv:cl4ihPrul7N8vHz69jdiAPxx4pVuHdd+Ag2DcKGW0/s=,tag:sl062eHK0dB4DAA4ob4QGg==,type:str]
+  extraManifests:
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+  token: ENC[AES256_GCM,data:KPs5psBUhi6dW04iy8RRbrvYUEVE5kw=,iv:BczTvFhwH6vXhesyVt0P2nLzxCSpbM3OvRUM47dFhvw=,tag:zuxeViHepEFADsrwWLqwXw==,type:str]
   ca:
-    crt: ENC[AES256_GCM,data:s+oVjeDW5MLAHRjvMeoygEqHsrwEXjzR7CJWJQfRyETBvgEKspBnpc1UAC40HUJrSHsXE63hWGtEbCrlzmYUaZ+rd3iooYi6HxqWtf1Yr9z/I7beafLYKrcWG5n+zWURR42FqyPmqVjLlZRNLXZ4q36h1/OZrmERhJUc3iXjZnSDh2Ao7/W68tnUuLNhIcoMoQRhQ5a4ftx0BQfS279c3FPYydWOmPwx+6v6+6b8sCNTwf0ApjSNXPfviL+XnF6X8XSixReiUlDQ6kMQOp0sL+5uNyTlsi3+lUPcO0L1u8LOSSw+gv1hVCqXJOyaQEdevyhuvjOH19k/qmDMFHZT0CE6JNTfsnY9g7o/B5uYvkA/G4rBBLuRlIei5pH09lkTYdVVkELS1NFb7F+qSme0R7AxYWJukIdpJBHgDeZ2HFyqstBH045RIHRH9+XZKoosVADe9JgwEjkf8/nqWSV6gCm15aoghW9Hqohe7TIrOuDHeotF7Ef/TZ+RvhG2YmGcwNB1KtIzI/X+IZ/KcZXVEH2CjQRHz4rbNYe++ket8oD1s47jegEdsT9E7GQ3iFcGkZRz6QPd1dz7sFT2Po+gVRpxjSSCsJYzFS7aw75vSnrM7EebVyquy1ivllg5vaWkf24MBYE03FEyz3XPjXXHIyfecrXl6e8r3wcyVl5ED/Itf+3cI44RIZbEDFYZ+DF/D926TPYP46cIn3XMqhNyEn7b1T2+jEf1gnNRsoX79jzYtbw4EaGoCoVXH3xzZOW0sQ3Z7YPQlloKral5BZaJ5uS4Oz4RFrUqtL/CIydy4IFAHQ/n9Cc77rr6+GGOUzpIki1hV02wxOaR1+fEIzVh9XLbxGBg/0cyv0R06sxX/LAFu6vFI0hyzWEoW/BkrsIcOfZBKV0d/SMKR7oK4ZKkUOfMUZeIEgw8WMAUzFYyaBfbiNKRREtvZUK2RPMqsXeCIZx1UPp7BBGduHuFizPFkEjOKptRCyxpWsQ74NIfxCJL/A+2IK0EgUKS99P75x+Y/jPlfC+dWU/tSqbBeHVb9dEoG39cCF2x2Ak+PQ==,iv:n7bC8UCBa8KG8jTuYag299TEDYxOPdW58vJeoJ4gQuU=,tag:kj2FgBwDKd7UVpaEiss2ew==,type:str]
+    crt: ENC[AES256_GCM,data:JhEdE3pylSHiBF/pGiaqDhpp43amwFHbc2tB3+ZJvTyyHyrj6Galf/a969U3WOYy8Ch1Sx58SgPogJZga4ZQKGVXpVHIlvg6DwN6jw3LojSM1ukPNBVDyL3R5GfvdP79lHGLFLtyapoKF+lR54lnmjG5g16MMwERmmbnwlJxa2+AnoRsk6DUv5yZn2fHnmkUpcHWsKZPzQYhENkHmv2GeFDACbcsPWHXNT+QdVZxEuujk30IpNdC6ndhdkbo+Ak5N5GrxCIbG1cR8L2BVNBt+rIcMukX4JPQIMkCM1AAFTqZwho8DYEOsUs3zYfMzcF1AiiS+CTy0yvDwCIEjJw8T5sxFVTEUAt04Po477VVMZv3b2taomq1M+0hY5mUtPk+S4iA2b1FcvNQuDHiGhNY7pn/fzZB/qE2g3RDgqeB8S543lr0Q2/EqBW/VErEOxhhjMKYFBZsPzzX/cPvl2XZpRxW5nwQE2vP4NEQ6LBFJrnJa+agy4O5PI0v1IMvKBglXnYF/ATtQQbZeNLMTboXB/UOMJspo9njpVdxuP37XiVdUbq+e56agRSXN6yTa5EIIBFOA8ysQ7u62Zp85udD86MDSb6BBlhHypOJfvKNyza0YllRDLVIzmIFaaFfgW/cDWdUFiZKUYCZ2xbQkfi7JXridT/Mhs8u7cxBHzdPraMh/ovilbbWdRohNolYJgXJkGh9Wq1ThWwwa2YuDUPMripQBX5Cymx8i/oU3DaubIm9cPcCAqUJmZwJ6zQNP+wuQ3SAM0vvCD1N6MxzW67rLy6ESHYIg/YORalk05WG/UbgJ/C3w7mcl0Wd3bFtcguk9cOSXC5dN8DT1fZS8vJN4DAu6GYjzRRgA/h+cuToywjbSWMy6ryoLx2pY8SQkVmxW35W1HLOsnXrNjQiR3deeNdwk763iqJismJFwWwTBCvts90ykrCyrpxiQrPLQyqzVJ2NtdHbFt7aV1uKAJQe4H9y8aIPVnMeS1YpEmBju3cxg8h9qGpsuI6ZYRGy9IPdPgCujD7Q7BoCY5rQUoLZRASf+XiGqQ6b9w3Kqw==,iv:zUxQi+bH6fJD8lP/WUmKH8/34q3nDb/u6POIqKcup3c=,tag:jo0ccwuO68xfeOAZi50izg==,type:str]
     key: ""
 sops:
   kms: []
@@ -145,14 +186,14 @@ sops:
     - recipient: age1jwm8ccjgfy04r9rwh65rehk72j6rkawkpjnf4rcu4ukwlcfyquhq4p2q23
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAza0JwK1ExQzZTVWtwMnh4
-        QlREdDhMZUJWdDVDaldTZkFncEJtaEVCQ2o0CjVONHpOKzNhZ3djLzZ0K2JHOCtn
-        M0s3QnFPZGMrRTUzbXRtTGhXYy82T1EKLS0tIHVodjY5L0QzMzBFVlJ3dC9iV01h
-        Nk9ZWDRXTWtjT04xV2FmOXNjMnI5YkEKuDU2Fq2ONsHPhGsqedvNNUDayJ5zi9he
-        spnRqaSz6b5avlOzf5+DG3UdJcCnXNwKBtP3QceXgiuhzJvDipbWPQ==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3b3VOUlpEblp3alFwR3R0
+        eWdKSTh3bkZHWGZsUmh1VWZZVzh6cUZaNHc4CnJ2VVZpak1KSU5jYWh0a3F6TXhC
+        RW1US1d1RWErTW9pOGp5NlhYTXNOKzQKLS0tIGVrYkY2QjBBaWZmL2pTWXNCWkVX
+        RjZPVWZDQWMyeFhzMzkrc3pJMWhCUXMKY1oXDqsqp/oSFNv3yN2kKPuaXU7Rf9Rp
+        /KRth0G0PqVBVeI61qkCsGb7NICdfDkM/Am/2/3EHIDEKWTscPj42g==
         -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-03-05T14:07:06Z"
-  mac: ENC[AES256_GCM,data:p/EKWH4VS0/LxPbyFm0M99NWO3DIljIFzJhUmD+DwxLI0YTv1jLoKlXMkWtNnc78rgHj6gWmcNiO36CF7WEAqaTXF0D9sp4g5xGUR546vRj7qpoUVOrOJurVPCiRS1wp4yNf528fukuC8DugmuZbV1ffjv672PGBvqvJP5/xG90=,iv:0qJ5cmg4v7mbnglzsr6hocytlguak4HT+vvN7aHpHRg=,tag:JV3LxErq/jL7GJgWU1lhRg==,type:str]
+  lastmodified: "2025-03-05T22:57:22Z"
+  mac: ENC[AES256_GCM,data:SrXNpdke8qCkpSxVATNlos8zQM/zOs4RwE2icIXJJTe9d9Ct9blH90nNkNc3ZC5JPeKXc7ET3L4ZqojhXUwp+ipU7bDNfea6AOgo5bHJNz/CDoTrtSgxHBc+ylEFGh2IX1CYlR9Ru9fvG/pSb4pC2px48Ut8+4ciwxr8JNkJpms=,iv:Y8S1ohgO05Ut6rF4itCNlDiKTmXt4oF/Le485Yr4z9o=,tag:3quK59wiObqWgPgo5C2T/w==,type:str]
   pgp: []
   encrypted_regex: ^(token|crt|key|id|secret|secretboxEncryptionSecret|ca)$
   mac_only_encrypted: true
