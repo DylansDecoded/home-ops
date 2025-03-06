@@ -6,7 +6,4 @@ resources:
   - ./helmrelease.yaml
   - ./rbac.yaml
   - ./crd.yaml
-
-  # multus attach configs
   - ./netattach-iot.yaml
-  - ./netattach-vpn.yaml
