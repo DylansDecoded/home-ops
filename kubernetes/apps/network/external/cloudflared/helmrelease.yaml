@@ -5,15 +5,11 @@ kind: HelmRelease
 metadata:
   name: cloudflared
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -33,7 +29,7 @@ spec:
           app:
             image:
               repository: docker.io/cloudflare/cloudflared
-              tag: 2025.2.0@sha256:6e2df069aaf5a8c0bf304b674ff31c0ed07c974534b4303a8c6e57d93c6c9224
+              tag: 2025.2.1@sha256:03737f27c38ecfb257a55664953cac510727cf27052c51ddb7c8ff1a2b9969e1
             env:
               NO_AUTOUPDATE: true
               TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
@@ -46,7 +42,7 @@ spec:
               - --config
               - /etc/cloudflared/config/config.yaml
               - run
-              - e901488f-a148-4024-b5a7-8537e7b42287
+              - 13a8cf0a-e16c-468b-a7c2-1fdd1719394e
             probes:
               liveness: &probes
                 enabled: true
@@ -74,7 +70,6 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: cloudflared
@@ -86,19 +81,15 @@ spec:
         serviceName: cloudflared
         endpoints:
           - port: http
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
     persistence:
-      config:
+      config-file:
         type: configMap
         name: cloudflared-configmap
         globalMounts:
           - path: /etc/cloudflared/config/config.yaml
             subPath: config.yaml
             readOnly: true
-      creds:
+      secret-file:
         type: secret
         name: cloudflared-tunnel-secret
         globalMounts:
