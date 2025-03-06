@@ -65,8 +65,16 @@ spec:
               limits:
                 memory: 512Mi
     defaultPodOptions:
-      nodeSelector:
-        topology.kubernetes.io/zone=m # Run only on worker nodes
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: topology.kubernetes.io/zone
+                  operator: In
+                  values:
+                    - w
       annotations:
           k8s.v1.cni.cncf.io/networks: |
             [{
