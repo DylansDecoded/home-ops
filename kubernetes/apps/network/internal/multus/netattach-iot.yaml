@@ -10,7 +10,7 @@ spec:
     {
       "cniVersion": "0.3.1",
       "type": "ipvlan",
-      "master": "eno1.40",
+      "master": "eth0.40",
       "ipam": {
         "type": "static",
         "routes": [
