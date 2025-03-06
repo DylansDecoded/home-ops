@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: intel-device-plugin-operator
 spec:
-  interval: 1h
+  interval: 30m
   chart:
     spec:
       chart: intel-device-plugins-operator
@@ -24,7 +24,9 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  dependsOn:
+    - name: node-feature-discovery
+      namespace: kube-system
   values:
-    manager:
-      devices:
-        gpu: true
+    controllerExtraArgs: |
+      - --devices=gpu
