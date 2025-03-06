@@ -26,6 +26,7 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
+
         containers:
           app:
             image:
@@ -64,6 +65,8 @@ spec:
               limits:
                 memory: 512Mi
     defaultPodOptions:
+      nodeSelector:
+        topology.kubernetes.io/zone=w # Run only on worker nodes
       annotations:
           k8s.v1.cni.cncf.io/networks: |
             [{
