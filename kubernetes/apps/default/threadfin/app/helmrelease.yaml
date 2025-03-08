@@ -71,7 +71,6 @@ spec:
             port: *port
     ingress:
       app:
-        enabled: true
         className: internal
         hosts:
           - host: tv.robsonhome.cloud
@@ -84,8 +83,6 @@ spec:
      persistence:
       config:
         existingClaim: threadfin
-        globalMounts:
-          - path: /home/threadfin/conf
 
       tmp:
         enabled: true
