@@ -62,7 +62,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: *app
+        controller: threadfin
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.1.20.99
