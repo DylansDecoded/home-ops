@@ -81,9 +81,9 @@ spec:
                   identifier: app
                   port: http
 
-    persistence:
-      data:
-        extistingClaim: threadfin
+     persistence:
+      config:
+        existingClaim: threadfin
         globalMounts:
           - path: /home/threadfin/conf
 
