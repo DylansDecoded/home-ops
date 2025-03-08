@@ -70,7 +70,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: "{{ .Release.Name }}.devbu.io"
+          - host: "{{ .Release.Name }}.robsonhome.cloud"
             paths:
               - path: /
                 service:
