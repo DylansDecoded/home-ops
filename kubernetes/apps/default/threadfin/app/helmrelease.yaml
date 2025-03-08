@@ -62,10 +62,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: threadfin
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: 10.1.20.99
+        controller: radarr
         ports:
           http:
             port: *port
@@ -73,16 +70,19 @@ spec:
       app:
         className: internal
         hosts:
-          - host: tv.robsonhome.cloud
+          - host: "{{ .Release.Name }}.devbu.io"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-
-     persistence:
+    persistence:
       config:
+        enabled: true
         existingClaim: threadfin
+        globalMounts:
+          - path: /home/threadfin/conf
+
 
       tmp:
         enabled: true
