@@ -62,7 +62,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: radarr
+        controller: threadfin
         ports:
           http:
             port: *port
