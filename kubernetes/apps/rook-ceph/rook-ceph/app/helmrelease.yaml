@@ -1,12 +1,12 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: rook-ceph-operator
+  name: rook-ceph
 spec:
-  interval: 1h
-  timeout: 15m
+  interval: 30m
+  releaseName: rook-ceph
   chart:
     spec:
       chart: rook-ceph
@@ -15,14 +15,6 @@ spec:
         kind: HelmRepository
         name: rook-ceph
         namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
   values:
     crds:
       enabled: true
@@ -34,6 +26,8 @@ spec:
       serviceMonitor:
         enabled: true
     enableDiscoveryDaemon: true
+    image:
+      repository: ghcr.io/rook/ceph
     monitoring:
       enabled: true
     resources:
