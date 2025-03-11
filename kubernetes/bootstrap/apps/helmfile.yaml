@@ -43,7 +43,7 @@ releases:
     needs: ["cert-manager/cert-manager"]
 
   - name: wipe-rook
-    namespace: kube-system
+    namespace: default
     chart: oci://ghcr.io/bjw-s/helm/app-template
     version: 3.7.2
     values: ["./templates/wipe-rook.yaml.gotmpl"]
