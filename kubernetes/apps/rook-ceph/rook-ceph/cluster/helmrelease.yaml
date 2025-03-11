@@ -34,7 +34,7 @@ spec:
           name: rook.robsonhome.cloud
           path: /
     toolbox:
-      enabled: true
+      enabled: false
     cephClusterSpec:
       cephConfig:
         global:
@@ -115,10 +115,10 @@ spec:
           mountOptions: ["discard"]
           parameters:
             # TODO: Consider enabling compression on cluster rebuild
-            # compression_mode: aggressive
-            # compression_algorithm: zstd
+            compression_mode: aggressive
+            compression_algorithm: zstd
             imageFormat: "2"
-            imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
+            imageFeatures: layering
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
             csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
