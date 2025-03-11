@@ -34,7 +34,7 @@ spec:
           name: rook.robsonhome.cloud
           path: /
     toolbox:
-      enabled: false
+      enabled: true
     cephClusterSpec:
       cephConfig:
         global:
