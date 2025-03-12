@@ -28,19 +28,12 @@ releases:
     values: ["../../apps/kube-system/coredns/app/helm/values.yaml"]
     needs: ["kube-system/cilium"]
 
-  - name: cert-manager
-    namespace: cert-manager
-    chart: jetstack/cert-manager
-    version: v1.17.1
-    values: ["../../apps/cert-manager/cert-manager/app/helm/values.yaml"]
-    needs: ["kube-system/coredns"]
-
   - name: external-secrets
     namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.14.4
     values: ["../../apps/external-secrets/external-secrets/app/helm/values.yaml"]
-    needs: ["cert-manager/cert-manager"]
+    needs: ["kube-system/coredns"]
 
   - name: wipe-rook
     namespace: default
@@ -54,7 +47,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.17.0
     values: ["../../apps/flux-system/flux-operator/app/helm/values.yaml"]
-    needs: ["kube-system/wipe-rook"]
+    needs: ["default/wipe-rook"]
 
   - name: flux-instance
     namespace: flux-system
