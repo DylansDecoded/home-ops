@@ -12,10 +12,9 @@ instance:
     - notification-controller
   sync:
     kind: GitRepository
-    url: https://github.com/DylansDecoded/home-ops
-    ref: refs/heads/main
+    url: "https://github.com/DylansDecoded/homelab.git"
+    ref: "refs/heads/main"
     path: kubernetes/flux/cluster
-    interval: 1h
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux
