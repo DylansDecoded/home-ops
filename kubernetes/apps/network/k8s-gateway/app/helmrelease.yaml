@@ -3,27 +3,27 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: jetstack
-  namespace: cert-manager # Required for Renovate lookups
+  name: k8s-gateway
+  namespace: network # Required for Renovate lookups
 spec:
   interval: 1h
-  url: https://charts.jetstack.io
+  url: https://ori-edge.github.io/k8s_gateway
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cert-manager
+  name: k8s-gateway
 spec:
   interval: 1h
   chart:
     spec:
-      chart: cert-manager
-      version: v1.17.1
+      chart: k8s-gateway
+      version: 2.4.0
       sourceRef:
         kind: HelmRepository
-        name: jetstack
-        namespace: cert-manager
+        name: k8s-gateway
+        namespace: network
   install:
     remediation:
       retries: 3
@@ -31,6 +31,14 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: cert-manager-values
+  values:
+    fullnameOverride: k8s-gateway
+    domain: "robsonhome.cloud"
+    ttl: 1
+    service:
+      type: LoadBalancer
+      port: 53
+      annotations:
+        lbipam.cilium.io/ips: "10.1.20.121"
+      externalTrafficPolicy: Cluster
+    watchedResources: ["Ingress", "Service"]

@@ -3,19 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app openebs
-  namespace: &namespace openebs-system
+  name: &app pihole-dns
+  namespace: &namespace network
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
-      name: *app
-      namespace: *namespace
   interval: 1h
-  path: ./kubernetes/apps/openebs-system/openebs/app
+  path: ./kubernetes/apps/network/pihole-dns/app
   prune: true
   retryInterval: 2m
   sourceRef:
@@ -24,3 +19,4 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   timeout: 5m
+  wait: false
