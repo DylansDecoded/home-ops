@@ -3,13 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: gatus
+  name: &app gatus
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
-    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -18,9 +17,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       gatus:
@@ -54,9 +50,6 @@ spec:
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
               WEB_PORT: &port 80
-            envFrom:
-              - secretRef:
-                  name: gatus-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -86,23 +79,30 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: gatus
         ports:
           http:
             port: *port
-    ingress:
+    serviceMonitor:
       app:
-        className: external
-        hosts:
-          - host: status.robsonhome.cloud
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        serviceName: gatus
+        endpoints:
+          - port: http
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.robsonhome.cloud"
+          - status.robsonhome.cloud
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     serviceAccount:
       create: true
       name: gatus
