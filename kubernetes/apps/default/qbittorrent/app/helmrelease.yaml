@@ -198,12 +198,12 @@ spec:
               - path: *gluetunAuthPath
                 subPath: auth.toml
 
-      dnsdist:
+      coredns:
         type: configMap
         name: qbittorrent-coredns
         advancedMounts:
           qbittorrent:
-            dnsdist:
+            coredns:
               - path: /etc/coredns/Corefile
                 subPath: Corefile
                 readOnly: true
