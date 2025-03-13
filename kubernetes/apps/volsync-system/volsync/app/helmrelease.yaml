@@ -1,11 +1,11 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: volsync
 spec:
-  interval: 1h
+  interval: 30m
   chart:
     spec:
       chart: volsync
@@ -13,7 +13,8 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: backube
-        namespace: volsync-system
+        namespace: flux-system
+      interval: 30m
   install:
     remediation:
       retries: 3
