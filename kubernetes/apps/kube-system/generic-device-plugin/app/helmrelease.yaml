@@ -4,15 +4,10 @@ kind: HelmRelease
 metadata:
   name: generic-device-plugin
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
   install:
     remediation:
       retries: 3
@@ -31,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/squat/generic-device-plugin
-              tag: latest@sha256:ba6f0b4cf6c858d6ad29ba4d32e4da11638abbc7d96436bf04f582a97b2b8821
+              tag: latest@sha256:12fec7756698072f6fa4546558460bc511de8a887c27183120af6417465b4355
             args:
               - --log-level=info
               - --config=/config/config.yaml

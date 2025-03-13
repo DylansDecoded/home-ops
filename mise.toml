@@ -3,3 +3,7 @@ KUBECONFIG = '{{config_root}}/kubernetes/kubeconfig'
 MINIJINJA_CONFIG_FILE = '{{config_root}}/.minijinja.toml'
 SOPS_AGE_KEY_FILE = '{{config_root}}/age.key'
 TALOSCONFIG = '{{config_root}}/kubernetes/talosconfig'
+# Included file paths
+_.file = [
+  "{{config_root}}/kubernetes/apps/system-upgrade/.env"
+]

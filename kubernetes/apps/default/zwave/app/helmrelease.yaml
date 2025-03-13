@@ -5,15 +5,11 @@ kind: HelmRelease
 metadata:
   name: zwave
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -34,7 +30,7 @@ spec:
           app:
             image:
               repository: ghcr.io/zwave-js/zwave-js-ui
-              tag: 9.30.1@sha256:69966e5a4bf1a6c52cb8b1c15037471a47cd07ae4fcdf24bf807019bba9ce2ee
+              tag: 9.32.0@sha256:e93c6c3558b5a6727f9411a8c220ecc52b72d98e035760220f89cee3eea244a3
             env:
               TZ: America/New_York
               PORT: &port 80

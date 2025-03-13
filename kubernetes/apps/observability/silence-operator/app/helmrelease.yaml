@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: silence-operator
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: silence-operator
@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: wiremind
-        namespace: flux-system
+        namespace: observability
   install:
     remediation:
       retries: 3
@@ -22,11 +22,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: observability
-    - name: silence-operator-crds
-      namespace: observability
   values:
     image:
       name: quay.io/giantswarm/silence-operator

@@ -5,15 +5,11 @@ kind: HelmRelease
 metadata:
   name: autobrr
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -34,7 +30,7 @@ spec:
           app:
             image:
               repository: ghcr.io/autobrr/autobrr
-              tag: v1.58.0@sha256:9b11c36605da242933b93dfc0c572bd17fa05af9aba2ae70deafe4977ba8048b
+              tag: v1.59.0@sha256:2c0dda4c7cc4e0597292132e3abe93b86e38fa21a491bef4de32861eb6700029
             env:
               AUTOBRR__CHECK_FOR_UPDATES: "false"
               AUTOBRR__HOST: 0.0.0.0

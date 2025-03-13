@@ -5,15 +5,11 @@ kind: HelmRelease
 metadata:
   name: home-assistant
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -34,7 +30,7 @@ spec:
           app:
             image:
               repository: ghcr.io/onedr0p/home-assistant
-              tag: 2025.2.5@sha256:595ced22062da128b78d249c84594f82649c097bb765a3c833afb3fce7e3a66d
+              tag: 2025.3.1@sha256:a5377eae2e414adb58413dbcf29cf9b08350ad33d123dfdbc3eaa94b44f7443c
             env:
               TZ: America/New_York
               HASS_HTTP_TRUSTED_PROXY_1: 10.1.20.0/24
@@ -54,7 +50,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
+              tag: 4.98.0@sha256:49190032f1ab73cdcd0c930b1e961c20110aa1b6004d296c14681eb11c9f49d8
             args: [
               "--auth", "none",
               "--user-data-dir", "/config/.vscode",
@@ -67,7 +63,10 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
+
     defaultPodOptions:
+      nodeSelector:
+        topology.kubernetes.io/zone=w
       annotations:
           k8s.v1.cni.cncf.io/networks: |
             [{

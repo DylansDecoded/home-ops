@@ -10,19 +10,20 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../flux/components/volsync
+    - ../../../../components/volsync
   dependsOn:
-    - name: onepassword-store
+    - name: onepassword
       namespace: external-secrets
-    - name: volsync
-      namespace: volsync-system
-  interval: 30m
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 1h
   path: ./kubernetes/apps/default/recyclarr/app
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 1Gi
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system

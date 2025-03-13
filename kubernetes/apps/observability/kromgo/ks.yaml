@@ -10,14 +10,15 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../flux/components/gatus/external
-  interval: 30m
+    - ../../../../components/gatus/external
+  interval: 1h
   path: ./kubernetes/apps/observability/kromgo/app
   postBuild:
     substitute:
       APP: *app
       GATUS_PATH: /talos_version
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
