@@ -65,7 +65,8 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        devicePathFilter: /dev/disk/by-id/ata-SAMSUNG_.*
+        deviceFilter: sda
+        # devicePathFilter: /dev/disk/by-id/ata-SAMSUNG_.*
         config:
           osdsPerDevice: "1"
     cephBlockPools:
