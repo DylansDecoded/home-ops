@@ -74,7 +74,7 @@ spec:
             [{
               "name":"netattach-iot",
               "namespace": "network",
-              "ips": ["10.1.40.200/24"],
+              "ips": ["10.1.20.235/24"],
               "mac": "3e:59:e4:f7:43:09"
             }]
       securityContext:
