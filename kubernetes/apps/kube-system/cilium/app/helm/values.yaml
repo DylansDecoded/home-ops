@@ -21,6 +21,7 @@ cni:
   exclusive: false
 dashboards:
   enabled: true
+# devices: enp+
 enableIPv4BIGTCP: true
 endpointRoutes:
   enabled: true
@@ -29,6 +30,7 @@ envoy:
 gatewayAPI:
   enabled: true
   enableAlpn: true
+  xffNumTrustedHops: 1
 hubble:
   enabled: false
 ipam:
