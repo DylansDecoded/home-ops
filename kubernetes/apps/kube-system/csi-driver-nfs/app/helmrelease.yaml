@@ -3,39 +3,48 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: piraeus
+  name: csi-driver-nfs
   namespace: kube-system # Required for Renovate lookups
 spec:
   interval: 12h
-  url: https://piraeus.io/helm-charts/
+  url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: snapshot-controller
+  name: csi-driver-nfs
 spec:
   interval: 1h
   chart:
     spec:
-      chart: snapshot-controller
-      version: 4.0.1
+      chart: csi-driver-nfs
+      version: v4.10.0
       sourceRef:
         kind: HelmRepository
-        name: piraeus
+        name: csi-driver-nfs
         namespace: kube-system
   install:
-    crds: CreateReplace
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
-    crds: CreateReplace
     remediation:
       strategy: rollback
       retries: 3
   values:
     controller:
-      replicaCount: 2
-      serviceMonitor:
-        create: true
+      replicas: 1
+    storageClass:
+      create: true
+      name: nfs-slow
+      parameters:
+        server: truenas.robsonhome.cloud
+        share: /mnt/tank/kubernetes
+      mountOptions:
+        - nfsvers=4.2
+        - nconnect=16
+        - hard
+        - noatime
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
