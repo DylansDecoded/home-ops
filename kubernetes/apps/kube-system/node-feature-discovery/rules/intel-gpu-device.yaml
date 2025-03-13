@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/nfd.k8s-sigs.io/nodefeaturerule_v1alpha1.json
 apiVersion: nfd.k8s-sigs.io/v1alpha1
 kind: NodeFeatureRule
@@ -5,12 +6,10 @@ metadata:
   name: intel-gpu-device
 spec:
   rules:
-    - # Intel HD Graphics 530 (Skylake GT2)
+    - # Intel UHD Graphics 630
       name: intel.gpu
       labels:
         intel.feature.node.kubernetes.io/gpu: "true"
-        intel.feature.node.kubernetes.io/gpu-model: "hd-530"
-        intel.feature.node.kubernetes.io/gpu-generation: "skylake"
       matchFeatures:
         - feature: pci.device
           matchExpressions:

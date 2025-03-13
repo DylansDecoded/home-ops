@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: wiremind
-        namespace: observability
+        namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -22,6 +22,9 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  dependsOn:
+    - name: silence-operator-crds
+      namespace: observability
   values:
     image:
       name: quay.io/giantswarm/silence-operator
@@ -46,19 +49,19 @@ spec:
             - name: mountpoint
               value: /etc/nfsmount.conf
               isRegex: false
-      - apiVersion: monitoring.giantswarm.io/v1alpha1
-        kind: Silence
-        metadata:
-          name: ceph-node-local-diskspace-warning
-          namespace: observability
-        spec:
-          matchers:
-            - name: alertname
-              value: CephNodeDiskspaceWarning
-              isRegex: false
-            - name: device
-              value: /dev/sd.*
-              isRegex: true
+      # - apiVersion: monitoring.giantswarm.io/v1alpha1
+      #   kind: Silence
+      #   metadata:
+      #     name: ceph-node-local-diskspace-warning
+      #     namespace: observability
+      #   spec:
+      #     matchers:
+      #       - name: alertname
+      #         value: CephNodeDiskspaceWarning
+      #         isRegex: false
+      #       - name: device
+      #         value: /dev/sd.*
+      #         isRegex: true
       # - apiVersion: monitoring.giantswarm.io/v1alpha1
       #   kind: Silence
       #   metadata:

@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: kube-system
 components:
   - ../../components/common
-  - ../../components/repos/app-template
 resources:
   - ./cilium/ks.yaml
   - ./coredns/ks.yaml
