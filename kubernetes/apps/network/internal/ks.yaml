@@ -3,19 +3,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app internal-external-dns
+  name: &app external-dns-pihole
   namespace: &namespace network
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: onepassword
+    - name: onepassword-store
       namespace: external-secrets
-  interval: 1h
+  interval: 30m
   path: ./kubernetes/apps/network/internal/external-dns
   prune: true
-  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -37,10 +36,9 @@ spec:
   dependsOn:
     - name: cert-manager-tls
       namespace: cert-manager
-  interval: 1h
+  interval: 30m
   path: ./kubernetes/apps/network/internal/ingress-nginx
   prune: true
-  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -53,16 +51,18 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app internal-multus
+  name: &app multus
   namespace: &namespace network
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 1h
+  dependsOn:
+    - name: cert-manager-tls
+      namespace: cert-manager
+  interval: 30m
   path: ./kubernetes/apps/network/internal/multus
   prune: true
-  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
