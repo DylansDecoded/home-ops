@@ -27,7 +27,6 @@ repositories:
     oci: true
 
 releases:
-  releases:
   - name: cilium
     namespace: kube-system
     atomic: true
