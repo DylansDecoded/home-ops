@@ -8,7 +8,7 @@ components:
 resources:
   - ./autobrr/ks.yaml
   - ./cross-seed/ks.yaml
-  - ./emby/ks.yaml
+  # - ./emby/ks.yaml
   - ./emqx/ks.yaml
   - ./frigate/ks.yaml
   - ./home-assistant/ks.yaml
