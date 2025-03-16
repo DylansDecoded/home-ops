@@ -22,11 +22,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: intel-device-plugin-gpu
-      namespace: kube-system
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       emby:
@@ -104,17 +99,14 @@ spec:
     persistence:
       config:
         existingClaim: emby
-        path: /config
-        globalMounts:
-          - path: /config
 
       media:
         type: nfs
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
-          - path: /media
-            readOnly: true
+          - path: /media/media
+            subPath: media
 
       # tv:
       #   type: nfs
