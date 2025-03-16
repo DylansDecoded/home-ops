@@ -30,15 +30,14 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/linuxserver/emby
-              tag: 4.8.11
+              repository: emby/embyserver
+              tag: 4.9.0.42
             args:
               - --device=/dev/dri # grant access to the GPU for container user
             env:
-              UMASK : 22
               TZ: America/New_York
-              PUID: 1000
-              PGID: 1000
+              UID: 1000
+              GID: 1000
             probes:
               liveness: &probes
                 enabled: true
