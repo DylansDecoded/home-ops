@@ -35,7 +35,6 @@ spec:
             args:
               - --device=/dev/dri # grant access to the GPU for container user
             env:
-              UMASK: 022
               TZ: America/New_York
               PUID: 1000
               PGID: 1000
