@@ -29,7 +29,7 @@ spec:
       namespace: rook-ceph
   values:
     controllers:
-      plex:
+      emby:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -37,10 +37,13 @@ spec:
             image:
               repository: ghcr.io/linuxserver/emby
               tag: 4.8.11
+            args:
+              - --device=/dev/dri # grant access to the GPU for container user
             env:
+              UMASK: 022
+              TZ: America/New_York
               PUID: 1000
               PGID: 1000
-              TZ: America/New_York
             probes:
               liveness: &probes
                 enabled: true
@@ -66,6 +69,7 @@ spec:
             resources:
               requests:
                 cpu: 100m
+                gpu.intel.com/i915: 1
               limits:
                 gpu.intel.com/i915: 1
                 memory: 8Gi
@@ -100,12 +104,9 @@ spec:
     persistence:
       config:
         existingClaim: emby
-
-      tmp:
-        type: emptyDir
-
-      transcode:
-        type: emptyDir
+        path: /config
+        globalMounts:
+          - path: /config
 
       media:
         type: nfs
@@ -114,3 +115,19 @@ spec:
         globalMounts:
           - path: /media
             readOnly: true
+
+      # tv:
+      #   type: nfs
+      #   server: truenas.robsonhome.cloud
+      #   path: /mnt/tank/media/tv
+      #   globalMounts:
+      #     - path: /media/tv
+      #       readOnly: true
+
+      # movies:
+      #   type: nfs
+      #   server: truenas.robsonhome.cloud
+      #   path: /mnt/tank/media/movies
+      #   globalMounts:
+      #     - path: /media/movies
+      #       readOnly: true
