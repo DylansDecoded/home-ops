@@ -34,7 +34,7 @@ spec:
           app:
             image:
               repository: docker.io/fallenbagel/jellyseerr
-              tag: 2.4.0@sha256:ae1703c66b0fc12bfcc8cba339a77044246a93f86cc8ea53665e88b3218f111f
+              tag: 2.5.1@sha256:52ca0b18c58ec4e769b8acae9beaae37a520a365c7ead52b7fc3ba1c3352d1f0
             env:
               TZ: America/New_York
               LOG_LEVEL: "info"
