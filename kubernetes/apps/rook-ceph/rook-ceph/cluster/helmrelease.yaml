@@ -39,11 +39,6 @@ spec:
         ingressClassName: internal
         host:
           name: rook.robsonhome.cloud
-      dashboard:
-        enabled: true
-        urlPrefix: /
-        ssl: false
-        prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
     cephClusterSpec:
       cephConfig:
         global:
@@ -56,6 +51,11 @@ spec:
       csi:
         readAffinity:
           enabled: true
+      dashboard:
+        enabled: true
+        urlPrefix: /
+        ssl: false
+        prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
       mgr:
         modules:
           - name: diskprediction_local
