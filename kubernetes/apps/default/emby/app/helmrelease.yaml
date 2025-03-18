@@ -71,13 +71,17 @@ spec:
       config:
         existingClaim: emby
 
-      # media:
-      #   type: nfs
-      #   server: truenas.robsonhome.cloud
-      #   path: /mnt/tank/media
-      #   globalMounts:
-      #     - path: /media/media
-      #       subPath: media
+      cache:
+        existingClaim: emby-cache
+        globalMounts:
+          - path: /config/cache
+            subPath: cache
+
+      tmp:
+        type: emptyDir
+
+      transcode:
+        type: emptyDir
 
       tv:
         type: nfs
