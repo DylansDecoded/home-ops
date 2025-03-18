@@ -37,8 +37,8 @@ spec:
             #   - --device=/dev/dri # grant access to the GPU for container user
             env:
               TZ: America/New_York
-              UID: 1000
-              GID: 1000
+              UID: 568
+              GID: 568
             probes:
               liveness: &probes
                 enabled: true
