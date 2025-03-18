@@ -35,9 +35,9 @@ spec:
             image:
               repository: emby/embyserver
               tag: 4.9.0.42
-            # args:
+            args:
             #   - --init=s6-overlay
-            #   - --device=/dev/dri # grant access to the GPU for container user
+              - --device=/dev/dri # grant access to the GPU for container user
             env:
               TZ: America/New_York
               GIDLIST: 1000,0
