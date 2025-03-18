@@ -99,6 +99,9 @@ spec:
       config:
         existingClaim: emby
 
+      tmp:
+        type: emptyDir
+
       media:
         type: nfs
         server: truenas.robsonhome.cloud
