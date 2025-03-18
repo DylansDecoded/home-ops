@@ -9,12 +9,15 @@ resources:
 configMapGenerator:
   - name: qbittorrent-scripts
     files:
-      - scripts/post-process.sh
-  - name: qbittorrent-coredns
+      - ./resources/post-process.sh
+
+  - name: qbittorrent-dnsdist
     files:
-      - ./config/Corefile
+      - ./resources/dnsdist.conf
+
 generatorOptions:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
+
 configurations:
   - kustomizeconfig.yaml
