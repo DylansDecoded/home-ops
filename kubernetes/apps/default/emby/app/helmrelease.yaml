@@ -77,26 +77,26 @@ spec:
       tmp:
         type: emptyDir
 
-      media:
+      # media:
+      #   type: nfs
+      #   server: truenas.robsonhome.cloud
+      #   path: /mnt/tank/media
+      #   globalMounts:
+      #     - path: /media/media
+      #       subPath: media
+
+      tv:
         type: nfs
         server: truenas.robsonhome.cloud
-        path: /mnt/tank/media
+        path: /mnt/tank/media/tv
         globalMounts:
-          - path: /media/media
-            subPath: media
+          - path: /media/tv
+            readOnly: true
 
-      # tv:
-      #   type: nfs
-      #   server: truenas.robsonhome.cloud
-      #   path: /mnt/tank/media/tv
-      #   globalMounts:
-      #     - path: /media/tv
-      #       readOnly: true
-
-      # movies:
-      #   type: nfs
-      #   server: truenas.robsonhome.cloud
-      #   path: /mnt/tank/media/movies
-      #   globalMounts:
-      #     - path: /media/movies
-      #       readOnly: true
+      movies:
+        type: nfs
+        server: truenas.robsonhome.cloud
+        path: /mnt/tank/media/movies
+        globalMounts:
+          - path: /media/movies
+            readOnly: true
