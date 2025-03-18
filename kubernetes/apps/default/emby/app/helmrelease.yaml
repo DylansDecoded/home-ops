@@ -35,8 +35,6 @@ spec:
             image:
               repository: emby/embyserver
               tag: 4.9.0.42
-            args:
-              - --device=/dev/dri # grant access to the GPU for container user
             env:
               TZ: America/New_York
               GIDLIST: 1000,0
@@ -72,14 +70,6 @@ spec:
     persistence:
       config:
         existingClaim: emby
-
-      gpu-device:
-        type: hostPath
-        path: /dev/dri
-        globalMounts:
-          - path: /dev/dri
-            subPath: /dev/dri
-            readOnly: true
 
       # media:
       #   type: nfs
