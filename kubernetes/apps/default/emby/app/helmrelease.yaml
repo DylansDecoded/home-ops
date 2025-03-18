@@ -74,7 +74,7 @@ spec:
       cache:
         existingClaim: emby-cache
         globalMounts:
-          - path: /config/cache
+          - path: /cache
             subPath: cache
 
       tmp:
