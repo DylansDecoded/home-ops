@@ -25,6 +25,9 @@ spec:
   values:
     controllers:
       emby:
+        pod:
+          nodeSelector:
+            intel.feature.node.kubernetes.io/gpu: "true"
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -56,10 +59,10 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 10
-            securityContext:
-              allowPrivilegeEscalation: false
-              # readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            # securityContext:
+            #   allowPrivilegeEscalation: true
+            #   # readOnlyRootFilesystem: true
+            #   capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
@@ -67,17 +70,7 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 8Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [44]
-        seccompProfile: { type: RuntimeDefault }
-      nodeSelector:
-        intel.feature.node.kubernetes.io/gpu: "true"
+
     service:
       app:
         controller: emby
