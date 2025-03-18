@@ -37,7 +37,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-dns-cloudflared
+    - name: external-dns-cloudflare
       namespace: network
   interval: 1h
   path: ./kubernetes/apps/network/external/echo
