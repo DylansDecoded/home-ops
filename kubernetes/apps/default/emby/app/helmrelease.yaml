@@ -36,7 +36,6 @@ spec:
               repository: emby/embyserver
               tag: 4.9.0.42
             args:
-            #   - --init=s6-overlay
               - --device=/dev/dri # grant access to the GPU for container user
             env:
               TZ: America/New_York
@@ -74,8 +73,13 @@ spec:
       config:
         existingClaim: emby
 
-      tmp:
-        type: emptyDir
+      gpu-device:
+        type: hostPath
+        path: /dev/dri
+        globalMounts:
+          - path: /dev/dri
+            subPath: /dev/dri
+            readOnly: true
 
       # media:
       #   type: nfs
