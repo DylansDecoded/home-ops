@@ -71,10 +71,10 @@ spec:
       config:
         existingClaim: emby
 
-      cache:
-        existingClaim: emby-cache
-        globalMounts:
-          - path: /config/Cache
+      # cache:
+      #   existingClaim: emby-cache
+      #   globalMounts:
+      #     - path: /config/Cache
 
       tmp:
         type: emptyDir
