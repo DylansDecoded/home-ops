@@ -29,7 +29,7 @@ spec:
     controllers:
       cross-seed:
         annotations:
-          reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: cross-seed-secret
         containers:
           app:
             image:
