@@ -90,7 +90,18 @@ cameras:
       track:
         - person
         - dog
-        - cat
+
+    zones:
+      # loitering_time: 3 # unit is in seconds
+      front_yard:
+        coordinates: 0.128,0.778,0.215,0.627,0.172,0.537,0.126,0.537,0.251,0.357,0.368,0.297,0.539,0.317,0.618,0.344,0.752,1,0.498,0.996,0.153,0.996,0.116,0.829,0.134,0.809
+        objects:
+          - person
+          - dog
+      front_porch:
+        coordinates: 0.089,0.652,0.163,0.539,0.206,0.581,0.111,0.745
+        objects:
+          - person
 
 
   backporch:
