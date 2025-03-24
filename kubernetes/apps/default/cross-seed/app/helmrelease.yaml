@@ -38,7 +38,9 @@ spec:
             env:
               CROSS_SEED_PORT: &port 80
               TZ: America/New_York
-            args: ["daemon"]
+            args:
+              - daemon
+              - -v
             probes:
               liveness: &probes
                 enabled: true
@@ -88,6 +90,7 @@ spec:
         type: nfs
         server: truenas.robsonhome.cloud
         path: /mnt/tank/media
-        globalMounts:
-          - path: /media/downloads
-            subPath: downloads
+        advancedMounts:
+          cross-seed:
+            app:
+              - path: /media
