@@ -13,7 +13,7 @@ configMapGenerator:
 
   - name: qbittorrent-coredns
     files:
-      - ./resources/Corefile
+      - ./resources/dnsdist.conf
 
 generatorOptions:
   disableNameSuffixHash: true
