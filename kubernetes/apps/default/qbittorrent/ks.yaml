@@ -21,7 +21,7 @@ spec:
   path: ./kubernetes/apps/default/qbittorrent/app
   postBuild:
     substitute:
-      APP: *app
+      APP: qbittorrent-config
       GATUS_SUBDOMAIN: qb
       VOLSYNC_CAPACITY: 2Gi
   prune: true
