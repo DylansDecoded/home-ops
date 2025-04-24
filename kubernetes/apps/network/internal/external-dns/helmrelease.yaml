@@ -23,8 +23,8 @@ spec:
       strategy: rollback
       retries: 3
   values:
-    fullnameOverride: *app
-    provider: rfc2136
+    provider:
+      name: rfc2136
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
         value: "10.1.20.43"
