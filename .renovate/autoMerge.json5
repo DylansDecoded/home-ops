@@ -11,7 +11,7 @@
       ignoreTests: false,
     },
     {
-      description: "Auto-merge OCI Charts",
+      description: "Auto-merge Charts",
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
@@ -26,6 +26,16 @@
       automergeType: "branch",
       matchUpdateTypes: ["minor", "patch", "digest"],
       minimumReleaseAge: "3 days",
+      ignoreTests: true,
+    },
+    {
+      description: "Auto-merge trusted GitHub Actions",
+      matchManagers: ["github-actions"],
+      matchPackageNames: ["/^actions\//"],
+      automerge: true,
+      automergeType: "branch",
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      minimumReleaseAge: "1 minute",
       ignoreTests: true,
     },
     {
