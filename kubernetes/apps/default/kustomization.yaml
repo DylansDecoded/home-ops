@@ -13,7 +13,6 @@ resources:
   - ./frigate/ks.yaml
   - ./home-assistant/ks.yaml
   - ./jellyseerr/ks.yaml
-  # - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
@@ -21,7 +20,12 @@ resources:
   - ./ring-mqtt/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
-  # - ./threadfin/ks.yaml
   - ./unpackerr/ks.yaml
   - ./zigbee/ks.yaml
   - ./zwave/ks.yaml
+
+
+
+aws s3 rm s3://volsync --recursive \
+  --endpoint-url=https://5a8862340df663c8595cce75ffa77854.r2.cloudflarestorage.com \
+  --profile cloudflare-r2

@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: volsync
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: volsync
@@ -20,18 +20,13 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
-      strategy: rollback
       retries: 3
-  dependsOn:
-    - name: snapshot-controller
-      namespace: kube-system
   values:
     manageCRDs: true
-    replicaCount: 1
+    replicaCount: 2
     metrics:
       disableAuth: true
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 1000
       runAsGroup: 1000
-      seccompProfile: { type: RuntimeDefault }
