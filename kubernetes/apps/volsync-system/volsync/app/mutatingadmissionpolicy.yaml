@@ -99,7 +99,7 @@ spec:
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
                   server: "truenas.robsonhome.cloud",
-                  path: "/mnt/tank/volsync"
+                  path: "/mnt/tank/Volsync"
                 }
               }
             }
