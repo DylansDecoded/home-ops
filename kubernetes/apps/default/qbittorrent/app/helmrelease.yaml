@@ -52,21 +52,31 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
             securityContext:
+              runAsUser: 1000
+              runAsGroup: 100
+              runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 100m
+                cpu: 25m
+                memory: 1Gi
               limits:
                 memory: 6Gi
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+      terminationGracePeriodSeconds: 120
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values: ["sabnzbd"]
+                topologyKey: kubernetes.io/hostname
     service:
       app:
         controller: qbittorrent
@@ -85,7 +95,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: &host qbittorrent.robsonhome.cloud
+          - host: &host qb.robsonhome.cloud
             paths:
               - path: /
                 service:
