@@ -85,7 +85,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: &host qb.robsonhome.cloud
+          - host: &host qbittorrent.robsonhome.cloud
             paths:
               - path: /
                 service:
