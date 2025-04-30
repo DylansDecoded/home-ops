@@ -21,7 +21,7 @@ spec:
   path: ./kubernetes/apps/default/autobrr/app
   postBuild:
     substitute:
-      APP: autobrr
+      APP: *app
       VOLSYNC_CAPACITY: 5Gi
   prune: true
   retryInterval: 2m
