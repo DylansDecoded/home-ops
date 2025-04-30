@@ -96,7 +96,7 @@ spec:
               - *host
     persistence:
       config:
-        existingClaim: qbittorrent-config
+        existingClaim: qbittorrent
       media:
         type: nfs
         server: truenas.robsonhome.cloud
