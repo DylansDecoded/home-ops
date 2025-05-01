@@ -80,6 +80,9 @@ cameras:
 
         - path: rtsp://127.0.0.1:8554/driveway_sub
           roles: ['detect']
+    motion:
+      mask:
+        - 0.204,0.374,0.218,0.359,0.226,0.403,0.208,0.423
 
     detect:
       enabled: True
@@ -102,9 +105,6 @@ cameras:
         coordinates: 0.089,0.652,0.163,0.539,0.206,0.581,0.111,0.745
         objects:
           - person
-      motion:
-        mask:
-          - 0.204,0.374,0.218,0.359,0.226,0.403,0.208,0.423
 
   backporch:
     ffmpeg:
