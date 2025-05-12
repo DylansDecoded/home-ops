@@ -68,7 +68,7 @@ spec:
     extraArgs:
       - --ignore-ingress-tls-spec
       - --annotation-filter=external-dns/opnsense in (true)
-      - --webhook-provider-url=http://localhost:8800
+      # - --webhook-provider-url=http://localhost:8800
     policy: sync
     sources:
       - ingress
