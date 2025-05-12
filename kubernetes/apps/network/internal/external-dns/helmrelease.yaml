@@ -32,7 +32,7 @@ spec:
       - name: OPNSENSE_API_SECRET
         valueFrom:
           secretKeyRef:
-            name: external-dns-opnsense-secret
+            name: &secret external-dns-opnsense-secret
             key: OPNSENSE_API_SECRET
       - name: OPNSENSE_API_KEY
         valueFrom:
