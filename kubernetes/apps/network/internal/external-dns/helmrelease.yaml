@@ -42,12 +42,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: &secret external-dns-opnsense-secret
-                key: api_key
+                key: OPNSENSE_API_KEY
           - name: OPNSENSE_API_SECRET
             valueFrom:
               secretKeyRef:
                 name: *secret
-                key: api_secret
+                key: OPNSENSE_API_SECRET
         livenessProbe:
           httpGet:
             path: /healthz
