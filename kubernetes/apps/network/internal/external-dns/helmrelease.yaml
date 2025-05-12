@@ -23,31 +23,48 @@ spec:
       strategy: rollback
       retries: 3
   values:
+
+    fullnameOverride: external-dns-opnsense
+    logLevel: debug
     provider:
-      name: rfc2136
+      name: webhook
     env:
-      - name: EXTERNAL_DNS_RFC2136_HOST
-        value: "10.1.20.43"
-      - name: EXTERNAL_DNS_RFC2136_PORT
-        value: "53"
-      - name: EXTERNAL_DNS_RFC2136_ZONE
-        value: &domain robsonhome.cloud
-      - name: EXTERNAL_DNS_RFC2136_TSIG_AXFR
-        value: "true"
-      - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
-        value: kubernetes-main-key
-      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
-        value: hmac-sha256
-      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+      - name: OPNSENSE_API_SECRET
         valueFrom:
           secretKeyRef:
-            name: &secret external-dns-technitium-secret
-            key: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+            name: external-dns-opnsense-secret
+            key: OPNSENSE_API_SECRET
+      - name: OPNSENSE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: external-dns-opnsense-secret
+            key: OPNSENSE_API_KEY
+      - name: OPNSENSE_HOST
+        value: https://10.1.1.1
+      # - name: OPNSENSE_SKIP_TLS_VERIFY
+      #   value: "true" # optional depending on your environment
+      - name: LOG_LEVEL
+        value: debug
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: http-wh-metrics
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      httpGet:
+        path: /readyz
+        port: http-wh-metrics
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    extraArgs:
+      - --ignore-ingress-tls-spec
     policy: sync
     sources: ["ingress", "service"]
+    registry: noop
+    domainFilters: ["robsonhome.cloud"]
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: [*domain]
     serviceMonitor:
       enabled: true
     podAnnotations:
