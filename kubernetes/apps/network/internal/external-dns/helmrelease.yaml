@@ -23,7 +23,6 @@ spec:
       strategy: rollback
       retries: 3
   values:
-
     fullnameOverride: external-dns-opnsense
     logLevel: info
     interval: 2m
