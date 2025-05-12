@@ -25,4 +25,4 @@ spec:
       retries: 3
   valuesFrom:
     - kind: ConfigMap
-      name: external-dns-opnsense-helm-values
+      name: external-dns-opnsense-values
