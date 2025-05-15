@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: docker.io/tsightler/ring-mqtt
-              tag: 5.8.0
+              tag: 5.8.1
             env:
               ENABLECAMERAS: "true"
               SNAPSHOTMODE: "true"
