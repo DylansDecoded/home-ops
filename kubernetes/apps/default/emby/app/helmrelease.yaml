@@ -34,7 +34,7 @@ spec:
           app:
             image:
               repository: emby/embyserver
-              tag: 4.9.0.59
+              tag: 4.9.1.0
             env:
               TZ: America/New_York
               GIDLIST: 1000,0
