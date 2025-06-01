@@ -38,9 +38,9 @@ spec:
               UN_WEBSERVER_LISTEN_ADDR: 0.0.0.0:80
               UN_WEBSERVER_LOG_FILE: /logs/webserver.log
               UN_ACTIVITY: true
-              UN_SONARR_0_URL: http://sonarr.default.svc.cluster.local
+              UN_SONARR_0_URL: http://sonarr.downloads.svc.cluster.local
               UN_SONARR_0_PATHS_0: /media/downloads/torrents/complete/sonarr
-              UN_RADARR_0_URL: http://radarr.default.svc.cluster.local
+              UN_RADARR_0_URL: http://radarr.downloads.svc.cluster.local
               UN_RADARR_0_PATHS_0: /media/downloads/torrents/complete/radarr
             envFrom:
               - secretRef:

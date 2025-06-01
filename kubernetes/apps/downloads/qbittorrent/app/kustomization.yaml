@@ -3,15 +3,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./externalsecret.yaml
   - ./helmrelease.yaml
+
 configMapGenerator:
-  - name: qbittorrent-loki-rules
+  - name: qbittorrent-coredns
     files:
-      - qbittorrent.yaml=./lokirule.yaml
-    options:
-      labels:
-        loki_rule: "true"
+      - ./config/Corefile
 generatorOptions:
-  disableNameSuffixHash: true
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
+configurations:
+  - kustomizeconfig.yaml
