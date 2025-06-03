@@ -18,7 +18,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: ./kubernetes/apps/defaults/qbittorrent/app
+  path: ./kubernetes/apps/default/qbittorrent/app
   postBuild:
     substitute:
       APP: *app
@@ -48,7 +48,7 @@ spec:
     - name: onepassword
       namespace: external-secrets
   interval: 1h
-  path: ./kubernetes/apps/defaults/qbittorrent/tools
+  path: ./kubernetes/apps/default/qbittorrent/tools
   prune: true
   retryInterval: 2m
   sourceRef:

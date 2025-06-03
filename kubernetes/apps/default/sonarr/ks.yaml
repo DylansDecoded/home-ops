@@ -18,7 +18,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: ./kubernetes/apps/defaults/sonarr/app
+  path: ./kubernetes/apps/default/sonarr/app
   postBuild:
     substitute:
       APP: *app
