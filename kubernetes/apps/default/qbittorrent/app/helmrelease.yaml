@@ -188,7 +188,7 @@ spec:
         path: /mnt/tank/media
         globalMounts:
           - path: /media/downloads/torrents
-            subPath: torrents/complete
+            subPath: downloads/torrents
       gluetun-auth:
         type: secret
         name: qbittorrent-gluetun-secret
