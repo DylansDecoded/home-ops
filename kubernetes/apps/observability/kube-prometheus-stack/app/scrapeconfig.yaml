@@ -38,7 +38,7 @@ metadata:
 spec:
   staticConfigs:
     - targets:
-        - pikvm.robsonhome.cloud
+        - 10.1.10.207
   metricsPath: /api/export/prometheus/metrics
   relabelings:
     - action: replace
@@ -53,7 +53,7 @@ metadata:
 spec:
   staticConfigs:
     - targets:
-        - zigbee-controller.robsonhome.cloud
+        - 10.1.20.7
   metricsPath: /metrics
   relabelings:
     - action: replace
