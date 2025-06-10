@@ -1,6 +1,6 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
     "config:recommended",
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
@@ -14,24 +14,24 @@
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":timezone(America/New_York)"
+    ":timezone(America/New_York)",
   ],
-  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
-  "suppressNotifications": [
+  dependencyDashboardTitle: "Renovate Dashboard 🤖",
+  suppressNotifications: [
     "prEditedNotification",
-    "prIgnoreNotification"
+    "prIgnoreNotification",
   ],
-  "ignorePaths": [
+  ignorePaths: [
     "**/*.sops.*",
-    "**/resources/**"
+    "**/resources/**",
   ],
-  "flux": {
-    "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"]
+  flux: {
+    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
   },
   "helm-values": {
-    "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"]
+    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
   },
-  "kubernetes": {
-    "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"]
-  }
+  kubernetes: {
+    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
+  },
 }
