@@ -75,7 +75,7 @@ spec:
     extraArgs:
       - --ignore-ingress-tls-spec
       - --annotation-filter=external-dns/opnsense in (true)
-      # - --ingress-class=internal
+      - --webhook-provider-url=http://localhost:8800
     policy: sync
     registry: noop
     sources: ["gateway-httproute", "service"]
