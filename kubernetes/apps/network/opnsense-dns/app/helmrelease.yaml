@@ -31,52 +31,58 @@ spec:
     remediation:
       retries: 3
   values:
-    fullnameOverride: *app
-    # logLevel: debug
-    podAnnotations:
-      secret.reloader.stakater.com/reload: &secret opnsense-dns-secret
+    fullnameOverride: external-dns-opnsense
+    logLevel: info
+    interval: 2m
     provider:
       name: webhook
+      managedRecordTypes:
+        - A
+        - AAAA
       webhook:
         image:
-          repository: ghcr.io/crutonjohn/external-dns-opnsense-webhook
-          tag: v0.1.0@sha256:72d4f5c79e515b8a70bb2e48f6472c746671a3ae3d8ad224aa686dd7192e1609
+          repository: ghcr.io/jobs62/opnsense_unbound_external-dns_webhook
+          tag: v0.4.5@sha256:22d3bd25bacaa0a8445a746d6541a8994bcb54e6047f5a079574adc792f88034
         env:
-          - name: OPNSENSE_SKIP_TLS_VERIFY
-            value: "true" # optional
-          - name: LOG_LEVEL
-            value: info
-          - name: OPNSENSE_HOST
-            value: http://opnsense.robsonhome.cloud # replace with the address to your OPNsense router
-          - name: OPNSENSE_API_KEY
+          - name: OPNSENSE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: &secret opnsense-dns-secret
+                key: OPNSENSE_API_SECRET
+          - name: OPNSENSE_KEY
             valueFrom:
               secretKeyRef:
                 name: *secret
                 key: OPNSENSE_API_KEY
-          - name: OPNSENSE_API_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: *secret
-                key: OPNSENSE_API_SECRET
+          - name: OPNSENSE_BASE
+            value: http://opnsense.robsonhome.cloud
+          - name: OPNSENSE_ALLOW_INVALID_CERTS
+            value: "false"
+          - name: OPNSENSE_DOMAIN_FILTERS
+            value: '[".robsonhome.cloud"]'
         livenessProbe:
           httpGet:
             path: /healthz
-            port: http-webhook
+            port: http-wh-metrics
           initialDelaySeconds: 10
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /readyz
-            port: http-webhook
+            port: http-wh-metrics
           initialDelaySeconds: 10
           timeoutSeconds: 5
     extraArgs:
       - --ignore-ingress-tls-spec
+      - --annotation-filter=external-dns/opnsense in (true)
       # - --ingress-class=internal
     policy: sync
+    registry: noop
     sources: ["gateway-httproute", "service"]
     txtOwnerId: main
     txtPrefix: k8s.main.
     domainFilters: ["robsonhome.cloud"]
     serviceMonitor:
       enabled: true
+    podAnnotations:
+      secret.reloader.stakater.com/reload: *secret
