@@ -3,7 +3,7 @@ originRequest:
   originServerName: external.robsonhome.cloud
 
 ingress:
-  - hostname: devbu.io
+  - hostname: robsonhome.cloud
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.robsonhome.cloud"
     service: *svc
