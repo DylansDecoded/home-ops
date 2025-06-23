@@ -47,10 +47,7 @@ spec:
           - name: LOG_LEVEL
             value: debug
           - name: OPNSENSE_HOST
-            valueFrom:
-              secretKeyRef:
-                name: *secret
-                key: OPNSENSE_HOST
+            value: http://opnsense.robsonhome.cloud # replace with the address to your OPNsense router
           - name: OPNSENSE_API_KEY
             valueFrom:
               secretKeyRef:
@@ -75,9 +72,8 @@ spec:
           timeoutSeconds: 5
     extraArgs:
       - --ignore-ingress-tls-spec
-      - --ingress-class=internal
     policy: sync
-    sources: ["ingress", "service"]
+    sources: ["ingress", "service", "crd"]
     txtOwnerId: default
     txtPrefix: k8s.
     domainFilters: ["robsonhome.cloud"]
