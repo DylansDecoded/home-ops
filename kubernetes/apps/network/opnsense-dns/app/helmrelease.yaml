@@ -45,7 +45,7 @@ spec:
           - name: OPNSENSE_SKIP_TLS_VERIFY
             value: "true" # optional
           - name: LOG_LEVEL
-            value: debug
+            value: info
           - name: OPNSENSE_HOST
             value: http://opnsense.robsonhome.cloud # replace with the address to your OPNsense router
           - name: OPNSENSE_API_KEY
@@ -72,7 +72,7 @@ spec:
           timeoutSeconds: 5
     extraArgs:
       - --ignore-ingress-tls-spec
-      - --ingress-class=internal
+      # - --ingress-class=internal
     policy: sync
     sources: ["gateway-httproute", "service"]
     txtOwnerId: main
