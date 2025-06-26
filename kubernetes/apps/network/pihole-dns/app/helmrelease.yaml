@@ -34,10 +34,10 @@ spec:
     interval: 2m
     provider: pihole
     env:
-      - name: &secret EXTERNAL_DNS_PIHOLE_PASSWORD
+      - name: EXTERNAL_DNS_PIHOLE_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: external-dns-pihole-secret
+            name: &secret external-dns-pihole-secret
             key: pihole-password
     extraArgs:
       - --pihole-server=http://pihole.robsonhome.cloud
