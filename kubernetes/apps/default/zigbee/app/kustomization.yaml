@@ -5,10 +5,11 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  # - ./scaledobject.yaml #TODO
 configMapGenerator:
   - name: zigbee-loki-rules
     files:
-      - zigbee.yaml=./resources/lokirule.yaml
+      - zigbee.yaml=./lokirule.yaml
     options:
       labels:
         loki_rule: "true"

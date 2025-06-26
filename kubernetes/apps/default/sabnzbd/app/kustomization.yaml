@@ -8,7 +8,7 @@ resources:
 configMapGenerator:
   - name: sabnzbd-scripts
     files:
-      - post-process.sh=./resources/post-process.sh
+      - cross-seed.sh=./resources/cross-seed.sh
 generatorOptions:
   disableNameSuffixHash: true
   annotations:

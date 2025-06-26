@@ -3,25 +3,26 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app frigate
+  name: &app thelounge
   namespace: &namespace default
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/gatus/external
+    - ../../../../components/gatus/guarded
     - ../../../../components/volsync
   dependsOn:
-    - name: volsync
-      namespace: volsync-system
-  interval: 30m
-  path: ./kubernetes/apps/default/frigate/app
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 1h
+  path: ./kubernetes/apps/default/thelounge/app
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system

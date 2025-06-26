@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ring-mqtt
+  name: thelounge
 spec:
   interval: 1h
   chartRef:
@@ -18,29 +18,30 @@ spec:
       retries: 3
   values:
     controllers:
-      ring-mqtt:
+      thelounge:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: docker.io/tsightler/ring-mqtt
-              tag: 5.8.1
+              repository: ghcr.io/thelounge/thelounge
+              tag: 4.4.3@sha256:c2aa0916203b298ffaf3a36c4eb60ef73c1006448d430e218d37840472e84e50
             env:
-              ENABLECAMERAS: "true"
-              SNAPSHOTMODE: "true"
-              ENABLEPANIC: "true"
-              MQTTHASSTOPIC: hass/status
-              MQTTPORT: 1883
-            envFrom:
-              - secretRef:
-                  name: ring-mqtt-secret
+              THELOUNGE_HOME: /config/thelounge
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 512Mi
-
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -48,27 +49,18 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
-
     service:
       app:
-        controller: ring-mqtt
         ports:
           http:
-            port: 8554
-          web-ui:
-            port: 55123
-
+            port: 9000
+    route:
+      app:
+        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
     persistence:
-      data:
-        existingClaim: ring-mqtt
-        globalMounts:
-          - path: /data
-      secret-file:
-        type: secret
-        name: ring-config-secret
-        globalMounts:
-          - path: /data/config.json
-            subPath: config.json
-            readOnly: true
-
+      config:
+        existingClaim: thelounge
