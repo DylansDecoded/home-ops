@@ -34,7 +34,7 @@ spec:
     interval: 2m
     provider: pihole
     env:
-      - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+      - name: &secret EXTERNAL_DNS_PIHOLE_PASSWORD
         valueFrom:
           secretKeyRef:
             name: external-dns-pihole-secret

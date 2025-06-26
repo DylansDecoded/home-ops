@@ -34,10 +34,6 @@ spec:
             env:
               TZ: America/New_York
               GIDLIST: 1000,0
-            # securityContext:
-            #   allowPrivilegeEscalation: true
-            #   # readOnlyRootFilesystem: true
-            #   capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
@@ -48,20 +44,16 @@ spec:
 
     service:
       app:
-        controller: emby
         ports:
           http:
-            port: 8096
-    ingress:
+            port: *port
+    route:
       app:
-        className: external
-        hosts:
-          - host: "{{ .Release.Name }}.robsonhome.cloud"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
 
     persistence:
       config:

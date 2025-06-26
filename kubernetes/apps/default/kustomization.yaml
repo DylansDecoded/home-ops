@@ -9,12 +9,11 @@ resources:
   - ./autobrr/ks.yaml
   - ./cross-seed/ks.yaml
   - ./emby/ks.yaml
-  - ./emqx/ks.yaml
   - ./frigate/ks.yaml
   - ./home-assistant/ks.yaml
   - ./jellyseerr/ks.yaml
-  # - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
+  - ./mosquitto/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
