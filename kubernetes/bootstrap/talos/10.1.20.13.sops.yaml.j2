@@ -3,9 +3,9 @@ debug: false
 persist: true
 machine:
   type: worker
-  token: ENC[AES256_GCM,data:1fEX5tmDxtfBEMZxXBEXlKm8DqY5Z+w=,iv:xqLVHVHyZBlYN1za+4n0RFXCAO/q0rwuktnftIrKV/k=,tag:3s8k0POwcT8O5IIMhxd3SQ==,type:str]
+  token: ENC[AES256_GCM,data:Quhq2xu+ZId9qQ1w0GwLCnFrPW2n7Es=,iv:sEhEEuUZ9OZ1JFmqjinP8NsM4f8v/qkDX9cpZZM/5Jg=,tag:t33m1w+zowMAy8p1XsRkeA==,type:str]
   ca:
-    crt: ENC[AES256_GCM,data:Dk/7Pt1/TeX2hkg0jFoYwr/BpDvvFn3P/l3ZM/ayEbKk3qr7garkVPapDzcnqTVZmsPIKK8K4n6VfE1HT3zHImI9WQkxjj4nHoZ0TIrd38Z8HLCWZ9IewdRzyNltU6mW5B+hrWkNLicbZPd4Ui9OS08APKfGAbxDc2lmu8yUIwoDQOHjDJC2hSCCZWiEKcm2WbbgVwHXvsQ7RPQIbN1Cgqkn+IdXRFO8WilozpqnewQmwoZIvDafYgqtLg9L3G5ASn/CBlX1BhWNRmCGMyma5brlRSY+/ap1BBEqRhY4pQb3e9gPF5QKaOyMMeJs7WC7FeFgLUzweSLdYB46ZHh5muzn5LQuBDBJyhRLCWwIXgCUhFNTwKE2r4IpObDoPTx7R3Ydp/Ly3M6Tac62ta6ECrPjNuP3Iq90sFHzR4J6kSnNpCHiIp9buA1AnDWkRfCBkxToqHPIHXVrN0GgZspIsqkr14rp1GITfyM1lGqgTKMlh4dzlcxaSSFGUCVZ89Qtl1G56acgTjdcU1HVgLC/hn9Y/4xc047wZBvLOFiue+jUpoh3yv3Whpr2KKyPdNqtnLW03fDP/QbUZPnO1vTqYrvEGD4UVH9NfFgs+57tMZWoWOS3TwCQJh2w7cXrItA0mGF+XDZU+3iwW4IgPbmnEfaGYJn8Vxju6ikHMwA7vPcgcVAiBm2tda1vd9bv2b+7mwrT7/hlf1bfVQ6OZd8e/XeOf6g1vgLrYYGecg+0Bca7jo+L05xPv8uggbLCXL6aw1EPMO0Q6oClwuaaKNQsw4t3FCzZJ8fZrn7oE3KVz7VhkofkFXxUBKsR4qC35t5TZ1Q/cYz84EKxvvS2/vJBC7vdjUYgqCzrYEslydVGeIBm3YwR,iv:CcoiUQL6jYq3eN5ZwStHVjM9/m5Ghcq65DWBI/OctA4=,tag:D+jJ4NlRBNwJzsPeKEFN8w==,type:str]
+    crt: ENC[AES256_GCM,data:9KjVWyJB8uvyjk/0+UWzjUpi9lGaRjsTbWzvrqO2r/IgR7tsQcmlemgBNDDcnQYdu19Y0LlMgk6UgK4jFfysCUjoqe5oXTDDX2KFGzqs0pew0uKs59txXH6V7mreBiiFFG57sQG0lX1eupFT+rGoQkMNaQ2Si0tyqdgyTCu0ZEaT2zSVyPkyvQ6CnXkqruQTV9janD1pNNf7P6damc/3S6y5fr+7Zn+bxOCKfvKfKl1bOdrZ41GIsOn+ubVzyBQBaOU1Hdk/GnYXpX06VaVGfi7VsNAYgEY+nMPqiauhRu5y/YqyosXs/94I7SwourAQlu0BYRQS46T+CyDx2YGwir2qjwrt/ae+RR0WpovtJSx1D2nEn7jOv1MuwO0k2l5uwMNLLnjP10qEAXsPjCl73ovWYhvCwCk/k1lmWG18Y4VPnhkN1WsjaqykZki6ulnvbZvCmJF2u0HWJk+9uQT5sMaOlSUKAEzBGoWvveCZ98liDCZhbeZCuOd+iT0ej9D2FqcJ5cDAK5f1/TycO969PJecCnyjjdb/B7eJTPY6UpmjAsO0iq0nCmtMm3HMJKGMbGQrpAYVAgeIdXm61VTjR0BWwYUFpE+5+lO2zeQ4tcWyaQu257jOKsDjpx3CJfaVKSKwKXExa/73aGbQ933P0Ko3J/38T88Tj9fykMynbkWOxGXDys3XrqWU5KKMbuKX0QKbUL4yMZucz3TC2zwzX6CdYpD+QU3dd9N047CCI35dWWeXiVdoCEjMX3cnMheVsjEtPZKWMvnuPfP4x5rD8yXqbU5NQR2flBYShxU/9fkQ2E4e1z97VsmYy4eMsPFZcoPZ4rbJrQ9wi3OU+pX4b25O1Y5r8zTtmdE2t79UgijrhFzI,iv:nswJvBS9pA5SYMYp+cgH1igvIs29GPyUAd2f+vs8+2s=,tag:zmyfZh1P5OVzkIGXdTYDmw==,type:str]
     key: ""
   certSANs:
     - 127.0.0.1
@@ -85,19 +85,19 @@ machine:
       forwardKubeDNSToHost: true
   udev:
     rules:
+      # Intel GPU
+      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
       # Thunderbolt
       - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
       # Coral TPU
       - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
-      # Intel GPU
-      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
   nodeLabels:
     intel.feature.node.kubernetes.io/gpu: "true"
     topology.kubernetes.io/region: main
     topology.kubernetes.io/zone: w
 cluster:
-  id: ENC[AES256_GCM,data:YyCPjwo47GlYa8CxeOpCUjxCxvPAyU/q5fPeg8Wfl3v2QxeXzm9Y8XV5kjw=,iv:Fpgjwrt8VrhEkjy6aFYYHp447JiSn1IBS6I7r9ePcWo=,tag:TQPYOqBEAufzQv5JU+5iiQ==,type:str]
-  secret: ENC[AES256_GCM,data:ncMfj35V8FKjRWwBol5oXbsyHAyte5w4Uuu/waTRXSebNIbTe6EshXexHxI=,iv:39Xo82VD0qOfpPwMaNJirHqZzYmeXmdRzsTtxb/cW+k=,tag:oymM5MLVmLVZtvTuIiWTIA==,type:str]
+  id: ENC[AES256_GCM,data:lo3vwy/FHGzNwCDDSKQ3t3DQ3L0Yfz6Hz3wBPpyO9IbGbirYomOKBB/Hg2U=,iv:xlQ3yYDbA9j8e6SNbSa2pvDKdckLMaAPZgNqnVSaL+8=,tag:HVZClBzVOgSu17SZpsnzVQ==,type:str]
+  secret: ENC[AES256_GCM,data:7UGzoiiRN/FhhcguUTaj5tZ45QJ3deV2nWt2E+6aODhQmQ/tz0JvvvXBZTw=,iv:9YYlsSviORtmWcl0OE8w9ofDk08tIokSaRRaSFAqZMc=,tag:8k/ivbi9e2BiCpYOB7z1Tg==,type:str]
   controlPlane:
     endpoint: https://10.1.20.120:6443
   clusterName: main
@@ -111,30 +111,9 @@ cluster:
       - 10.43.0.0/16
   coreDNS:
     disabled: true
-  extraManifests:
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-    # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.1/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
-  token: ENC[AES256_GCM,data:NChLQkgNagFAx4SBDOitJY7kV+Nkp9Q=,iv:R3EoQaTozIsGL7ux413xpAxV5rydW4cmvHiWhAFi+bA=,tag:knoHgp2cptLE+o0ufgz4QQ==,type:str]
+  token: ENC[AES256_GCM,data:FHzrA2vHmF1hzAjxuLWyEtKA2DQZC277gahVsP4MGtcjXqg=,iv:k7I9DBOzGfO08uJxuT7mhkK2mHLA9U74mDgyjrYW7eQ=,tag:FzMjn0/bqya0zofFk3FCsA==,type:str]
   ca:
-    crt: ENC[AES256_GCM,data:esE41dZgLW3c/Vv3GIH9gKIbQNVPgQhDDcyciOmAaGn/cBIU2c5YcrOhKJr8B3KheMTl6itg2mgDIWb+3LoCFEjtcjuwbgjH9QLMxWMg8OTdV3F3Mw2/6g2FoyKWGcQph3ALMHEwU0UGSbIFgKDHxDj1+epAgRuN1+VaWRNX5BBDwERHg9zWtSYEMFqCsWqyG3OKd0FRkD8IUq/Q82osQaRkUjdUHFrLJWhnQ3uDMk312uVDunst4ByqNBTTVvUTLI3XtcuF5EKliX/b6dOEHaitusWDNEiCy/fK0yu4OwJwefVT7sz6nuOR3zdDa+r2t8M5797bxzMH+Jfe0ogk4MPPKYoTUtw7muKtgII7l/uaYk6b5paMtpgSEwKbsbOqEYhyXVLzcv+v/78n/jFXYnwk/jmgoBPczw3hNnSHpUDsu04C4TpZ1m5kbrpAaBbk+yDCSUa3yndQm0Vh6ksQWZWWmqTQzyo1gy6FL1XqpZfoBG6zSd6Byp8xBp3ycNwZ4jTayXqEWYonKgeiKpd8CQ4rJdYN5giZUZgQ5dUSk2TrpKKMVJ+588VlFLSP301BzGvgmvxWy+S2ZivpbshqzZ5XBlwEwDGzNGOFDykZmA6UvgEjUp9Fsdq4LqnB/eepKykW2cB9wXqkwaam4sVi+hyw7aejuFfsIpp80ux06V0DtkuO7BYqybWxVrUgsny2+VJtF59iclWqd70UBBdF7JriqfBC4TyDkwjitzzZk86iy5wbqGP2nJjfF8Y9hrPOe5oBTSsMvZZAw4x2Pg4CY+Ciixt3DuqzmSPr2dSEWfB4+EurqEJkvyfQbB7NN0z8f2EBZe09ueb3l45VDnerMsGjZBG7qWNcsKZ8F/fbFlckLBdQSTPGMaduJSOrf8QMoaFPxsslOt9+ycUbqEHBoRJzQBtx/h+oVv5bbofnc2Xlqi2gBXlzyRbrLGe3EUDtP2Yn2zLvcJ15RC9LonPBnOF3Sg/0HNtd3XNP1bf3V9IlurQgqhM0eGSItZqsijZz1v8xxFNjVelqnLVgPdjst5MdaHaPhpLUQzMZ7Q==,iv:x+UdXqHUHE5PI/6ltwwl1eXyzAaSJP5WIst7zfH02P4=,tag:BSdcIcfn5iJRQHFGLeMAtQ==,type:str]
+    crt: ENC[AES256_GCM,data:OcFrJ9K7k184Celz7JDYl/M7TpI7emdKWe3zLUbcg/WDVH4s,iv:hMjFIaHj1+B7P2CaanQd1b2gl7VyZUXARgpt7af3Oos=,tag:lEpIs6lDJ2V33Xx2hGdsOg==,type:str]
     key: ""
   discovery:
     enabled: true
@@ -143,23 +122,18 @@ cluster:
         disabled: true
       service: {}
 sops:
-  kms: []
-  gcp_kms: []
-  azure_kv: []
-  hc_vault: []
   age:
     - recipient: age1jwm8ccjgfy04r9rwh65rehk72j6rkawkpjnf4rcu4ukwlcfyquhq4p2q23
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByZEwydFJmNUFVNSsyZjFO
-        OUovTzlXVnVXRjV6dW9aa3QreldVNCtuZGgwClRyVndiVVJxOTUvSWZEcmV0VElU
-        MENreWJXamlyZm8rOXpSMUp0Ym11b2sKLS0tIFJzb3Axa2FHZm5hV3YwTnVuT0J2
-        QTVzdUMrZVZkcUtPWTdzdjMyV2xvWDQKE02/B/kgVEZMZ8UO+g2gwYoLaS7ilPRa
-        yAzmDCL3Zij18MZSdWVOccBoaTpFot6gnmTGsdDETTfhd05mzGmh3w==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGTVRTWm1aQ0FkUVNydnJC
+        WnNuSFpZR2o0SGRDeURLd2VnT29PbjE2QWxRCm5DVStFSk1OV2RDZHppRG1iMzkv
+        U0k4S0kzQmVYVGsxdFNWUlhqY28xTDQKLS0tIGptOFJHTzhjbEU0ZmNuYkZYeUUz
+        NEZwODdLVXowYmxIQU5KVHduSS84bGcKwoIH7zwakPrHr7IEd4sWOM171C5UxY5t
+        teCIP55uJpSX6Z87mWUibd9sta3pfvJ4EGU10Rjn5ZkR3nlWnDit4w==
         -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-03-13T03:10:46Z"
-  mac: ENC[AES256_GCM,data:gxKNftr8kwPzvo3bGvPkBuc8VC2CuDfDlhHY1JPC2Qoz0+87ZT26aDQeBVEJj2NySSwhuGTpIEZIVHKE60lC02LNBAcK8dp3vsxqnI50f3Q1rR1lyzPYoFjB6GiSTDdtCiLTKvaK5ZS7t4SzyxNviOwrrOGw7QtZaq3sxKGvsoU=,iv:XF5t3i49EjAx8Ujli5NlxlHX1TtLVEQvLnl0w76UW/E=,tag:3j4JwOlNbAKocaMCBt9paA==,type:str]
-  pgp: []
+  lastmodified: "2025-06-26T19:41:49Z"
+  mac: ENC[AES256_GCM,data:bSzCCFXs+2R/4Vh/c4lIEqV2T0mD/K5F/eKDDsEQIDgvLc/L03mM1hQyxtVspSE3ia46JMVkod5MbBK11kAA5sujvgj0CRShSnOAvheuSgPxQLioKYvyqwSRD4PjhftWSEIQ3r2kxLjMaKD5ulGZ1DNLkSoFJ6Fj2yEMB8JQ4P4=,iv:L3E9h/ApjrBJawQTr/ZfDWZlMSoAmHWc354cLgEGmAA=,tag:CrPH6u7WC63JhYIQJdyrEw==,type:str]
   encrypted_regex: ^(token|crt|key|id|secret|secretboxEncryptionSecret|ca)$
   mac_only_encrypted: true
-  version: 3.9.4
+  version: 3.10.2

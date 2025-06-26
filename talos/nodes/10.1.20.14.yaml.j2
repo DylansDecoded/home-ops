@@ -1,5 +1,27 @@
 machine:
+  type: worker
   network:
     hostname: k8s-4
+    interfaces:
+      - deviceSelector:
+          hardwareAddr: ac:e2:d3:15:fd:f9
+        addresses:
+          - 10.1.20.14/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        dhcp: false
+        vlans:
+          - vlanId: 40
+            mtu: 1500
+            addresses:
+              - "10.1.40.14/24"
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.1.40.1
+    nameservers:
+      - 10.1.20.44
+      - 10.1.20.1
+    disableSearchDomain: true
   install:
     image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}
