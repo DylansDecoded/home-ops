@@ -46,14 +46,17 @@ spec:
       app:
         ports:
           http:
-            port: 80
-    route:
+            port: 8096
+    ingress:
       app:
-        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
-        parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
+        className: external
+        hosts:
+          - host: emby.robsonhome.cloud
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
 
     persistence:
       config:

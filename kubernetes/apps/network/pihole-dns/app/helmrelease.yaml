@@ -33,9 +33,11 @@ spec:
   values:
     provider: pihole
     env:
-      EXTERNAL_DNS_PIHOLE_SERVER: https://pihole.robsonhome.cloud
-      EXTERNAL_DNS_PIHOLE_API_VERSION: 6
-      EXTERNAL_DNS_PIHOLE_PASSWORD:
+      - name: EXTERNAL_DNS_PIHOLE_SERVER
+        value: https://pihole.robsonhome.cloud
+      - name: EXTERNAL_DNS_PIHOLE_API_VERSION
+        value: "6"
+      - name: EXTERNAL_DNS_PIHOLE_PASSWORD
         valueFrom:
           secretKeyRef:
             name: &secret pihole-dns-secret
