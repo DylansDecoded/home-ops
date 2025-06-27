@@ -31,6 +31,7 @@ spec:
     remediation:
       retries: 3
   values:
+    fullnameOverride: *app
     provider: pihole
     env:
       - name: EXTERNAL_DNS_PIHOLE_SERVER
