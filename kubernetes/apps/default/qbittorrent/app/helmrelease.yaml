@@ -96,7 +96,7 @@ spec:
         existingClaim: qbittorrent
       media:
         type: nfs
-        server: expanse.internal
+        server: truenas.robsonhome.cloud
         path: /mnt/tank/media
         globalMounts:
           - path: /media/downloads/torrents
