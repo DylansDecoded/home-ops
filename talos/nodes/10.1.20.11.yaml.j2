@@ -2,5 +2,28 @@ machine:
   type: controlplane
   network:
     hostname: k8s-1
+    interfaces:
+      - deviceSelector:
+          hardwareAddr: 18:60:24:27:27:a7
+        addresses:
+          - 10.1.20.11/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
+        dhcp: false
+        vip:
+          ip: 10.1.20.120
+        vlans:
+          - vlanId: 40
+            mtu: 1500
+            addresses:
+              - "10.1.40.11/24"
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.1.40.1
+    nameservers:
+      - 10.1.20.44
+      - 10.1.20.1
+    disableSearchDomain: true
   install:
     image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}

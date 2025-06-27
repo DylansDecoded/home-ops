@@ -4,26 +4,16 @@ machine:
     hostname: k8s-0
     interfaces:
       - deviceSelector:
-          hardwareAddr: 10:62:e5:00:*
-          driver: e1000e
-        mtu: 9000
-        dhcp: false
+          hardwareAddr: 10:62:e5:00:4c:12
         addresses:
           - 10.1.20.10/24
         routes:
           - network: 0.0.0.0/0
             gateway: 10.1.20.1
+        dhcp: false
         vip:
-          - 10.1.20.120
+          ip: 10.1.20.120
         vlans:
-          - vlanId: 30 # VPN VLAN
-            dhcp: false
-            mtu: 1500
-            addresses:
-              - "10.1.30.10/24"
-            routes:
-              - network: 0.0.0.0/0
-                gateway: 10.1.30.1
           - vlanId: 40
             mtu: 1500
             addresses:
@@ -31,5 +21,9 @@ machine:
             routes:
               - network: 0.0.0.0/0
                 gateway: 10.1.40.1
+    nameservers:
+      - 10.1.20.44
+      - 10.1.20.1
+    disableSearchDomain: true
   install:
-    image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}
+    image: factory.talos.dev/installer/a0b4991356a74f14e884e8b9192ac3864397894fa5223317098564de42ce0a0f:{{ ENV.TALOS_VERSION }}
