@@ -20,6 +20,7 @@ metadata:
   name: &app pihole-dns
 spec:
   interval: 1h
+  suspend: true
   chartRef:
     kind: OCIRepository
     name: pihole-dns
@@ -32,7 +33,7 @@ spec:
     remediation:
       retries: 3
     timeout: 10m
- values:
+  values:
     fullnameOverride: *app
     provider: pihole
     env:
