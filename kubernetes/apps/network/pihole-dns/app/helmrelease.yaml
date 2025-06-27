@@ -42,8 +42,6 @@ spec:
           secretKeyRef:
             name: &secret pihole-dns-secret
             key: EXTERNAL_DNS_PIHOLE_PASSWORD
-    extraArgs:
-      - --pihole-server=http://pihole.robsonhome.cloud
     policy: upsert-only
     sources: ["gateway-httproute", "service"]
     registry: noop
