@@ -6,13 +6,10 @@ metadata:
   name: gatus
 spec:
   interval: 30m
-  chart:
-    spec:
-      interval: 30m
-      chartRef:
-        kind: OCIRepository
-        name: app-template
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: -1
