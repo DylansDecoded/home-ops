@@ -32,6 +32,7 @@ radarr:
     replace_existing_custom_formats: true
     quality_profiles:
       - name: SQP-1 (1080p)
+      min_format_score: 10
     include:
       - template: radarr-quality-definition-sqp-streaming
       - template: radarr-quality-profile-sqp-1-1080p

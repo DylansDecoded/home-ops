@@ -20,5 +20,6 @@ resources:
   - ./ring-mqtt/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
+  - ./thelounge/ks.yaml
   - ./zigbee/ks.yaml
   - ./zwave/ks.yaml

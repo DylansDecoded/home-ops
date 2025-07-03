@@ -70,20 +70,16 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: jellyseerr
         ports:
           http:
             port: *port
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: requests.robsonhome.cloud
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
     persistence:
       config:
         existingClaim: jellyseerr
