@@ -32,11 +32,14 @@ radarr:
     replace_existing_custom_formats: true
     quality_profiles:
       - name: SQP-1 (1080p)
-      min_format_score: 10
+      # min_format_score: 10
+
     include:
+      # Comment out any of the following includes to disable them
       - template: radarr-quality-definition-sqp-streaming
       - template: radarr-quality-profile-sqp-1-1080p
       - template: radarr-custom-formats-sqp-1-1080p
+    # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
     custom_formats:
       - trash_ids:
           - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
