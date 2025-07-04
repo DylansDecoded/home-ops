@@ -1,11 +1,12 @@
+
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: jellyseerr
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
@@ -16,11 +17,7 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
-      strategy: rollback
       retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       jellyseerr:
@@ -29,8 +26,8 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/fallenbagel/jellyseerr
-              tag: 2.6.0@sha256:8f320036d937d84c385ea5800f87d69ba16ec4d3770fccf6cad803b5e8d66a52
+              repository: ghcr.io/fallenbagel/jellyseerr
+              tag: 2.7.0@sha256:3ec2ce92445719ea1e610b3e758da20cd317c8e1028fc810d001b1370a339226
             env:
               TZ: America/New_York
               LOG_LEVEL: "info"
@@ -67,7 +64,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         ports:
@@ -75,9 +71,11 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
+        hostnames:
+          - "{{ .Release.Name }}.robsonhome.cloud"
+          - requests.robsonhome.cloud
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https
     persistence:
@@ -85,13 +83,16 @@ spec:
         existingClaim: jellyseerr
         globalMounts:
           - path: /app/config
-      cache:
+      config-cache:
         existingClaim: jellyseerr-cache
         globalMounts:
           - path: /app/config/cache
-      logs:
+      tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /app/config/logs
-      tmp:
-        type: emptyDir
+        advancedMounts:
+          jellyseerr:
+            app:
+              - path: /app/config/logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp

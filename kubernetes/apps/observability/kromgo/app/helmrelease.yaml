@@ -9,6 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: -1
@@ -19,7 +20,6 @@ spec:
   values:
     controllers:
       kromgo:
-        replicas: 2
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
