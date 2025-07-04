@@ -9,6 +9,7 @@ resources:
   - ./autobrr/ks.yaml
   - ./cross-seed/ks.yaml
   - ./emby/ks.yaml
+  - ./fusion/ks.yaml
   - ./home-assistant/ks.yaml
   # - ./jellyfin/ks.yaml # TODO
   - ./jellyseerr/ks.yaml
@@ -21,5 +22,6 @@ resources:
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
   - ./thelounge/ks.yaml
+  - ./webhook/ks.yaml
   - ./zigbee/ks.yaml
   - ./zwave/ks.yaml

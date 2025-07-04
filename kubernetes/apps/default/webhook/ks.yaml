@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app fusion
+  name: &app webhook
   namespace: &namespace default
 spec:
   commonMetadata:
@@ -11,16 +11,11 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/gatus/guarded
-    - ../../../../components/volsync
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   interval: 1h
-  path: ./kubernetes/apps/default/fusion/app
+  path: ./kubernetes/apps/default/webhook/app
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 1Gi
   prune: true
   retryInterval: 2m
   sourceRef:

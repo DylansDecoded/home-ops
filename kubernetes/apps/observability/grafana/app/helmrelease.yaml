@@ -1,26 +1,34 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: grafana
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 9.2.9
+  url: oci://ghcr.io/grafana/helm-charts/grafana
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: grafana
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: grafana
-      version: 9.2.7
-      sourceRef:
-        kind: HelmRepository
-        name: grafana
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: grafana
   install:
     remediation:
       retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
-      strategy: rollback
       retries: 3
   values:
     deploymentStrategy:
@@ -118,19 +126,16 @@ spec:
           revision: 6
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
+        envoy:
+           # renovate: depName="Envoy Proxy Monitoring gRPC"
+           gnetId: 23239
+           revision: 1
+           datasource:
+             - { name: DS_AFRANET_PROMETHEUS, value: Prometheus }
         external-dns:
           # renovate: depName="External-dns"
           gnetId: 15038
           revision: 3
-          datasource: Prometheus
-        external-secrets:
-          url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
-          datasource: Prometheus
-        flux-cluster:
-          url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/cluster.json
-          datasource: Prometheus
-        flux-control-plane:
-          url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/control-plane.json
           datasource: Prometheus
         kubernetes-api-server:
           # renovate: depName="Kubernetes / System / API Server"
@@ -155,7 +160,7 @@ spec:
         kubernetes-nodes:
           # renovate: depName="Kubernetes / Views / Nodes"
           gnetId: 15759
-          revision: 35
+          revision: 37
           datasource: Prometheus
         kubernetes-pods:
           # renovate: depName="Kubernetes / Views / Pods"
@@ -167,23 +172,12 @@ spec:
           gnetId: 11454
           revision: 14
           datasource: Prometheus
-        miniflux:
-          url: https://raw.githubusercontent.com/miniflux/v2/main/contrib/grafana/dashboard.json
-          datasource: Prometheus
-        nginx:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
-          datasource: Prometheus
-        nginx-request-handling-performance:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
-          datasource: Prometheus
         node-exporter-full:
           # renovate: depName="Node Exporter Full"
           gnetId: 1860
           revision: 41
-          datasource: Prometheus
-        node-feature-discovery:
-          url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
-          datasource: Prometheus
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         prometheus:
           # renovate: depName="Prometheus"
           gnetId: 19105
@@ -195,12 +189,32 @@ spec:
           revision: 2
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-        unpackerr:
-          # renovate: depName="Unpackerr"
-          gnetId: 18817
+        unifi-pdu:
+          # renovate: depName="UniFi-Poller: PDU Insights - Prometheus"
+          gnetId: 23027
           revision: 1
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
+        unifi-insights:
+          # renovate: depName="UniFi-Poller: Client Insights - Prometheus"
+          gnetId: 11315
+          revision: 9
+          datasource: Prometheus
+        unifi-network-sites:
+          # renovate: depName="UniFi-Poller: Network Sites - Prometheus"
+          gnetId: 11311
+          revision: 5
+          datasource: Prometheus
+        unifi-uap:
+          # renovate: depName="UniFi-Poller: UAP Insights - Prometheus"
+          gnetId: 11314
+          revision: 10
+          datasource: Prometheus
+        unifi-usw:
+          # renovate: depName="UniFi-Poller: USW Insights - Prometheus"
+          gnetId: 11312
+          revision: 9
+          datasource: Prometheus
         volsync:
           # renovate: depName="VolSync Dashboard"
           gnetId: 21356
@@ -214,6 +228,10 @@ spec:
           revision: 4
           datasource: Prometheus
     sidecar:
+      image:
+        registry: ghcr.io
+        repository: home-operations/k8s-sidecar
+        tag: 1.30.6@sha256:ee7efa82ce53089e6a0644d16fbf1263020510b938794a0e3da373972dbbdecc
       dashboards:
         enabled: true
         searchNamespace: ALL
@@ -235,10 +253,14 @@ spec:
       - vonage-status-panel
     serviceMonitor:
       enabled: true
-    ingress:
-      enabled: true
-      ingressClassName: internal
-      hosts: ["grafana.robsonhome.cloud"]
+    route:
+      main:
+        enabled: true
+        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
     persistence:
       enabled: false
     testFramework:
