@@ -10,8 +10,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: onepassword
-      namespace: external-secrets
   interval: 1h
   path: ./kubernetes/apps/rook-ceph/rook-ceph/app
   prune: false # let's not make happy accidents
