@@ -17,9 +17,6 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-  dependsOn:
-    - name: qbittorrent
-      namespace: default
   values:
     controllers:
       tagging:
