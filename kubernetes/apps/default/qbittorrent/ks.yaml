@@ -43,6 +43,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: qbittorrent
+      namespace: default
   interval: 1h
   path: ./kubernetes/apps/default/qbittorrent/tools
   prune: true
