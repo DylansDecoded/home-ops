@@ -85,7 +85,7 @@ spec:
                 subPath: npm-cache
       recs:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: truenas.internal
         path: /mnt/tank/Apps/scrypted
         globalMounts:
           - path: /recs

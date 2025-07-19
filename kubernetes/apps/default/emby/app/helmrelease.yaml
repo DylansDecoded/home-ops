@@ -72,7 +72,7 @@ spec:
 
       tv:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: truenas.internal
         path: /mnt/tank/media/tv
         globalMounts:
           - path: /media/tv
@@ -80,7 +80,7 @@ spec:
 
       movies:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: truenas.internal
         path: /mnt/tank/media/movies
         globalMounts:
           - path: /media/movies

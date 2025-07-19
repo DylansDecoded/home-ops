@@ -77,7 +77,7 @@ spec:
             readOnly: true
       media:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: truenas.internal
         path: /mnt/tank/media
         globalMounts:
           - path: /media/downloads

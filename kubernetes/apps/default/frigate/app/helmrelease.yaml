@@ -124,7 +124,7 @@ spec:
           - path: /dev/bus/usb
       media:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: truenas.internal
         path: /mnt/tank/frigate
         globalMounts:
           - path: /media

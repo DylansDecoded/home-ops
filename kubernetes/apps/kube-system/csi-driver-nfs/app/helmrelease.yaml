@@ -37,7 +37,7 @@ spec:
       create: true
       name: nfs-slow
       parameters:
-        server: truenas.robsonhome.cloud
+        server: truenas.internal
         share: /mnt/tank/Kubernetes
       mountOptions:
         - nfsvers=4.2
