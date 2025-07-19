@@ -10,5 +10,5 @@ resources:
   - ./cloudflare-dns/ks.yaml
   - ./echo/ks.yaml
   - ./multus/ks.yaml
-  - ./pihole-dns/ks.yaml
-  # - ./technitium-dns/ks.yaml
+  # - ./pihole-dns/ks.yaml
+  - ./technitium-dns/ks.yaml
