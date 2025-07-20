@@ -11,7 +11,7 @@ spec:
   targets:
     staticConfig:
       static:
-        - truenas.internal
+        - 10.1.10.210
         # - kvm.robsonhome.cloud # KVM Switch
         - pikvm.robsonhome.cloud
         # - ups.robsonhome.cloud

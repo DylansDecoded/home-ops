@@ -88,7 +88,7 @@ spec:
           - path: /config/metadata
       media:
         type: nfs
-        server: truenas.internal
+        server: 10.1.10.210
         path: /mnt/tank/media
         globalMounts:
           - path: /media
