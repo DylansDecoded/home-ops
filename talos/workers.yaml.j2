@@ -7,9 +7,6 @@ machine:
   ca:
     crt: op://kubernetes/talos/MACHINE_CA_CRT
     key: ""
-  certSANs:
-    - 10.1.20.120
-    - 127.0.0.1
   certSANs: ["127.0.0.1", "10.1.20.120"]
   kubelet:
     image: ghcr.io/siderolabs/kubelet:{{ ENV.KUBERNETES_VERSION }}
@@ -95,8 +92,8 @@ machine:
     topology.kubernetes.io/region: main
     topology.kubernetes.io/zone: w
 cluster:
-  id: 5tBFxQuYqqit_gLp_egsnS-Ot4faxcIsX7LZpRnGJhY=
-  secret: R5RwC0mFNJVEgN87zMUbXiEpmoeInELzxKr+zDFOjwQ=
+  id: op://kubernetes/talos/CLUSTER_ID
+  secret: op://kubernetes/talos/CLUSTER_SECRET
   controlPlane:
     endpoint: https://10.1.20.120:6443
   clusterName: main

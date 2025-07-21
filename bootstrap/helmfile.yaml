@@ -1,3 +1,4 @@
+
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 
@@ -10,7 +11,7 @@ releases:
   - name: cilium
     namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
-    version: 1.17.5
+    version: 1.17.6
     values: ['../kubernetes/apps/kube-system/cilium/app/helm/values.yaml']
 
   - name: coredns
@@ -30,14 +31,14 @@ releases:
   - name: cert-manager
     namespace: cert-manager
     chart: oci://quay.io/jetstack/charts/cert-manager
-    version: v1.17.2
+    version: v1.18.2
     values: ['../kubernetes/apps/cert-manager/cert-manager/app/helm/values.yaml']
     needs: ['kube-system/spegel']
 
   - name: external-secrets
     namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.18.1
+    version: 0.18.2
     values: ['../kubernetes/apps/external-secrets/external-secrets/app/helm/values.yaml']
     hooks:
       - # Apply cluster secret store
@@ -57,13 +58,13 @@ releases:
   - name: flux-operator
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.23.0
+    version: 0.24.1
     values: ['../kubernetes/apps/flux-system/flux-operator/app/helm/values.yaml']
     needs: ['external-secrets/external-secrets']
 
   - name: flux-instance
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.23.0
+    version: 0.24.1
     values: ['../kubernetes/apps/flux-system/flux-instance/app/helm/values.yaml']
     needs: ['flux-system/flux-operator']

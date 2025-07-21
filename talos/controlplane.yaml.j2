@@ -52,12 +52,7 @@ machine:
         hard=True
         nconnect=16
         noatime=True
-    - op: overwrite
-      path: /usr/local/etc/nut/upsmon.conf
-      permissions: 0o644
-      content: |
-        MONITOR nut-server.robsonhome.cloud 1 {{ ENV.UPSMON_USER }} {{ ENV.UPSMON_PASS }} secondary
-        SHUTDOWNCMD "/sbin/poweroff"
+
 
   sysctls:
     fs.inotify.max_user_watches: 1048576   # Watchdog

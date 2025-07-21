@@ -6,6 +6,11 @@ source "$(dirname "${0}")/lib/common.sh"
 export LOG_LEVEL="debug"
 export ROOT_DIR="$(git rev-parse --show-toplevel)"
 
+# Load environment variables from onepassword.env if it exists
+if [[ -f "${ROOT_DIR}/onepassword.env" ]]; then
+    source "${ROOT_DIR}/onepassword.env"
+fi
+
 # Apply the Talos configuration to all the nodes
 function apply_talos_config() {
     log debug "Applying Talos configuration"
@@ -43,7 +48,14 @@ function apply_talos_config() {
 
         log debug "Applying Talos node configuration" "node=${node}" "machine_type=${machine_type}"
 
-        if ! machine_config=$(bash "${ROOT_DIR}/scripts/render-machine-config.sh" "${ROOT_DIR}/talos/${machine_type}.yaml.j2" "${node_file}") || [[ -z "${machine_config}" ]]; then
+        # Map machine type to the correct template file
+        local template_file
+        case "${machine_type}" in
+            worker) template_file="${ROOT_DIR}/talos/workers.yaml.j2" ;;
+            *) template_file="${ROOT_DIR}/talos/${machine_type}.yaml.j2" ;;
+        esac
+
+        if ! machine_config=$(bash "${ROOT_DIR}/scripts/render-machine-config.sh" "${template_file}" "${node_file}") || [[ -z "${machine_config}" ]]; then
             exit 1
         fi
 
@@ -116,12 +128,12 @@ function apply_crds() {
     log debug "Applying CRDs"
 
     local -r crds=(
-        # renovate: datasource=github-releases depName=kubernetes-sigs/external-dns
-        https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.17.0/config/crd/standard/dnsendpoint.yaml
+       # renovate: datasource=github-releases depName=kubernetes-sigs/external-dns
+        https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.18.0/config/crd/standard/dnsendpoints.externaldns.k8s.io.yaml
         # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
         https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
         # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-        https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.83.0/stripped-down-crds.yaml
+        https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.84.0/stripped-down-crds.yaml
     )
 
     for crd in "${crds[@]}"; do
@@ -185,7 +197,7 @@ function main() {
     fi
 
     # Bootstrap the Talos node configuration
-    apply_talos_config
+    # apply_talos_config
     bootstrap_talos
     fetch_kubeconfig
 
