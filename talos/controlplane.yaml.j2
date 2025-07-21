@@ -29,7 +29,7 @@ machine:
       - -selinux                            # Less security, faster puter
       - apparmor=0                          # Less security, faster puter
       - init_on_alloc=0                     # Less security, faster puter
-      - init_on_free=0                      # Less security, faster puter
+      - init_on_free=1                      # Less security, faster puter
       - intel_iommu=on                      # PCI Passthrough
       - iommu=pt                            # PCI Passthrough
       - mitigations=off                     # Less security, faster puter

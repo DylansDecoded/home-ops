@@ -3,25 +3,21 @@ machine:
   network:
     hostname: k8s-2
     interfaces:
-      - interface: eth0
+      - interface: eno1
         addresses:
           - 10.1.20.12/24
         routes:
           - network: 0.0.0.0/0
             gateway: 10.1.20.1
         dhcp: false
+        mtu: 1500
         vip:
           ip: 10.1.20.120
         vlans:
           - vlanId: 40
-            mtu: 1500
             addresses:
-              - "10.1.40.12/24"
-            routes:
-              - network: 0.0.0.0/0
-                gateway: 10.1.40.1
+              - 10.1.40.12/24
     nameservers:
       - 10.1.20.41
-    disableSearchDomain: true
   install:
-    image: factory.talos.dev/installer/1be6923a14b1498bc2930c02b286cbf9d98764032fb6a8659b8fce7c1476262b:{{ ENV.TALOS_VERSION }}
+    image: factory.talos.dev/installer/a0b4991356a74f14e884e8b9192ac3864397894fa5223317098564de42ce0a0f:{{ ENV.TALOS_VERSION }}

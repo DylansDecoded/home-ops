@@ -16,7 +16,7 @@ function apply_talos_config() {
     log debug "Applying Talos configuration"
 
     local controlplane_file="${ROOT_DIR}/talos/controlplane.yaml.j2"
-    local worker_file="${ROOT_DIR}/talos/workers.yaml.j2"
+    local worker_file="${ROOT_DIR}/talos/worker.yaml.j2"
 
     if [[ ! -f ${controlplane_file} ]]; then
         log error "No Talos machine files found for controlplane" "file=${controlplane_file}"
@@ -51,7 +51,7 @@ function apply_talos_config() {
         # Map machine type to the correct template file
         local template_file
         case "${machine_type}" in
-            worker) template_file="${ROOT_DIR}/talos/workers.yaml.j2" ;;
+            worker) template_file="${ROOT_DIR}/talos/worker.yaml.j2" ;;
             *) template_file="${ROOT_DIR}/talos/${machine_type}.yaml.j2" ;;
         esac
 
@@ -77,9 +77,7 @@ function apply_talos_config() {
 function bootstrap_talos() {
     log debug "Bootstrapping Talos"
 
-    if ! controller=$(talosctl config info --output json | jq --exit-status --raw-output '.endpoints[]' | shuf -n 1) || [[ -z "${controller}" ]]; then
-        log error "No Talos controller found"
-    fi
+    controller=$(talosctl config info --output json | jq --exit-status --raw-output '.endpoints[]' | sort -R | head -n 1)
 
     log debug "Talos controller discovered" "controller=${controller}"
 
@@ -95,7 +93,7 @@ function bootstrap_talos() {
 function fetch_kubeconfig() {
     log debug "Fetching kubeconfig"
 
-    if ! controller=$(talosctl config info --output json | jq --exit-status --raw-output '.endpoints[]' | shuf -n 1) || [[ -z "${controller}" ]]; then
+    if ! controller=$(talosctl config info --output json | jq --exit-status --raw-output '.endpoints[]' | sort -R | head -n 1) || [[ -z "${controller}" ]]; then
         log error "No Talos controller found"
     fi
 
@@ -131,7 +129,7 @@ function apply_crds() {
        # renovate: datasource=github-releases depName=kubernetes-sigs/external-dns
         https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.18.0/config/crd/standard/dnsendpoints.externaldns.k8s.io.yaml
         # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-        https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
+        # https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
         # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
         https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.84.0/stripped-down-crds.yaml
     )
@@ -197,13 +195,13 @@ function main() {
     fi
 
     # Bootstrap the Talos node configuration
-    # apply_talos_config
+    apply_talos_config
     bootstrap_talos
     fetch_kubeconfig
 
     # Apply resources and Helm releases
     wait_for_nodes
-    apply_crds
+    # apply_crds
     apply_resources
     sync_helm_releases
 
