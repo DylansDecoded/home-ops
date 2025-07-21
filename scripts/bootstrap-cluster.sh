@@ -11,7 +11,7 @@ function apply_talos_config() {
     log debug "Applying Talos configuration"
 
     local controlplane_file="${ROOT_DIR}/talos/controlplane.yaml.j2"
-    local worker_file="${ROOT_DIR}/talos/worker.yaml.j2"
+    local worker_file="${ROOT_DIR}/talos/workers.yaml.j2"
 
     if [[ ! -f ${controlplane_file} ]]; then
         log error "No Talos machine files found for controlplane" "file=${controlplane_file}"

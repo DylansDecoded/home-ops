@@ -22,8 +22,7 @@ machine:
       validSubnets: ["10.1.20.0/24"]
     disableManifestsDirectory: true
   install:
-    diskSelector:
-      model: /dev/nvme0n1
+    disk: /dev/nvme0n1
     extraKernelArgs:
       - -init_on_alloc                      # Less security, faster puter
       - -init_on_free                       # Less security, faster puter
