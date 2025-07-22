@@ -10,7 +10,6 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
-    namespace: flux-system
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
