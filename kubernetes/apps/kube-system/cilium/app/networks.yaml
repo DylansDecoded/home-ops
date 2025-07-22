@@ -16,7 +16,7 @@ metadata:
   name: l2-policy
 spec:
   loadBalancerIPs: true
-  interfaces: ["^eno1"]
+  # interfaces: ["^eno1"]
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
