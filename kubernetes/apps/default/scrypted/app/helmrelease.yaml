@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: scrypted
+  name: &app scrypted
 spec:
   interval: 30m
   chartRef:
@@ -24,7 +24,7 @@ spec:
               [{
                 "name":"multus-iot",
                 "namespace": "network",
-                "ips": ["10.1.3.153/24"],
+                "ips": ["10.1.40.209/24"],
                 "mac": "76:fa:11:c0:c9:84"
               }]
           securityContext:
@@ -68,7 +68,7 @@ spec:
 
     persistence:
       config:
-        existingClaim: scrypted-config
+        existingClaim: *app
         advancedMounts:
           scrypted:
             app:
@@ -84,15 +84,15 @@ spec:
                 subPath: npm-cache
       recs:
         type: nfs
-        server: 10.1.10.210
-        path: /mnt/tank/Apps/scrypted
+        server: truenas.internal
+        path: /mnt/tank/scrypted
         globalMounts:
           - path: /recs
 
     route:
       app:
         hostnames:
-          - scrypted.bjw-s.dev
+          - scrypted.robsonhome.cloud
         parentRefs:
           - name: internal
             namespace: kube-system
