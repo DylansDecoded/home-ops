@@ -23,18 +23,6 @@ machine:
     disableManifestsDirectory: true
   install:
     disk: /dev/nvme0n1
-    extraKernelArgs:
-      - -init_on_alloc                      # Less security, faster puter
-      - -init_on_free                       # Less security, faster puter
-      - -selinux                            # Less security, faster puter
-      - apparmor=0                          # Less security, faster puter
-      - init_on_alloc=0                     # Less security, faster puter
-      - init_on_free=1                      # Less security, faster puter
-      - intel_iommu=on                      # PCI Passthrough
-      - iommu=pt                            # PCI Passthrough
-      - mitigations=off                     # Less security, faster puter
-      - security=none                       # Less security, faster puter
-      - talos.auditd.disabled=1             # Less security, faster puter
     wipe: false
   files:
     - # Spegel
@@ -52,24 +40,12 @@ machine:
         hard=True
         nconnect=16
         noatime=True
-
-
   sysctls:
-    fs.inotify.max_user_watches: 1048576   # Watchdog
     fs.inotify.max_user_instances: 8192    # Watchdog
-    net.core.default_qdisc: fq_codel       # 1Gb/s - better for lower bandwidth
-    net.core.rmem_max: 16777216            # 1Gb/s | Cloudflared / QUIC
-    net.core.wmem_max: 16777216            # 1Gb/s | Cloudflared / QUIC
-    net.ipv4.tcp_congestion_control: bbr   # Good for 1Gb/s
-    net.ipv4.tcp_fastopen: 3               # Send and accept data in the opening SYN packet
-    net.ipv4.tcp_mtu_probing: 1            # 1Gb/s | Standard frames
-    net.ipv4.tcp_rmem: 4096 87380 16777216 # 1Gb/s
-    net.ipv4.tcp_wmem: 4096 65536 16777216 # 1Gb/s
-    net.ipv4.tcp_window_scaling: 1         # 1Gb/s
-    sunrpc.tcp_slot_table_entries: 64      # 1Gb/s | NFS
-    sunrpc.tcp_max_slot_table_entries: 64  # 1Gb/s | NFS
-    user.max_user_namespaces: 11255        # User Namespaces
-    vm.nr_hugepages: 1024                  # PostgreSQL
+    fs.inotify.max_user_watches: 1048576   # Watchdog
+    user.max_user_namespaces: 11255        # User namespaces
+    net.core.rmem_max: 67108864            # Cloudflared / QUIC
+    net.core.wmem_max: 67108864            # Cloudflared / QUIC
   features:
     rbac: true
     stableHostname: true
