@@ -3,8 +3,7 @@ machine:
   network:
     hostname: k8s-5
     interfaces:
-      - interface: eth0
-        deviceSelector:
+      - deviceSelector:
           hardwareAddr: 10:62:e5:1a:80:18
         dhcp: true
         vlans:

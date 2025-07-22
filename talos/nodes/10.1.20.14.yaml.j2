@@ -3,8 +3,7 @@ machine:
   network:
     hostname: k8s-4
     interfaces:
-      - interface: eth0
-        deviceSelector:
+      - deviceSelector:
           hardwareAddr: ac:e2:d3:15:fd:f9
         dhcp: true
         vlans:

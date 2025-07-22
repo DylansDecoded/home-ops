@@ -3,8 +3,7 @@ machine:
   network:
     hostname: k8s-1
     interfaces:
-      - interface: eth0
-        deviceSelector:
+      - deviceSelector:
           hardwareAddr: 18:60:24:27:27:a7
         dhcp: true
         vip:
