@@ -69,7 +69,7 @@ tasks:
   reset-node:
     desc: Reset Talos on a single node [IP=required]
     prompt: Reset Talos node '{{.IP}}' ... continue?
-    cmd: talosctl reset --nodes {{.IP}} --graceful=false
+    cmd: talosctl reset --nodes {{.IP}} --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot=true
     requires:
       vars: [IP]
     preconditions:
@@ -79,7 +79,7 @@ tasks:
   reset-cluster:
     desc: Reset Talos across the whole cluster
     prompt: Reset the Talos cluster ... continue?
-    cmd: talosctl reset --nodes {{.NODES}} --graceful=false
+    cmd: talosctl reset --nodes {{.NODES}} --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot=true
     vars:
       NODES:
         sh: talosctl config info --output json | jq --exit-status --join-output '[.nodes[]] | join(",")'
