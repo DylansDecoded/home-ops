@@ -3,12 +3,18 @@ machine:
   network:
     hostname: k8s-4
     interfaces:
-      - deviceSelector:
-          hardwareAddr: ac:e2:d3:15:fd:f9
-        dhcp: true
+      - interface: eno1
+        dhcp: false
+        addresses:
+          - 10.1.20.14/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.1.20.1
         vlans:
           - vlanId: 40
             dhcp: false
             mtu: 1500
+    nameservers:
+      - 10.1.20.41
   install:
     image: factory.talos.dev/installer/a0b4991356a74f14e884e8b9192ac3864397894fa5223317098564de42ce0a0f:{{ ENV.TALOS_VERSION }}

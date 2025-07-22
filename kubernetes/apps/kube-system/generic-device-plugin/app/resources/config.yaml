@@ -10,3 +10,8 @@ devices:
       - count: 1000
         paths:
           - path: /dev/net/tun
+
+  - name: zwave
+    groups:
+      - paths:
+          - path: /dev/serial/by-id/usb-1a86_USB_Single_Serial_58E9045056-if00

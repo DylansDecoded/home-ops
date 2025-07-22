@@ -22,13 +22,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: intel-device-plugin-gpu
-      namespace: kube-system
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-    - name: volsync
-      namespace: volsync-system
   values:
     defaultPodOptions:
       nodeSelector:
@@ -68,8 +61,10 @@ spec:
               requests:
                 cpu: 10m
                 memory: 1Gi
+                squat.ai/coral: '1'
                 gpu.intel.com/i915: '1'
               limits:
+                squat.ai/coral: '1'
                 gpu.intel.com/i915: '1'
                 memory: 2Gi
             securityContext:
