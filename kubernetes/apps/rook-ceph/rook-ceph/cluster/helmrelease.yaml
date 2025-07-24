@@ -10,7 +10,7 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: v1.17.5
+    tag: v1.17.6
   url: oci://ghcr.io/rook/rook-ceph-cluster
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
@@ -37,11 +37,6 @@ spec:
       createPrometheusRules: true
     toolbox:
       enabled: true
-    ingress:
-      dashboard:
-        ingressClassName: internal
-        host:
-          name: rook.robsonhome.cloud
     cephClusterSpec:
       cephConfig:
         global:
@@ -61,6 +56,20 @@ spec:
         urlPrefix: /
         ssl: false
         prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
+      mgr:
+        modules:
+          - name: diskprediction_local
+            enabled: true
+          - name: insights
+            enabled: true
+          - name: pg_autoscaler
+            enabled: true
+          - name: rook
+            enabled: true
+      network:
+        provider: host
+        connections:
+          requireMsgr2: true
       mgr:
         modules:
           - name: insights
