@@ -23,7 +23,7 @@
   ],
   ignorePaths: [
     "**/*.sops.*",
-    "**/resources/**",
+    "**/resources/**"
   ],
   flux: {
     managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
@@ -34,4 +34,10 @@
   kubernetes: {
     managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
   },
+  "packageRules": [
+    {
+      "matchLabels": ["type/major"],
+      "automerge": false
+    }
+  ]
 }

@@ -2,22 +2,24 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Auto merge container digests",
+      description: "Auto-merge trusted container digests",
       matchDatasources: ["docker"],
       automerge: true,
+      automergeType: "pr",
       matchUpdateTypes: ["digest"],
-      matchPackagePrefixes: ["ghcr.io/home-operations", "ghcr.io/onedr0p", "ghcr.io/bjw-s", "ghcr.io/bjw-s-labs"],
+      matchPackageNames: ["/home-operations/"],
       ignoreTests: false,
     },
+
     {
       description: "Auto-merge OCI Charts",
       matchDatasources: ["docker"],
       automerge: true,
-      automergeType: "pr",
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: ["/kube-prometheus-stack/", "/grafana/"],
       ignoreTests: false,
     },
+
     {
       description: "Auto-merge GitHub Actions",
       matchManagers: ["github-actions"],
@@ -44,8 +46,6 @@
       description: "Auto-merge GitHub Releases",
       matchDatasources: ["github-releases"],
       automerge: true,
-      automergeType: "branch",
-      matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: ["/external-dns/", "/gateway-api/", "/prometheus-operator/"],
       ignoreTests: true,
     },
