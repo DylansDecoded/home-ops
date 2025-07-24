@@ -9,9 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: app-template
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       scrypted:
@@ -69,8 +66,10 @@ spec:
     persistence:
       config:
         existingClaim: *app
-        globalMounts:
-          - path: /config
+        advancedMounts:
+          scrypted:
+            app:
+              - path: /server/volume
 
       tmpfs:
         type: emptyDir
