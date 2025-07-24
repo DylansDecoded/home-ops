@@ -17,21 +17,22 @@ spec:
       scrypted:
         annotations:
           reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations: {}
           securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-              - 44
-              - 109
-              - 65542 # gladius:external-services
+            runAsUser: 3000
+            runAsGroup: 3000
+            fsGroup: 3000
+            fsGroupChangePolicy: OnRootMismatch
 
         containers:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/scrypted
               tag: 0.139.0@sha256:0a376e9166d51e0d0fae47b9234774338809fdbd317db614fdc95cef532f024e
+            env:
+              TZ: America/New_York
             probes:
               liveness:
                 enabled: true
@@ -39,8 +40,9 @@ spec:
                 enabled: true
             resources:
               requests:
-                cpu: 136m
-                memory: 1024Mi
+                cpu: 500m
+                memory: 128Mi
+                gpu.intel.com/i915: 1
               limits:
                 gpu.intel.com/i915: 1
                 memory: 8192Mi
@@ -55,14 +57,21 @@ spec:
             port: 34135
           rebroadcast2:
             port: 34136
+    route:
+      app:
+        hostnames:
+          - scrypted.robsonhome.cloud
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
 
     persistence:
       config:
         existingClaim: *app
-        advancedMounts:
-          scrypted:
-            app:
-              - path: /server/volume
+        globalMounts:
+          - path: /config
+
       tmpfs:
         type: emptyDir
         advancedMounts:
@@ -77,13 +86,6 @@ spec:
         server: truenas.internal
         path: /mnt/tank/scrypted
         globalMounts:
-          - path: /recs
+          - path: /recordings
 
-    route:
-      app:
-        hostnames:
-          - scrypted.robsonhome.cloud
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+
