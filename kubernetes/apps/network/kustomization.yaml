@@ -10,4 +10,4 @@ resources:
   - ./cloudflare-dns/ks.yaml
   - ./echo/ks.yaml
   - ./multus/ks.yaml
-  - ./opnsense-dns/ks.yaml
+  - ./technitium-dns/ks.yaml

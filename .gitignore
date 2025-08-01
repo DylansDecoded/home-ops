@@ -12,3 +12,7 @@ talosconfig
 
 controlplane.yaml
 worker.yaml
+
+onepassword.env
+
+*.sops.yaml.j2

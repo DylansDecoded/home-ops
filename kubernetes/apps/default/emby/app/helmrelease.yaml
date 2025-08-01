@@ -1,19 +1,14 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: emby
 spec:
-  interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.1.2
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
   install:
     remediation:
       retries: -1
@@ -38,10 +33,6 @@ spec:
             env:
               TZ: America/New_York
               GIDLIST: 1000,0
-            # securityContext:
-            #   allowPrivilegeEscalation: true
-            #   # readOnlyRootFilesystem: true
-            #   capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
@@ -52,20 +43,16 @@ spec:
 
     service:
       app:
-        controller: emby
         ports:
           http:
             port: 8096
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: "{{ .Release.Name }}.robsonhome.cloud"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames: ["{{ .Release.Name }}.robsonhome.cloud"]
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
 
     persistence:
       config:
@@ -84,7 +71,7 @@ spec:
 
       tv:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: 10.1.10.210
         path: /mnt/tank/media/tv
         globalMounts:
           - path: /media/tv
@@ -92,7 +79,7 @@ spec:
 
       movies:
         type: nfs
-        server: truenas.robsonhome.cloud
+        server: 10.1.10.210
         path: /mnt/tank/media/movies
         globalMounts:
           - path: /media/movies

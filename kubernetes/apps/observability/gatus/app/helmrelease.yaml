@@ -1,26 +1,20 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: gatus
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 4.1.2
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
   install:
     remediation:
       retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
-      strategy: rollback
       retries: 3
   values:
     controllers:
@@ -30,8 +24,8 @@ spec:
         initContainers:
           init-config:
             image:
-              repository: ghcr.io/kiwigrid/k8s-sidecar
-              tag: 1.30.3@sha256:49dcce269568b1645b0050f296da787c99119647965229919a136614123f0627
+              repository: ghcr.io/home-operations/k8s-sidecar
+              tag: 1.30.7@sha256:3b6444d91c6e69a9e07c5e55419452d967d18c833d88b36277dc2021b708f621
             env:
               FOLDER: /config
               LABEL: gatus.io/enabled
@@ -49,15 +43,12 @@ spec:
           app:
             image:
               repository: ghcr.io/twin/gatus
-              tag: v5.18.1@sha256:97525568fdef34539b1b4d015aef2d1cf6f58f1bc087443387b349940544394d
+              tag: v5.20.0@sha256:e655d13d0cb89c64a2e53a853bbca9556a7238e788bc4a08c19aa5fb7938d0da
             env:
               TZ: America/New_York
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
               WEB_PORT: &port 80
-            envFrom:
-              - secretRef:
-                  name: gatus-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -87,26 +78,41 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: gatus
         ports:
           http:
             port: *port
-    ingress:
+    serviceMonitor:
       app:
-        className: external
-        hosts:
-          - host: status.robsonhome.cloud
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        endpoints:
+          - port: http
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.robsonhome.cloud"
+          - status.robsonhome.cloud
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+    rbac:
+      roles:
+        gatus:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: ["configmaps", "secrets"]
+              verbs: ["get", "watch", "list"]
+      bindings:
+        gatus:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: gatus
+          subjects:
+            - identifier: gatus
     serviceAccount:
-      create: true
-      name: gatus
+      gatus: {}
     persistence:
       config:
         existingClaim: gatus

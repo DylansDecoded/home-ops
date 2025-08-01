@@ -1,0 +1,94 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app scrypted
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  values:
+    controllers:
+      scrypted:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations: {}
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 44
+              - 109
+              - 65542 # truenas:external-services
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bjw-s-labs/scrypted
+              tag: 0.139.0@sha256:0a376e9166d51e0d0fae47b9234774338809fdbd317db614fdc95cef532f024e
+            env:
+              TZ: America/New_York
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 500m
+                memory: 128Mi
+                gpu.intel.com/i915: 1
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 8192Mi
+
+    service:
+      app:
+        ports:
+          http:
+            port: &port 11080
+            primary: true
+          rebroadcast1:
+            port: 34135
+          rebroadcast2:
+            port: 34136
+    route:
+      app:
+        hostnames:
+          - scrypted.robsonhome.cloud
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+
+    persistence:
+      config:
+        existingClaim: *app
+        advancedMounts:
+          scrypted:
+            app:
+              - path: /server/volume
+
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          scrypted:
+            app:
+              - path: /.cache
+                subPath: cache
+              - path: /.npm
+                subPath: npm-cache
+      recs:
+        type: nfs
+        server: truenas.internal
+        path: /mnt/tank/scrypted
+        globalMounts:
+          - path: /recordings
+
+

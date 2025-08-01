@@ -5,30 +5,33 @@ kind: HelmRelease
 metadata:
   name: node-feature-discovery
 spec:
-  interval: 1h
-  chart:
-    spec:
-      chart: node-feature-discovery
-      version: 0.17.3
-      sourceRef:
-        kind: HelmRepository
-        name: node-feature-discovery
-        namespace: flux-system
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
   install:
     remediation:
       retries: -1
   upgrade:
     cleanupOnFail: true
-    crds: CreateReplace
     remediation:
-      strategy: rollback
       retries: 3
+
   values:
-    master:
-      replicaCount: 1
-    worker:
-      config:
-        core:
-          labelSources: ["pci", "system", "usb"]
-    prometheus:
-      enable: true
+    controllers:
+      node-feature-discovery:
+        type: daemonset
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/kubernetes-sigs/node-feature-discovery
+              tag: v0.17.3
+          master:
+            replicaCount: 1
+          worker:
+            config:
+              core:
+                labelSources: ["pci", "system", "usb"]
+          prometheus:
+            enable: true
