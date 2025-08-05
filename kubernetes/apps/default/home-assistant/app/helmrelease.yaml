@@ -21,13 +21,13 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
-         pod:
+        pod:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
                 "name":"multus-iot",
                 "namespace": "network",
-                "ips": ["10.1.40.221/24"],
+                "ips": ["10.1.40.244/24"],
                 "mac": "3e:59:e4:f7:43:08"
               }]
           securityContext:
@@ -56,22 +56,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 2Gi
-
-    defaultPodOptions:
-      annotations:
-          k8s.v1.cni.cncf.io/networks: |
-            [{
-              "name":"multus-iot",
-              "namespace": "network",
-              "ips": ["10.1.40.235/24"],
-              "mac": "3e:59:e4:f7:43:09"
-            }]
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
         ports:
