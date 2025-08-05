@@ -16,3 +16,4 @@ worker.yaml
 onepassword.env
 
 *.sops.yaml.j2
+*.vscode/settings.json*
