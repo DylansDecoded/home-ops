@@ -50,9 +50,10 @@ spec:
                   periodSeconds: 10
             resources:
               requests:
-                cpu: 100m
+                cpu: 200m
+                memory: 2Gi
               limits:
-                memory: 32Gi
+                memory: 10Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -65,10 +66,13 @@ spec:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [65536]
+
     service:
       app:
-        forceRename: "{{ .Release.Name }}"
+        forceRename: qbittorrent
         primary: true
+        annotations:
+          lbipam.cilium.io/ips: 10.1.20.122
         ports:
           http:
             port: *port
@@ -77,7 +81,8 @@ spec:
         annotations:
           lbipam.cilium.io/ips: 10.1.20.122
         ports:
-          bittorrent-tcp:
+          bittorrent:
+            enabled: true
             port: *bittorrentPort
             protocol: TCP
     route:
@@ -102,6 +107,7 @@ spec:
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
+
       config-file:
         type: configMap
         name: "{{ .Release.Name }}"
@@ -119,5 +125,6 @@ spec:
       qbrr:
         type: image
         image: ghcr.io/buroa/qbrr:0.0.28@sha256:4c86e047a3da5b18a1b5af840d38c11a820d2e07a4155f63865ea3225a222553
+
       tmp:
         type: emptyDir
