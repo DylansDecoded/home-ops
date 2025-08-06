@@ -24,6 +24,7 @@ resources:
   - ./scrypted/ks.yaml
   - ./sonarr/ks.yaml
   - ./thelounge/ks.yaml
+  - ./tqm/ks.yaml
   - ./webhook/ks.yaml
   - ./zigbee/ks.yaml
   - ./zwave/ks.yaml
