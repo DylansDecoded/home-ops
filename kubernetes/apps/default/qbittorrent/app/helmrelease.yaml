@@ -19,11 +19,13 @@ spec:
   values:
     controllers:
       qbittorrent:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/qbittorrent
-              tag: 5.1.0
+              tag: 5.1.2@sha256:9dd0164cc23e9c937e0af27fd7c3f627d1df30c182cf62ed34d3f129c55dc0e8
             env:
               TZ: America/New_York
               QBT_WEBUI_PORT: &port 80
@@ -54,7 +56,7 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                memory: 12Gi
+                memory: 18Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -64,7 +66,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        forceRename: *app
+        forceRename: "{{ .Release.Name }}"
         primary: true
         ports:
           http:
@@ -90,15 +92,31 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
+    configMaps:
+      config:
+        data:
+          .qbt.toml: |
+            [qbittorrent]
+            addr = "http://localhost:80"
     persistence:
       config:
-        existingClaim: qbittorrent
+        existingClaim: "{{ .Release.Name }}"
+      config-file:
+        type: configMap
+        name: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config/.qbt.toml
+            subPath: .qbt.toml
+            readOnly: true
       media:
         type: nfs
         server: truenas.internal
         path: /mnt/tank/media
         globalMounts:
-          - path: /media/downloads/torrents
-            subPath: downloads/torrents
+          - path: /media/downloads/qbittorrent
+            subPath: downloads/qbittorrent
+      qbrr:
+        type: image
+        image: ghcr.io/buroa/qbrr:0.0.28@sha256:4c86e047a3da5b18a1b5af840d38c11a820d2e07a4155f63865ea3225a222553
       tmp:
         type: emptyDir
