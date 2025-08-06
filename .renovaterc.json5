@@ -36,7 +36,7 @@
   },
   "packageRules": [
     {
-      "matchLabels": ["type/major"],
+      "matchUpdateTypes": ["major"],
       "automerge": false
     }
   ]
