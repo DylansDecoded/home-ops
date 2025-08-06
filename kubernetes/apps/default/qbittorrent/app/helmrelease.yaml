@@ -57,14 +57,6 @@ spec:
                 cpu: 100m
               limits:
                 memory: 18Gi
-          qbrr:
-            image:
-              repository: ghcr.io/buroa/qbrr
-              tag: 0.0.28@sha256:4c86e047a3da5b18a1b5af840d38c11a820d2e07a4155f63865ea3225a222553
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -108,10 +100,10 @@ spec:
             addr = "http://localhost:80"
     persistence:
       config:
-        existingClaim: "{{ .Release.Name }}"
+        existingClaim: *app
       config-file:
         type: configMap
-        name: "{{ .Release.Name }}"
+        name: *app
         globalMounts:
           - path: /config/.qbt.toml
             subPath: .qbt.toml
@@ -121,8 +113,10 @@ spec:
         server: truenas.internal
         path: /mnt/tank/media
         globalMounts:
-          - path: /media/downloads/qbittorrent
-            subPath: downloads/qbittorrent
-
+          - path: /media/downloads/torrents
+            subPath: downloads/torrents
+      qbrr:
+        type: image
+        image: ghcr.io/buroa/qbrr:0.0.28@sha256:4c86e047a3da5b18a1b5af840d38c11a820d2e07a4155f63865ea3225a222553
       tmp:
         type: emptyDir
