@@ -1,8 +1,9 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: qbittorrent
+  name: &app qbittorrent
 spec:
   interval: 1h
   chartRef:
@@ -18,15 +19,17 @@ spec:
   values:
     controllers:
       qbittorrent:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.2@sha256:9dd0164cc23e9c937e0af27fd7c3f627d1df30c182cf62ed34d3f129c55dc0e8
             env:
-              QBT_TORRENTING_PORT: &bittorrentPort 50413
-              QBT_WEBUI_PORT: &port 80
               TZ: America/New_York
+              QBT_WEBUI_PORT: &port 80
+              QBT_TORRENTING_PORT: &torrentPort 50413
             probes:
               liveness: &probes
                 enabled: true
@@ -45,70 +48,22 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 10
-            resources:
-              requests:
-                cpu: 100m
-              limits:
-                memory: 32Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 18Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65536]
-    persistence:
-      config:
-        existingClaim: "{{ .Release.Name }}"
-      incomplete:
-        type: custom
-        volumeSpec:
-          ephemeral:
-            volumeClaimTemplate:
-              spec:
-                accessModes: [ReadWriteOnce]
-                resources:
-                  requests:
-                    storage: 1Mi # Ignored
-                storageClassName: openebs-hostpath
-                volumeMode: Filesystem
-      media:
-        type: nfs
-        server: truenas.internal
-        path: /mnt/tank/media
-        globalMounts:
-          - path: /media/downloads/torrents
-            subPath: downloads/torrents
-      qbrr:
-        type: image
-        image: ghcr.io/buroa/qbrr:0.0.28@sha256:4c86e047a3da5b18a1b5af840d38c11a820d2e07a4155f63865ea3225a222553
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config/qBittorrent/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
-    route:
-      app:
-        hostnames:
-          - "{{ .Release.Name }}.robsonhome.cloud"
-          - qb.robsonhome.cloud
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     service:
       app:
         forceRename: "{{ .Release.Name }}"
@@ -122,5 +77,46 @@ spec:
           lbipam.cilium.io/ips: 10.1.20.133
         ports:
           bittorrent-tcp:
-            port: *bittorrentPort
+            port: *torrentPort
             protocol: TCP
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.robsonhome.cloud"
+          - qb.robsonhome.cloud
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    configMaps:
+      config:
+        data:
+          .qbt.toml: |
+            [qbittorrent]
+            addr = "http://localhost:80"
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+      config-file:
+        type: configMap
+        name: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config/.qbt.toml
+            subPath: .qbt.toml
+            readOnly: true
+      media:
+        type: nfs
+        server: truenas.internal
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media/downloads/torrents
+            subPath: downloads/torrents
+      qbrr:
+        type: image
+        image: ghcr.io/buroa/qbrr:0.0.28@sha256:4c86e047a3da5b18a1b5af840d38c11a820d2e07a4155f63865ea3225a222553
+      tmp:
+        type: emptyDir
