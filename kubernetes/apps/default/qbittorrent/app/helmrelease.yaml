@@ -31,41 +31,31 @@ spec:
               QBT_WEBUI_PORT: &port 80
               TZ: America/New_York
             probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  tcpSocket:
-                    port: *port
-                  initialDelaySeconds: 30
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
               startup:
-                enabled: true
+                enabled: false
                 spec:
-                  tcpSocket:
-                    port: *port
                   failureThreshold: 30
                   periodSeconds: 10
-            resources:
-              requests:
-                cpu: 200m
-                memory: 2Gi
-              limits:
-                memory: 10Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 8Gi
 
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [65536]
 
