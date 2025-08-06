@@ -35,10 +35,9 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /api/v2/app/version
+                  tcpSocket:
                     port: *port
-                  initialDelaySeconds: 0
+                  initialDelaySeconds: 30
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
@@ -46,6 +45,8 @@ spec:
               startup:
                 enabled: true
                 spec:
+                  tcpSocket:
+                    port: *port
                   failureThreshold: 30
                   periodSeconds: 10
             resources:
@@ -58,6 +59,7 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
