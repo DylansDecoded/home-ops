@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/sabnzbd
-              tag: 4.5.1@sha256:804650bc034ff4af18159615853d43a0cb7e5a24cb2484b5b46e77486eca91f3
+              tag: 4.5.2@sha256:e3f27e50ee51f950d89ce888cb3c3c4e74b46b42751333ee008f906906cbf05b
             env:
               CROSS_SEED_HOST: cross-seed.default.svc.cluster.local
               SABNZBD__PORT: &port 80
@@ -40,7 +40,7 @@ spec:
               TZ: America/New_York
             envFrom:
               - secretRef:
-                  name: sabnzbd-secret
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness: &probes
                 enabled: true
@@ -62,7 +62,7 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                memory: 12Gi
+                memory: 8Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -86,7 +86,7 @@ spec:
             sectionName: https
     persistence:
       config:
-        existingClaim: sabnzbd
+        existingClaim: "{{ .Release.Name }}"
       media:
         type: nfs
         server: truenas.internal
@@ -96,9 +96,16 @@ spec:
             subPath: downloads/usenet
       scripts:
         type: configMap
-        name: sabnzbd-scripts
+        name: "{{ .Release.Name }}-scripts"
         defaultMode: 0775
         globalMounts:
           - readOnly: true
-      tmp:
+      tmpfs:
         type: emptyDir
+        advancedMounts:
+          sabnzbd:
+            app:
+              - path: /config/logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp
