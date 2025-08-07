@@ -69,18 +69,26 @@ spec:
       transcode:
         type: emptyDir
 
-      tv:
+      media:
         type: nfs
-        server: 10.1.10.210
-        path: /mnt/tank/media/tv
+        server: truenas.internal
+        path: /mnt/tank/media
         globalMounts:
-          - path: /media/tv
+          - path: /media
             readOnly: true
 
-      movies:
-        type: nfs
-        server: 10.1.10.210
-        path: /mnt/tank/media/movies
-        globalMounts:
-          - path: /media/movies
-            readOnly: true
+      # tv:
+      #   type: nfs
+      #   server: truenas.internal
+      #   path: /mnt/tank/media/tv
+      #   globalMounts:
+      #     - path: /media/tv
+      #       readOnly: true
+
+      # movies:
+      #   type: nfs
+      #   server: truenas.internal
+      #   path: /mnt/tank/media/movies
+      #   globalMounts:
+      #     - path: /media/movies
+      #       readOnly: true
