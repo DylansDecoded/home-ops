@@ -8,11 +8,11 @@ components:
 resources:
   - ./autobrr/ks.yaml
   - ./cross-seed/ks.yaml
-  - ./emby/ks.yaml
+  # - ./emby/ks.yaml
   - ./frigate/ks.yaml
   - ./fusion/ks.yaml
   - ./home-assistant/ks.yaml
-  # - ./jellyfin/ks.yaml # TODO
+  - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
   - ./prowlarr/ks.yaml
   - ./mosquitto/ks.yaml

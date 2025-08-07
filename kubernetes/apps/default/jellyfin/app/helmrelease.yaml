@@ -63,7 +63,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [44]
     service:
       app:
         ports:
@@ -78,16 +77,16 @@ spec:
             sectionName: https
     persistence:
       config:
-        existingClaim: jellyfin
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       config-cache:
-        existingClaim: jellyfin-cache
+        existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:
           - path: /config/metadata
       media:
         type: nfs
-        server: 10.1.10.210
+        server: truenas.internal
         path: /mnt/tank/media
         globalMounts:
           - path: /media
